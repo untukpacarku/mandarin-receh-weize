@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@700;900&family=Playfair+Display:wght@900&family=Cormorant+Garamond:wght@600;700&display=swap" rel="stylesheet">
     <style>
-        :root { --imperial-red: #C41E3A; --emperor-gold: #FFD700; --rice-paper: #FDF6E3; }
+        :root { --imperial-red: #8B0000; --emperor-gold: #D4AF37; --rice-paper: #FDF6E3; }
         body { background-color: var(--rice-paper); color: #1a1a1a; font-family: 'Noto Serif SC', serif; background-image: url('https://www.transparenttextures.com/patterns/natural-paper.png'); overflow-x: hidden; padding-bottom: 120px; }
         
         .emperor-name { 
@@ -136,17 +136,66 @@
         .difficulty-btn.active.medium { background: #f59e0b; }
         .difficulty-btn.hard { border-color: #ef4444; }
         .difficulty-btn.active.hard { background: #ef4444; }
+
+        /* IMLEK: Kaligrafi */
+        .gongxi-text { font-family: 'Ma Shan Zheng', cursive; font-size: clamp(1.2rem, 3vw, 2rem); color: var(--emperor-gold); text-shadow: 1px 1px 3px rgba(0,0,0,0.4); letter-spacing: 8px; margin-top: 6px; display: block; }
+
+        /* ANGPAO WALLET */
+        #angpaoWidget { position: fixed; top: 14px; right: 14px; z-index: 9999; background: linear-gradient(135deg, #8B0000, #5a0000); border: 2px solid var(--emperor-gold); border-radius: 14px; padding: 10px 14px; color: var(--emperor-gold); font-family: 'Noto Serif SC', serif; box-shadow: 0 4px 20px rgba(0,0,0,0.4); min-width: 160px; text-align: center; }
+        #angpaoWidget .angpao-label { font-size: 11px; font-weight: 700; letter-spacing: 1px; opacity: 0.85; }
+        #angpaoWidget .angpao-saldo { font-size: 18px; font-weight: 900; margin: 4px 0; color: #fff; text-shadow: 0 0 8px var(--emperor-gold); }
+        #angpaoWidget .tarik-btn { background: var(--emperor-gold); color: #8B0000; border: none; border-radius: 8px; padding: 6px 14px; font-weight: 900; font-size: 12px; cursor: pointer; width: 100%; margin-top: 4px; transition: 0.2s; }
+        #angpaoWidget .tarik-btn:hover { background: #fff; transform: scale(1.03); }
+
+        /* MODAL */
+        #angpaoModal { display: none; position: fixed; inset: 0; z-index: 99999; background: rgba(0,0,0,0.7); align-items: center; justify-content: center; }
+        #angpaoModal.show { display: flex; }
+        #angpaoModalBox { background: #fff; border: 3px solid #8B0000; border-radius: 20px; padding: 32px; max-width: 400px; width: 92%; box-shadow: 0 20px 50px rgba(0,0,0,0.4); position: relative; }
+        #angpaoModalBox h3 { font-family: 'Ma Shan Zheng', cursive; color: #8B0000; font-size: 26px; text-align: center; margin-bottom: 18px; }
+        #angpaoModalBox label { font-weight: 700; font-size: 13px; color: #5a0000; display: block; margin-top: 12px; margin-bottom: 4px; }
+        #angpaoModalBox select, #angpaoModalBox input[type=text] { width: 100%; padding: 10px 12px; border: 2px solid #8B0000; border-radius: 8px; font-size: 14px; outline: none; box-sizing: border-box; }
+        #angpaoModalBox .modal-submit { background: #8B0000; color: var(--emperor-gold); border: none; border-radius: 10px; padding: 12px; font-weight: 900; font-size: 15px; width: 100%; margin-top: 18px; cursor: pointer; transition: 0.2s; }
+        #angpaoModalBox .modal-submit:hover { background: #D4AF37; color: #8B0000; }
+        #angpaoModalBox .modal-close { position: absolute; top: 12px; right: 16px; background: none; border: none; font-size: 22px; cursor: pointer; color: #8B0000; }
     </style>
 </head>
 <body>
     <div id="particle-container"></div>
     <div id="achievementContainer"></div>
 
+    <!-- ANGPAO WALLET WIDGET -->
+    <div id="angpaoWidget">
+        <div class="angpao-label">🧧 Saldo Angpao</div>
+        <div class="angpao-saldo" id="angpaoDisplay">Rp 0</div>
+        <button class="tarik-btn" onclick="tarikCuan()">💰 Tarik Cuan</button>
+    </div>
+
+    <!-- MODAL PENARIKAN -->
+    <div id="angpaoModal">
+        <div id="angpaoModalBox">
+            <button class="modal-close" onclick="tutupModal()">✕</button>
+            <h3>🧧 Tarik Angpao</h3>
+            <p style="text-align:center;font-size:13px;color:#5a0000;margin-bottom:8px;">Selamat! Saldo Anda sudah 1 Juta! 🎉</p>
+            <label>Metode E-Wallet</label>
+            <select id="modalMetode">
+                <option value="DANA">DANA</option>
+                <option value="OVO">OVO</option>
+                <option value="GoPay">GoPay</option>
+            </select>
+            <label>Nama Lengkap</label>
+            <input type="text" id="modalNama" placeholder="Nama sesuai e-wallet">
+            <label>Nomor HP / No. Rekening</label>
+            <input type="text" id="modalNoRek" placeholder="08xxxxxxxxxx">
+            <button class="modal-submit" onclick="submitTarik()">📤 Kirim ke WhatsApp Boss Wang</button>
+        </div>
+    </div>
+
     <header class="p-10 md:p-14 text-center relative overflow-hidden z-10">
         <div class="absolute top-0 left-0 w-full h-4 bg-gradient-to-r from-red-900 via-yellow-500 to-red-900"></div>
         <div class="mt-6">
             <p class="text-[12px] md:text-sm tracking-[0.5em] font-black text-red-800 uppercase mb-4">Native Shaanxi Bloodline • Medan Soul • AI-Powered Learning</p>
             <h1 class="emperor-name">WANG WEIZE</h1>
+            <span class="gongxi-text">恭喜发财 🏮</span>
             <p class="mt-6 text-xl text-red-900 font-black italic max-w-2xl mx-auto border-l-4 border-yellow-500 pl-4 bg-white/60 p-4 rounded shadow-md">
                 "Darah Shaanxi, Jiwa Medan. Belajar Mandarin isinya daging semua biar lu kaga Boncos! 🚀 Ultra Advanced Edition"
             </p>
@@ -242,7 +291,7 @@
                     <div class="flex flex-wrap justify-center gap-4">
                         <a href="https://wa.me/6288277200044" target="_blank" class="bg-green-600 text-white px-6 py-3 rounded-xl font-black shadow-lg hover:scale-105 transition">📱 WhatsApp</a>
                         <a href="https://www.tiktok.com/@wangweize10" target="_blank" class="bg-black text-white px-6 py-3 rounded-xl font-black shadow-lg hover:scale-105 transition">🎵 TikTok</a>
-                        <a href="mailto:wangweize10@gmail.com" class="bg-red-700 text-white px-6 py-3 rounded-xl font-black shadow-lg hover:scale-105 transition">📧 Gmail</a>
+                        <a href="/cdn-cgi/l/email-protection#1166707f766674786b74202151767c70787d3f727e7c" class="bg-red-700 text-white px-6 py-3 rounded-xl font-black shadow-lg hover:scale-105 transition">📧 Gmail</a>
                     </div>
                 </div>
             </div>
@@ -702,7 +751,7 @@
         </div>
     </main>
 
-    <script>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
         // =============== ORIGINAL FUNCTIONALITY ===============
         const vocabData = [
             {h:"你好", p:"nǐ hǎo", a:"Halo", d:"easy", c:"perkenalan", ctx:"你好，很高兴认识你。(Halo, senang berkenalan denganmu.)"},
@@ -753,6 +802,38 @@
             document.getElementById('accuracyRate').textContent = userStats.accuracy + '%';
         }
 
+        // ===== ANGPAO WALLET =====
+        let saldoAngpao = 0;
+
+        function updateAngpaoUI() {
+            document.getElementById('angpaoDisplay').textContent = 'Rp ' + saldoAngpao.toLocaleString('id-ID');
+        }
+
+        function tarikCuan() {
+            if (saldoAngpao < 1000000) {
+                alert('Kerja keras lagi bos! Saldo belum 1 Juta!');
+            } else {
+                document.getElementById('angpaoModal').classList.add('show');
+            }
+        }
+
+        function tutupModal() {
+            document.getElementById('angpaoModal').classList.remove('show');
+        }
+
+        function submitTarik() {
+            const metode = document.getElementById('modalMetode').value;
+            const nama = document.getElementById('modalNama').value.trim();
+            const noRek = document.getElementById('modalNoRek').value.trim();
+            if (!nama || !noRek) { alert('Isi semua data dulu bos!'); return; }
+            const text = encodeURIComponent(
+                'Halo Boss Wang Weize, saya sudah selesai misi belajar dan mau tarik Angpao Rp 1.000.000.\n\nData Pencairan:\nMetode: ' + metode + '\nNama: ' + nama + '\nNo Rek/HP: ' + noRek
+            );
+            window.open('https://wa.me/6288277200044?text=' + text, '_blank');
+            tutupModal();
+        }
+        // ===== END ANGPAO WALLET =====
+
         function addXP(amount) {
             userStats.totalXP += amount;
             const newLevel = Math.floor(userStats.totalXP / 1000) + 1;
@@ -762,6 +843,7 @@
             }
             updateStatsDisplay();
             saveUserData();
+            saldoAngpao += (amount * 5); updateAngpaoUI(); localStorage.setItem('saldoAngpao', saldoAngpao);
         }
 
         function showAchievement(message) {
@@ -1341,10 +1423,11 @@ ${context}
             updateStatsDisplay();
             updateWritingHistory();
             updateSRSDisplay();
+            saldoAngpao = parseInt(localStorage.getItem('saldoAngpao')) || 0; updateAngpaoUI();
             
             // Particles
             const pc = document.getElementById('particle-container');
-            const sym = ['王', '汪', '💰', '🐉', '🔥', '📚', '✍️', '🎯'];
+            const sym = ['🏮', '🧧', '🪙', '🐉', '🧨'];
             for(let i=0; i<25; i++) {
                 const p = document.createElement('div'); 
                 p.className = 'imperial-particle';
@@ -1365,11 +1448,4 @@ ${context}
                     userStats.studyStreak = 1;
                 } else {
                     userStats.studyStreak = 1;
-                }
-                localStorage.setItem('lastStudyDate', today);
-                saveUserData();
-            }
-        });
-    </script>
-</body>
-</html>
+               
