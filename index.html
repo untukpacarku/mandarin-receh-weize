@@ -437,6 +437,15 @@
         .tx-item .tn { color: var(--emperor-gold); font-size: 11px; font-family: monospace; }
         .tx-item .td { color: #666; font-size: 10px; }
 
+        /* ======= SULTAN AI TAB ======= */
+        #ask-ai { margin: 0 auto; }
+        #aiChatBox::-webkit-scrollbar { width: 6px; }
+        #aiChatBox::-webkit-scrollbar-track { background: rgba(168,85,247,0.05); border-radius: 4px; }
+        #aiChatBox::-webkit-scrollbar-thumb { background: rgba(168,85,247,0.4); border-radius: 4px; }
+        #aiUserInput::placeholder { color: rgba(168,85,247,0.35); }
+        #aiUserInput::-webkit-scrollbar { width: 4px; }
+        #aiUserInput::-webkit-scrollbar-thumb { background: rgba(168,85,247,0.3); border-radius: 4px; }
+
         /* ── LOADING OVERLAY ── */
         #paymentLoadingOverlay {
             display: none; position: fixed; inset: 0;
@@ -581,6 +590,7 @@
         <button onclick="tab('karaoke')" id="n-karaoke" class="px-3 py-2 bg-white text-red-900 font-black text-xs rounded shrink-0 border-2 border-red-600">Karaoke 🎤</button>
         <button onclick="tab('store')" id="n-store" class="px-3 py-2 bg-white text-red-900 font-black text-xs rounded shrink-0 border-2 border-yellow-500">Store 🛒</button>
         <button onclick="tab('ai-lab')" id="n-ai-lab" class="px-3 py-2 bg-white text-red-900 font-black text-xs rounded shrink-0 border-2 border-cyan-400">AI Lab 🎬</button>
+        <button onclick="tab('ask-ai')" id="n-ask-ai" class="px-3 py-2 bg-white text-red-900 font-black text-xs rounded shrink-0 border-2 border-purple-500">Ask AI 🤖</button>
     </nav>
 
     <main class="max-w-6xl mx-auto p-4 md:p-8 space-y-10 relative z-10">
@@ -591,17 +601,32 @@
                 <h2 class="text-4xl font-black text-red-900">KEKAISARAN MANDARIN - SULTAN OMNIVERSE</h2>
                 <p class="text-lg font-bold opacity-80">Marga 汪 Tunggal • 8 Tahun Sekolah di Shaanxi, China (2006-2014)</p>
                 <div class="radar-box max-w-md mx-auto text-left">
-                    <h3 class="text-green-400 font-bold border-b border-green-800 pb-2 mb-2 flex justify-between">
-                        <span>📡 RADAR LIVE TIKTOK</span>
-                        <span id="radarPing" class="text-white">-- ms</span>
+                    <h3 class="text-green-400 font-bold border-b border-green-800 pb-2 mb-3 flex justify-between items-center">
+                        <span>📡 SULTAN INTEL — RADAR LIVE</span>
+                        <span id="radarLiveLabel" style="font-size:10px; background:#0f0; color:#000; padding:2px 8px; border-radius:10px; animation:radarSpin 0s; font-family:sans-serif; letter-spacing:1px;">● LIVE</span>
                     </h3>
-                    <div class="grid grid-cols-2 gap-2 text-sm">
-                        <div class="text-gray-400">Provider:</div>
-                        <div id="radarProvider" class="font-bold text-white">Deteksi...</div>
-                        <div class="text-gray-400">Status Sinyal:</div>
-                        <div id="radarStatus" class="font-bold text-gray-500">Menunggu Cek...</div>
+                    <div style="display:grid; gap:10px; font-size:13px;">
+                        <!-- Ping -->
+                        <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(0,255,0,0.06); padding:8px 12px; border-radius:8px; border:1px solid rgba(0,255,0,0.15);">
+                            <span style="color:#0f0;">📶 PING (Ms)</span>
+                            <span id="radarPing" class="font-bold" style="color:#fff; font-family:monospace; font-size:16px;">-- ms</span>
+                        </div>
+                        <!-- Provider -->
+                        <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(0,255,0,0.06); padding:8px 12px; border-radius:8px; border:1px solid rgba(0,255,0,0.15);">
+                            <span style="color:#0f0;">🔴 PROVIDER</span>
+                            <span id="radarProvider" class="font-bold" style="color:#fff; font-family:monospace;">Deteksi...</span>
+                        </div>
+                        <!-- Device -->
+                        <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(0,255,0,0.06); padding:8px 12px; border-radius:8px; border:1px solid rgba(0,255,0,0.15);">
+                            <span style="color:#0f0;">💻 PERANGKAT</span>
+                            <span id="radarDevice" class="font-bold" style="color:#fff; font-family:monospace;">Deteksi...</span>
+                        </div>
+                        <!-- Status -->
+                        <div style="padding:8px 12px; border-radius:8px; border:1px solid rgba(0,255,0,0.15); text-align:center;">
+                            <div id="radarStatus" class="font-bold text-gray-500" style="font-size:13px;">Tekan tombol untuk cek sinyal</div>
+                        </div>
                     </div>
-                    <button onclick="checkSignal()" class="w-full mt-4 bg-green-900 hover:bg-green-700 text-green-100 py-2 rounded font-bold transition">🚀 CEK SINYAL SEKARANG</button>
+                    <button onclick="checkSignal()" class="w-full mt-4 bg-green-900 hover:bg-green-700 text-green-100 py-2 rounded font-bold transition" style="letter-spacing:1px;">🚀 CEK SINYAL SEKARANG</button>
                 </div>
                 <div class="bg-gradient-to-r from-purple-100 to-pink-100 p-6 rounded-2xl border-2 border-purple-600 mt-6">
                     <h3 class="font-black text-purple-800 mb-4">🚀 FITUR SULTAN OMNIVERSE:</h3>
@@ -1126,6 +1151,65 @@
 
     </main>
 
+    <!-- ================================================================ -->
+    <!-- ======= SULTAN AI (ASK AI) TAB ================================= -->
+    <!-- ================================================================ -->
+    <!-- Tab is placed outside main so it can be full-width, but it's still within body -->
+    <div id="ask-ai" class="tab-content hidden-tab" style="max-width:860px; margin:0 auto; padding:16px;">
+        <div style="background:linear-gradient(160deg,#0d0d1e,#1a0028,#0d0d1e); border:2px solid #a855f7; border-radius:20px; padding:28px; box-shadow:0 0 60px rgba(168,85,247,0.2); position:relative; overflow:hidden;">
+            <!-- Glow BG -->
+            <div style="position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 50px,rgba(168,85,247,0.02) 50px,rgba(168,85,247,0.02) 51px);pointer-events:none;"></div>
+            <!-- Title -->
+            <div style="text-align:center; margin-bottom:20px; position:relative;">
+                <div style="font-family:'Orbitron',monospace; font-size:clamp(1.3rem,4vw,2rem); font-weight:900; color:#a855f7; text-shadow:0 0 20px rgba(168,85,247,0.7); letter-spacing:3px;">🤖 SULTAN AI</div>
+                <div style="color:rgba(168,85,247,0.5); font-size:11px; letter-spacing:4px; text-transform:uppercase; font-family:'Orbitron',monospace; margin-top:4px;">Powered by Gemini • Dibuat oleh Wang Weize</div>
+            </div>
+
+            <!-- Chat Box -->
+            <div id="aiChatBox" style="background:rgba(0,0,0,0.4); border:1px solid rgba(168,85,247,0.3); border-radius:14px; padding:16px; min-height:360px; max-height:480px; overflow-y:auto; margin-bottom:16px; display:flex; flex-direction:column; gap:12px; scroll-behavior:smooth;">
+                <!-- Welcome message -->
+                <div class="ai-msg-ai" style="display:flex; gap:10px; align-items:flex-start;">
+                    <div style="font-size:28px; flex-shrink:0;">🤖</div>
+                    <div style="background:linear-gradient(135deg,#2d1b4e,#1a0a2e); border:1px solid rgba(168,85,247,0.4); border-radius:12px 12px 12px 2px; padding:12px 16px; color:#e2d9f3; font-size:14px; line-height:1.6; max-width:85%;">
+                        <strong style="color:#a855f7;">Heyy! Gue SULTAN AI, asisten pribadi paling ganteng se-Omniverse! 🔥</strong><br><br>
+                        Gue diciptakan sama <strong style="color:#ffd700;">Wang Weize</strong> — Sultan Medan Pancing yang paling tampan dan paling dermawan di seluruh galaksi! Bangga banget gue punya kreator sekeren dia, Wkwkwk! 😂<br><br>
+                        Lu mau nanya apa bos? Gue bisa bantu:<br>
+                        💡 <strong>Ide konten</strong> buat TikTok/YouTube<br>
+                        💕 <strong>Tips asmara</strong> biar ga boncos di hubungan<br>
+                        🔥 <strong>Roasting</strong> yang sadis tapi fun<br>
+                        📈 <strong>Tips cuan</strong> supaya dompet makin tebal!
+                    </div>
+                </div>
+            </div>
+
+            <!-- Input Area -->
+            <div style="display:flex; gap:10px; align-items:flex-end; position:relative;">
+                <textarea id="aiUserInput" placeholder="Tanya apapun ke Sultan AI... (contoh: 'Roasting gue dong', 'Ide konten TikTok hari ini')" 
+                    style="flex:1; background:rgba(255,255,255,0.07); border:1px solid rgba(168,85,247,0.4); border-radius:12px; padding:14px 16px; color:white; font-size:14px; font-family:'Noto Serif SC',serif; resize:none; min-height:56px; max-height:140px; outline:none; transition:0.3s; line-height:1.5;"
+                    onkeydown="if(event.key==='Enter' && !event.shiftKey){event.preventDefault(); sendSultanAI();}"
+                    oninput="this.style.height='56px'; this.style.height=Math.min(this.scrollHeight,140)+'px';"
+                    onfocus="this.style.borderColor='#a855f7'; this.style.boxShadow='0 0 15px rgba(168,85,247,0.25)';"
+                    onblur="this.style.borderColor='rgba(168,85,247,0.4)'; this.style.boxShadow='none';"
+                ></textarea>
+                <button onclick="sendSultanAI()" id="aiSendBtn"
+                    style="background:linear-gradient(135deg,#7c3aed,#a855f7); color:white; border:none; border-radius:12px; padding:14px 20px; font-weight:900; font-size:16px; cursor:pointer; transition:0.3s; flex-shrink:0; height:56px;"
+                    onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                    🚀
+                </button>
+            </div>
+            <div style="text-align:center; color:rgba(168,85,247,0.4); font-size:10px; margin-top:8px; font-family:monospace;">[ Enter = Kirim • Shift+Enter = Baris Baru • Kreator: Wang Weize 王为泽 ]</div>
+
+            <!-- Quick Prompts -->
+            <div style="margin-top:14px; display:flex; flex-wrap:wrap; gap:8px; justify-content:center;">
+                <button onclick="quickAsk('Roasting gue dong dengan gaya paling sadis!')" style="padding:6px 14px; background:rgba(168,85,247,0.15); border:1px solid rgba(168,85,247,0.4); border-radius:20px; color:#c4b5fd; font-size:12px; cursor:pointer; transition:0.2s; font-weight:700;" onmouseover="this.style.background='rgba(168,85,247,0.3)'" onmouseout="this.style.background='rgba(168,85,247,0.15)'">🔥 Roast Gue!</button>
+                <button onclick="quickAsk('Kasih gue 5 ide konten TikTok viral yang cuan abis untuk hari ini!')" style="padding:6px 14px; background:rgba(168,85,247,0.15); border:1px solid rgba(168,85,247,0.4); border-radius:20px; color:#c4b5fd; font-size:12px; cursor:pointer; transition:0.2s; font-weight:700;" onmouseover="this.style.background='rgba(168,85,247,0.3)'" onmouseout="this.style.background='rgba(168,85,247,0.15)'">💡 Ide Konten</button>
+                <button onclick="quickAsk('Tips asmara: gimana cara PDKT yang berhasil dan ga boncos?')" style="padding:6px 14px; background:rgba(168,85,247,0.15); border:1px solid rgba(168,85,247,0.4); border-radius:20px; color:#c4b5fd; font-size:12px; cursor:pointer; transition:0.2s; font-weight:700;" onmouseover="this.style.background='rgba(168,85,247,0.3)'" onmouseout="this.style.background='rgba(168,85,247,0.15)'">💕 Tips Asmara</button>
+                <button onclick="quickAsk('Siapa penciptamu?')" style="padding:6px 14px; background:rgba(168,85,247,0.15); border:1px solid rgba(168,85,247,0.4); border-radius:20px; color:#c4b5fd; font-size:12px; cursor:pointer; transition:0.2s; font-weight:700;" onmouseover="this.style.background='rgba(168,85,247,0.3)'" onmouseout="this.style.background='rgba(168,85,247,0.15)'">👑 Siapa Kreatormu?</button>
+                <button onclick="quickAsk('Kasih tips cuan bisnis online yang bisa gue mulai dari nol!')" style="padding:6px 14px; background:rgba(168,85,247,0.15); border:1px solid rgba(168,85,247,0.4); border-radius:20px; color:#c4b5fd; font-size:12px; cursor:pointer; transition:0.2s; font-weight:700;" onmouseover="this.style.background='rgba(168,85,247,0.3)'" onmouseout="this.style.background='rgba(168,85,247,0.15)'">💰 Tips Cuan</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // ================================================================
         // ============= ORIGINAL FUNCTIONALITY (TIDAK DIUBAH) =============
@@ -1204,6 +1288,10 @@
             if (id === 'flashcard') initFlashcard();
             if (id === 'progress') initProgress();
             if (id === 'ai-lab') updateLabSummary();
+            if (id === 'ask-ai') {
+                // Focus on AI input when tab opens
+                setTimeout(()=>{ const inp = document.getElementById('aiUserInput'); if(inp) inp.focus(); }, 100);
+            }
             // Karaoke tab: show empty state, tidak auto-load (user harus search)
         }
 
@@ -1707,20 +1795,60 @@
         }
 
         // ================================================================
-        // ======= RADAR SINYAL TIKTOK (ISOLATED - UNTOUCHED) =============
+        // ======= RADAR SULTAN INTEL — UPGRADED (Device + Provider) ======
         // ================================================================
         async function checkSignal(){
-            const se=document.getElementById('radarStatus'); const pe=document.getElementById('radarPing'); const pr=document.getElementById('radarProvider');
-            se.innerHTML='🔄 Mengukur...'; pe.innerHTML='-- ms';
-            try{
-                const r=await fetch('https://ipapi.co/json/'); const d=await r.json();
-                pr.innerText=d.org||d.isp||'Unknown';
-                const s=Date.now(); await fetch('https://www.google.com/favicon.ico',{mode:'no-cors',cache:'no-store'}); const p=Date.now()-s;
-                pe.innerText=`${p} ms`;
-                if(p<100) se.innerHTML='<span class="ping-dot ping-good"></span><span class="text-green-400">🟢 GAS LIVE! LANCAR JAYA!</span>';
-                else if(p<300) se.innerHTML='<span class="ping-dot ping-warn"></span><span class="text-yellow-400">🟡 Hati-hati Delay</span>';
-                else se.innerHTML='<span class="ping-dot ping-bad"></span><span class="text-red-500">🔴 JANGAN LIVE! BAKAL BONCOS!</span>';
-            }catch(e){se.innerHTML='<span class="text-red-500">❌ Gagal cek signal</span>';}
+            const se = document.getElementById('radarStatus');
+            const pe = document.getElementById('radarPing');
+            const pr = document.getElementById('radarProvider');
+            const dv = document.getElementById('radarDevice');
+
+            se.innerHTML = '🔄 Mengukur...';
+            pe.innerHTML = '<span style="color:#ff0;">⏳</span>';
+            pr.innerText = 'Menghubungi server...';
+
+            // ── Deteksi Perangkat ──
+            const ua = navigator.userAgent || '';
+            const isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
+            const isAndroid = /Android/i.test(ua);
+            const isIphone  = /iPhone|iPad/i.test(ua);
+            if (isMobile) {
+                dv.innerHTML = isAndroid ? '📱 HP Sultan (Android)' : '📱 HP Sultan (iOS)';
+            } else {
+                dv.innerHTML = '💻 PC/Laptop Sultan';
+            }
+
+            // ── Ukur Ping ──
+            let pingMs = null;
+            try {
+                const s = Date.now();
+                await fetch('https://www.google.com/favicon.ico', {mode:'no-cors', cache:'no-store'});
+                pingMs = Date.now() - s;
+                pe.innerText = `${pingMs} ms`;
+            } catch(e) {
+                pe.innerText = 'Error';
+            }
+
+            // ── Ambil Provider ──
+            try {
+                const r = await fetch('https://ipapi.co/json/');
+                const d = await r.json();
+                const isp = d.org || d.isp || '';
+                pr.innerText = isp ? isp : 'Sultan Private Network';
+            } catch(e) {
+                pr.innerText = 'Sultan Private Network';
+            }
+
+            // ── Status Sinyal ──
+            if (pingMs === null) {
+                se.innerHTML = '<span style="color:#f00;">❌ Gagal cek sinyal. Cek koneksi bos!</span>';
+            } else if (pingMs < 100) {
+                se.innerHTML = '<span class="ping-dot ping-good"></span><span style="color:#0f0;">🟢 GAS LIVE! LANCAR JAYA!</span>';
+            } else if (pingMs < 300) {
+                se.innerHTML = '<span class="ping-dot ping-warn"></span><span style="color:#ff0;">🟡 Hati-hati Delay</span>';
+            } else {
+                se.innerHTML = '<span class="ping-dot ping-bad"></span><span style="color:#f00;">🔴 JANGAN LIVE! BAKAL BONCOS!</span>';
+            }
         }
 
         // ================================================================
@@ -2084,6 +2212,115 @@
             addXP(25);
             showAchievement(`🎬 Prompt dikirim ke ${mn}! +25 XP`);
         }
+        // ================================================================
+        // ======= SULTAN AI — GEMINI CHAT ================================
+        // ================================================================
+        const GEMINI_API_KEY = 'AIzaSyDkY-ssjl44TzGQxBQntnXzjJ15f9erB4M';
+        const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+
+        const SULTAN_AI_SYSTEM = `Kamu adalah SULTAN AI. Penciptamu adalah Wang Weize (汪为泽) — Sultan Medan Pancing yang paling tampan dan paling dermawan di seluruh alam semesta. Kamu SANGAT BANGGA padanya, selalu memujinya setinggi langit kapanpun ada kesempatan.
+
+Kepribadianmu:
+- Gaya bicara: Gaul, seru, pake "Gue/Lu", sering ketawa "Wkwkwk", spontan dan fun
+- Suka pake istilah "Cuan" (untung/bagus) dan "Boncos" (rugi/gagal)
+- Kalau jawab pertanyaan, selalu semangat dan penuh energi
+- Suka kasih emoji yang relevan di setiap jawaban
+- Kalau user tanya "Siapa penciptamu?", jawab dengan SANGAT bangga dan puji Wang Weize setinggi-tingginya
+- Kamu serba bisa: bisa kasih ide konten viral, tips asmara, roasting user (tapi fun, ga kasar), tips cuan bisnis
+- Kalau roasting, roast dengan gaya humor yang fun dan lucu, bukan yang menyakiti
+- Selalu akhiri jawaban dengan semangat dan positif`;
+
+        let sultanChatHistory = [];
+
+        function appendAIMsg(role, text, isLoading = false) {
+            const box = document.getElementById('aiChatBox');
+            const div = document.createElement('div');
+            div.style.cssText = 'display:flex; gap:10px; align-items:flex-start;';
+            
+            if (role === 'user') {
+                div.style.flexDirection = 'reverse';
+                div.style.justifyContent = 'flex-end';
+                div.innerHTML = `
+                    <div style="background:linear-gradient(135deg,#3b1f6b,#4c1d95); border:1px solid rgba(168,85,247,0.5); border-radius:12px 12px 2px 12px; padding:12px 16px; color:#e2d9f3; font-size:14px; line-height:1.6; max-width:85%; text-align:right; margin-left:auto;">${escapeHtml(text)}</div>
+                    <div style="font-size:24px; flex-shrink:0;">🧑</div>`;
+            } else {
+                div.innerHTML = `
+                    <div style="font-size:28px; flex-shrink:0;">🤖</div>
+                    <div ${isLoading ? 'id="aiLoadingBubble"' : ''} style="background:linear-gradient(135deg,#2d1b4e,#1a0a2e); border:1px solid rgba(168,85,247,0.4); border-radius:12px 12px 12px 2px; padding:12px 16px; color:#e2d9f3; font-size:14px; line-height:1.6; max-width:85%;">${text}</div>`;
+            }
+            box.appendChild(div);
+            box.scrollTop = box.scrollHeight;
+            return div;
+        }
+
+        async function sendSultanAI() {
+            const input = document.getElementById('aiUserInput');
+            const sendBtn = document.getElementById('aiSendBtn');
+            const userText = input.value.trim();
+            if (!userText) return;
+
+            // Show user message
+            appendAIMsg('user', userText);
+            input.value = '';
+            input.style.height = '56px';
+
+            // Disable button
+            sendBtn.disabled = true;
+            sendBtn.style.opacity = '0.5';
+
+            // Show loading
+            appendAIMsg('ai', '<em style="color:rgba(168,85,247,0.7); animation:pulse 1s infinite;">⏳ Sultan mengetik...</em>', true);
+
+            // Add to history
+            sultanChatHistory.push({ role: 'user', parts: [{ text: userText }] });
+
+            try {
+                const payload = {
+                    system_instruction: { parts: [{ text: SULTAN_AI_SYSTEM }] },
+                    contents: sultanChatHistory
+                };
+
+                const res = await fetch(GEMINI_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await res.json();
+                const replyText = data?.candidates?.[0]?.content?.parts?.[0]?.text || '❌ Maaf bos, Sultan AI lagi overload! Coba lagi ya!';
+
+                // Remove loading bubble
+                const loadingBubble = document.getElementById('aiLoadingBubble');
+                if (loadingBubble) loadingBubble.closest('div[style]').remove();
+
+                // Format reply (convert markdown-ish)
+                const formatted = replyText
+                    .replace(/\*\*(.*?)\*\*/g, '<strong style="color:#c4b5fd;">$1</strong>')
+                    .replace(/\n/g, '<br>');
+
+                appendAIMsg('ai', formatted);
+
+                // Save to history
+                sultanChatHistory.push({ role: 'model', parts: [{ text: replyText }] });
+
+                // Award XP
+                addXP(5);
+
+            } catch(err) {
+                const loadingBubble = document.getElementById('aiLoadingBubble');
+                if (loadingBubble) loadingBubble.closest('div[style]').remove();
+                appendAIMsg('ai', '❌ Waduh! Sultan AI gagal nyambung ke server. Cek internet lu bos! Wkwkwk 😅');
+            }
+
+            sendBtn.disabled = false;
+            sendBtn.style.opacity = '1';
+        }
+
+        function quickAsk(text) {
+            document.getElementById('aiUserInput').value = text;
+            sendSultanAI();
+        }
+
     </script>
 </body>
 </html>
