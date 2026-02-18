@@ -318,6 +318,146 @@
         /* Store Toast */
         #storeToast { position: fixed; bottom: 140px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, #1a0000, #330000); border: 1px solid var(--emperor-gold); color: var(--emperor-gold); padding: 12px 24px; border-radius: 30px; font-family: 'Noto Serif SC', serif; font-size: 13px; font-weight: 900; box-shadow: 0 0 20px rgba(255,215,0,0.3); z-index: 9999; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
         #storeToast.show { opacity: 1; }
+
+        /* ================================================================ */
+        /* ======= STORE V3 — SMART PAYMENT HUB STYLES =================== */
+        /* ================================================================ */
+
+        /* ── 3D COIN ── */
+        .coin-3d {
+            width: 56px; height: 56px; border-radius: 50%; margin: 0 auto 10px;
+            background: radial-gradient(circle at 35% 35%, #fff7a0, #FFD700 40%, #c8960c 70%, #7a5c00 100%);
+            box-shadow:
+                3px 3px 0 #a07800,
+                6px 6px 0 #8a6600,
+                9px 9px 0 rgba(0,0,0,0.25),
+                inset -4px -4px 8px rgba(0,0,0,0.3),
+                inset 4px 4px 8px rgba(255,255,255,0.5),
+                0 0 20px rgba(255,215,0,0.4);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 26px; transition: transform 0.5s;
+            transform-style: preserve-3d;
+        }
+        .topup-product-card:hover .coin-3d { transform: rotateY(360deg); }
+        .coin-3d-wrap { perspective: 600px; }
+
+        /* ── CSS PAYMENT LOGOS ── */
+        .pay-logo-qris {
+            width: 44px; height: 26px; background: #fff; border: 2px solid #cc0000;
+            border-radius: 5px; display: inline-flex; align-items: center; justify-content: center;
+            font-size: 9px; font-weight: 900; color: #cc0000; letter-spacing: 0.5px; font-family: monospace;
+        }
+        .pay-logo-bca {
+            width: 44px; height: 26px; background: #005BAA; border-radius: 5px;
+            display: inline-flex; align-items: center; justify-content: center;
+            font-size: 10px; font-weight: 900; color: #fff; letter-spacing: 0.5px;
+        }
+        .pay-logo-dana {
+            width: 44px; height: 26px; background: #118EEA; border-radius: 5px;
+            display: inline-flex; align-items: center; justify-content: center;
+            font-size: 10px; font-weight: 900; color: #fff;
+        }
+        .pay-logo-ovo {
+            width: 44px; height: 26px; background: #4C3FA0; border-radius: 5px;
+            display: inline-flex; align-items: center; justify-content: center;
+            font-size: 10px; font-weight: 900; color: #fff;
+        }
+        .pay-logo-gopay {
+            width: 44px; height: 26px; background: #00AED6; border-radius: 5px;
+            display: inline-flex; align-items: center; justify-content: center;
+            font-size: 10px; font-weight: 900; color: #fff;
+        }
+        .pay-logo-mandiri {
+            width: 44px; height: 26px; background: #003F8A; border-radius: 5px;
+            display: inline-flex; align-items: center; justify-content: center;
+            font-size: 9px; font-weight: 900; color: #FFCB00;
+        }
+        .pay-logo-bri {
+            width: 44px; height: 26px; background: #00529B; border-radius: 5px;
+            display: inline-flex; align-items: center; justify-content: center;
+            font-size: 10px; font-weight: 900; color: #fff;
+        }
+        .pay-logo-tsel {
+            width: 44px; height: 26px; background: #FF0000; border-radius: 5px;
+            display: inline-flex; align-items: center; justify-content: center;
+            font-size: 8px; font-weight: 900; color: #fff; letter-spacing: 0;
+        }
+        .pay-logo-xl {
+            width: 44px; height: 26px; background: #0A4FA8; border-radius: 5px;
+            display: inline-flex; align-items: center; justify-content: center;
+            font-size: 10px; font-weight: 900; color: #fff;
+        }
+        .pay-logo-indosat {
+            width: 44px; height: 26px; background: #FFCB00; border-radius: 5px;
+            display: inline-flex; align-items: center; justify-content: center;
+            font-size: 9px; font-weight: 900; color: #000; letter-spacing: 0;
+        }
+
+        /* ── NOMOR INPUT WRAPPER ── */
+        .nomor-input-wrap { position: relative; display: flex; gap: 8px; align-items: center; }
+        .nomor-input-wrap .store-input { flex: 1; }
+        .btn-contact-book {
+            flex-shrink: 0; width: 46px; height: 48px;
+            background: rgba(255,215,0,0.1); border: 1px solid rgba(255,215,0,0.4);
+            border-radius: 10px; color: var(--emperor-gold); font-size: 22px;
+            cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center;
+        }
+        .btn-contact-book:hover { background: rgba(255,215,0,0.2); transform: scale(1.05); }
+
+        /* ── CONTACT BOOK PANEL ── */
+        #contactBookPanel {
+            display: none; background: rgba(15,10,0,0.98); border: 1px solid rgba(255,215,0,0.3);
+            border-radius: 12px; padding: 16px; margin-top: 10px;
+        }
+        #contactBookPanel h4 { color: var(--emperor-gold); font-size: 12px; font-weight: 900; letter-spacing: 2px; margin-bottom: 12px; text-transform: uppercase; }
+        .contact-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 10px 12px; background: rgba(255,215,0,0.05);
+            border: 1px solid rgba(255,215,0,0.15); border-radius: 8px; margin-bottom: 8px;
+            cursor: pointer; transition: 0.2s;
+        }
+        .contact-item:hover { background: rgba(255,215,0,0.12); border-color: rgba(255,215,0,0.4); }
+        .contact-item .cn { color: white; font-weight: 700; font-size: 13px; }
+        .contact-item .cd { color: #888; font-size: 11px; }
+        .contact-item .del-btn { color: #f87171; font-size: 16px; padding: 2px 6px; background: none; border: none; cursor: pointer; }
+        .contact-save-row { display: flex; gap: 8px; margin-top: 12px; }
+        .contact-save-row input { flex: 1; padding: 10px 12px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,215,0,0.2); border-radius: 8px; color: white; font-size: 13px; outline: none; }
+        .contact-save-row button { padding: 10px 16px; background: var(--emperor-gold); color: #000; border: none; border-radius: 8px; font-weight: 900; font-size: 12px; cursor: pointer; }
+
+        /* ── TRANSACTION HISTORY ── */
+        #txHistory { margin-top: 16px; }
+        #txHistory h4 { color: var(--emperor-gold); font-size: 11px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; }
+        .tx-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 10px 14px; background: rgba(255,215,0,0.04);
+            border-left: 3px solid rgba(255,215,0,0.4); border-radius: 0 8px 8px 0;
+            margin-bottom: 8px;
+        }
+        .tx-item .tp { color: white; font-weight: 700; font-size: 12px; }
+        .tx-item .tn { color: var(--emperor-gold); font-size: 11px; font-family: monospace; }
+        .tx-item .td { color: #666; font-size: 10px; }
+
+        /* ── LOADING OVERLAY ── */
+        #paymentLoadingOverlay {
+            display: none; position: fixed; inset: 0;
+            background: rgba(0,0,0,0.92);
+            z-index: 99999; flex-direction: column;
+            align-items: center; justify-content: center;
+            font-family: 'Noto Serif SC', serif;
+        }
+        #paymentLoadingOverlay .lo-spinner {
+            width: 80px; height: 80px; border-radius: 50%;
+            background: radial-gradient(circle at 35% 35%, #fff7a0, #FFD700 40%, #c8960c 70%, #7a5c00);
+            box-shadow: 0 0 40px rgba(255,215,0,0.5);
+            animation: spinCoin 1s linear infinite;
+            margin-bottom: 28px;
+            display: flex; align-items: center; justify-content: center; font-size: 36px;
+        }
+        @keyframes spinCoin { to { transform: rotateY(360deg); } }
+        #paymentLoadingOverlay .lo-title { color: var(--emperor-gold); font-size: 20px; font-weight: 900; letter-spacing: 2px; text-align: center; }
+        #paymentLoadingOverlay .lo-sub { color: #888; font-size: 12px; margin-top: 10px; letter-spacing: 1px; font-family: monospace; }
+        #paymentLoadingOverlay .lo-dots { color: var(--emperor-gold); font-size: 28px; animation: blink 1s infinite; letter-spacing: 4px; margin-top: 8px; }
+        @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.2; } }
     </style>
 </head>
 <body>
@@ -326,6 +466,16 @@
     <div id="achievementContainer"></div>
     <div id="labToast">✅ PROMPT DISALIN! MEMBUKA AI...</div>
     <div id="storeToast">✅ Membuka halaman resmi...</div>
+
+    <!-- PAYMENT LOADING OVERLAY -->
+    <div id="paymentLoadingOverlay">
+        <div style="transform-style:preserve-3d;">
+            <div class="lo-spinner">💰</div>
+        </div>
+        <div class="lo-title">🔄 Menghubungkan ke Server Pembayaran</div>
+        <div class="lo-sub">Menyiapkan sesi aman & menyalin nomor...</div>
+        <div class="lo-dots">• • •</div>
+    </div>
 
     <!-- ANGPAO WIDGET -->
     <div id="angpaoWidget">
@@ -705,49 +855,81 @@
         </div>
 
         <!-- ================================================================ -->
-        <!-- ======= SULTAN SUPER STORE TAB (BARU) ========================= -->
+        <!-- ======= SULTAN SMART PAYMENT HUB V3 =========================== -->
         <!-- ================================================================ -->
         <div id="store" class="tab-content hidden-tab">
-            <div class="store-title">🛒 SULTAN SUPER STORE</div>
-            <div class="store-subtitle">Top Up • Premium Accounts • All Operators</div>
+            <div class="store-title">💳 SMART PAYMENT HUB</div>
+            <div class="store-subtitle">Top Up Cerdas • Memory Nomor • Riwayat Transaksi</div>
+
+            <!-- PAYMENT METHOD SHOWCASE (CSS Only - No External Images) -->
+            <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,215,0,0.15); border-radius:14px; padding:18px; margin-bottom:24px; text-align:center;">
+                <div style="color:#666; font-size:10px; letter-spacing:3px; text-transform:uppercase; margin-bottom:14px;">✓ METODE PEMBAYARAN TERSEDIA</div>
+                <div style="display:flex; flex-wrap:wrap; gap:10px; justify-content:center; align-items:center;">
+                    <div class="pay-logo-qris">■ QRIS</div>
+                    <div class="pay-logo-bca">BCA</div>
+                    <div class="pay-logo-mandiri">MNDRI</div>
+                    <div class="pay-logo-bri">BRI</div>
+                    <div class="pay-logo-dana">DANA</div>
+                    <div class="pay-logo-ovo">OVO</div>
+                    <div class="pay-logo-gopay">GoPay</div>
+                    <div class="pay-logo-tsel">Telkomsel</div>
+                    <div class="pay-logo-xl">XL</div>
+                    <div class="pay-logo-indosat">Indosat</div>
+                </div>
+            </div>
 
             <!-- CATEGORY A: TOP UP OFFICIAL -->
-            <div class="mb-2"><span class="store-category-label">🏪 A. TOP UP OFFICIAL — DIRECT WEBSITE</span></div>
-            <p style="color:#888; font-size:12px; margin-bottom:18px;">Pilih produk → Isi data → Pilih bayar → BAYAR → Diarahkan ke website resmi ✓</p>
+            <div class="mb-2"><span class="store-category-label">🏪 A. TOP UP OFFICIAL — SMART REDIRECT</span></div>
+            <p style="color:#888; font-size:12px; margin-bottom:18px;">Pilih produk → Isi data → Klik BAYAR → Auto-copy nomor → Redirect aman ✓</p>
 
-            <!-- Product Selector -->
+            <!-- Product Selector with 3D Coins -->
             <div class="topup-grid" id="topupProductGrid">
                 <div class="topup-product-card" onclick="selectTopupProduct(this,'tiktok')" data-product="tiktok">
-                    <span class="topup-icon">🎵</span>
+                    <div class="coin-3d-wrap"><div class="coin-3d">🎵</div></div>
                     <div class="topup-name">TikTok Coin</div>
                     <div class="topup-desc">70 – 17.500 Koin</div>
                 </div>
-                <div class="topup-product-card" onclick="selectTopupProduct(this,'capcut')" data-product="capcut">
-                    <span class="topup-icon">🎬</span>
-                    <div class="topup-name">CapCut Premium</div>
-                    <div class="topup-desc">Pro Editing No Watermark</div>
-                </div>
-                <div class="topup-product-card" onclick="selectTopupProduct(this,'pln')" data-product="pln">
-                    <span class="topup-icon">⚡</span>
-                    <div class="topup-name">PLN Token/Tagihan</div>
-                    <div class="topup-desc">Semua meteran listrik</div>
-                </div>
-                <div class="topup-product-card" onclick="selectTopupProduct(this,'esim')" data-product="esim">
-                    <span class="topup-icon">🌐</span>
-                    <div class="topup-name">eSIM Roaming Global</div>
-                    <div class="topup-desc">170+ Negara tersedia</div>
-                </div>
                 <div class="topup-product-card" onclick="selectTopupProduct(this,'pulsa')" data-product="pulsa">
-                    <span class="topup-icon">📱</span>
+                    <div class="coin-3d-wrap"><div class="coin-3d">📱</div></div>
                     <div class="topup-name">Pulsa & Data</div>
                     <div class="topup-desc">All Operator Indonesia</div>
+                </div>
+                <div class="topup-product-card" onclick="selectTopupProduct(this,'pln')" data-product="pln">
+                    <div class="coin-3d-wrap"><div class="coin-3d">⚡</div></div>
+                    <div class="topup-name">PLN Token</div>
+                    <div class="topup-desc">Semua meteran listrik</div>
+                </div>
+                <div class="topup-product-card" onclick="selectTopupProduct(this,'ewallet')" data-product="ewallet">
+                    <div class="coin-3d-wrap"><div class="coin-3d">💳</div></div>
+                    <div class="topup-name">E-Wallet</div>
+                    <div class="topup-desc">DANA / OVO / GoPay</div>
+                </div>
+                <div class="topup-product-card" onclick="selectTopupProduct(this,'travel')" data-product="travel">
+                    <div class="coin-3d-wrap"><div class="coin-3d">✈️</div></div>
+                    <div class="topup-name">Travel & Hotel</div>
+                    <div class="topup-desc">Tiket & Penginapan Murah</div>
                 </div>
             </div>
 
             <!-- Form Top Up -->
             <div class="store-form" id="topupForm">
                 <label>NOMOR HP / ID PENGGUNA</label>
-                <input type="text" class="store-input" id="topupNomor" placeholder="Masukkan No HP atau ID TikTok..." oninput="validateTopupBtn()">
+                <div class="nomor-input-wrap">
+                    <input type="tel" class="store-input" id="topupNomor" placeholder="08xxxxxxxxxx atau ID TikTok..." oninput="validateTopupBtn()">
+                    <button class="btn-contact-book" onclick="toggleContactBook()" title="Buku Kontak">📒</button>
+                </div>
+
+                <!-- Contact Book Panel -->
+                <div id="contactBookPanel">
+                    <h4>📒 BUKU KONTAK SULTAN</h4>
+                    <div id="contactList">
+                        <div style="color:#555; font-size:12px; text-align:center; padding:12px;">Belum ada kontak tersimpan</div>
+                    </div>
+                    <div class="contact-save-row">
+                        <input type="text" id="contactNameInput" placeholder="Nama (opsional)">
+                        <button onclick="saveCurrentContact()">💾 Simpan</button>
+                    </div>
+                </div>
 
                 <!-- Nominal -->
                 <label>PILIH NOMINAL</label>
@@ -760,29 +942,39 @@
                 <div class="payment-section">
                     <span class="payment-group-label">💳 Transfer Bank</span>
                     <div class="payment-logos">
-                        <div class="payment-logo" onclick="selectPayment(this)" data-pay="BCA"><span class="pay-icon pay-bca">🏦</span> BCA</div>
-                        <div class="payment-logo" onclick="selectPayment(this)" data-pay="Mandiri"><span class="pay-icon pay-mandiri">🏦</span> Mandiri</div>
-                        <div class="payment-logo" onclick="selectPayment(this)" data-pay="BRI"><span class="pay-icon pay-bri">🏦</span> BRI</div>
+                        <div class="payment-logo" onclick="selectPayment(this)" data-pay="BCA"><div class="pay-logo-bca" style="width:36px;height:20px;font-size:9px;">BCA</div> BCA</div>
+                        <div class="payment-logo" onclick="selectPayment(this)" data-pay="Mandiri"><div class="pay-logo-mandiri" style="width:36px;height:20px;font-size:8px;">MNDRI</div> Mandiri</div>
+                        <div class="payment-logo" onclick="selectPayment(this)" data-pay="BRI"><div class="pay-logo-bri" style="width:36px;height:20px;font-size:9px;">BRI</div> BRI</div>
                     </div>
                     <span class="payment-group-label">📲 E-Wallet</span>
                     <div class="payment-logos">
-                        <div class="payment-logo" onclick="selectPayment(this)" data-pay="DANA"><span class="pay-icon pay-dana">💳</span> DANA</div>
-                        <div class="payment-logo" onclick="selectPayment(this)" data-pay="OVO"><span class="pay-icon pay-ovo">💜</span> OVO</div>
-                        <div class="payment-logo" onclick="selectPayment(this)" data-pay="GoPay"><span class="pay-icon pay-gopay">💚</span> GoPay</div>
+                        <div class="payment-logo" onclick="selectPayment(this)" data-pay="DANA"><div class="pay-logo-dana" style="width:36px;height:20px;font-size:9px;">DANA</div> DANA</div>
+                        <div class="payment-logo" onclick="selectPayment(this)" data-pay="OVO"><div class="pay-logo-ovo" style="width:36px;height:20px;font-size:9px;">OVO</div> OVO</div>
+                        <div class="payment-logo" onclick="selectPayment(this)" data-pay="GoPay"><div class="pay-logo-gopay" style="width:36px;height:20px;font-size:9px;">GoPay</div> GoPay</div>
+                    </div>
+                    <span class="payment-group-label">📲 QRIS</span>
+                    <div class="payment-logos">
+                        <div class="payment-logo" onclick="selectPayment(this)" data-pay="QRIS"><div class="pay-logo-qris" style="width:36px;height:20px;font-size:8px;">■ QRIS</div> QRIS</div>
                     </div>
                     <span class="payment-group-label">📶 Pulsa Operator</span>
                     <div class="payment-logos">
-                        <div class="payment-logo" onclick="selectPayment(this)" data-pay="Telkomsel"><span class="pay-icon pay-tsel">🔴</span> Telkomsel</div>
-                        <div class="payment-logo" onclick="selectPayment(this)" data-pay="XL"><span class="pay-icon pay-xl">🔵</span> XL Axiata</div>
-                        <div class="payment-logo" onclick="selectPayment(this)" data-pay="Indosat"><span class="pay-icon pay-indosat" style="color:#000;">🟡</span> Indosat</div>
-                        <div class="payment-logo" onclick="selectPayment(this)" data-pay="Tri"><span class="pay-icon pay-tri">🔴</span> Tri</div>
+                        <div class="payment-logo" onclick="selectPayment(this)" data-pay="Telkomsel"><div class="pay-logo-tsel" style="width:36px;height:20px;font-size:7px;">Telkomsel</div> Tsel</div>
+                        <div class="payment-logo" onclick="selectPayment(this)" data-pay="XL"><div class="pay-logo-xl" style="width:36px;height:20px;font-size:9px;">XL</div> XL</div>
+                        <div class="payment-logo" onclick="selectPayment(this)" data-pay="Indosat"><div class="pay-logo-indosat" style="width:36px;height:20px;font-size:8px;">Indosat</div> Indosat</div>
                     </div>
                 </div>
 
-                <button class="store-pay-btn" id="topupPayBtn" disabled onclick="handleStoreRedirect()">
+                <button class="store-pay-btn" id="topupPayBtn" disabled onclick="handleSmartRedirect()">
                     🔒 ISI NOMOR HP DULU
                 </button>
-                <p style="color:#555; font-size:11px; text-align:center; margin-top:10px;">* Anda akan diarahkan ke website resmi masing-masing layanan untuk menyelesaikan pembayaran.</p>
+
+                <!-- Transaction History -->
+                <div id="txHistory" style="display:none;">
+                    <h4>🕐 RIWAYAT TRANSAKSI</h4>
+                    <div id="txList"></div>
+                </div>
+
+                <p style="color:#555; font-size:11px; text-align:center; margin-top:10px;">✅ Nomor HP otomatis disalin • Redirect ke website resmi • Data aman</p>
             </div>
 
             <div class="store-divider"></div>
@@ -1544,26 +1736,6 @@
                 {label:'7.000 Koin', price:'Rp 1.119.900'},
                 {label:'17.500 Koin', price:'Rp 2.975.000'},
             ],
-            capcut: [
-                {label:'1 Bulan', price:'Rp 79.000'},
-                {label:'3 Bulan', price:'Rp 199.000'},
-                {label:'1 Tahun', price:'Rp 649.000'},
-            ],
-            pln: [
-                {label:'Rp 20.000', price:'Rp 20.000'},
-                {label:'Rp 50.000', price:'Rp 50.000'},
-                {label:'Rp 100.000', price:'Rp 100.000'},
-                {label:'Rp 200.000', price:'Rp 200.000'},
-                {label:'Rp 500.000', price:'Rp 500.000'},
-                {label:'Rp 1.000.000', price:'Rp 1.000.000'},
-            ],
-            esim: [
-                {label:'1 GB / 7 Hari', price:'Rp 65.000'},
-                {label:'3 GB / 15 Hari', price:'Rp 130.000'},
-                {label:'5 GB / 30 Hari', price:'Rp 215.000'},
-                {label:'10 GB / 30 Hari', price:'Rp 375.000'},
-                {label:'20 GB / 30 Hari', price:'Rp 650.000'},
-            ],
             pulsa: [
                 {label:'Rp 5.000', price:'Rp 5.500'},
                 {label:'Rp 10.000', price:'Rp 10.500'},
@@ -1574,13 +1746,39 @@
                 {label:'Paket 5 GB', price:'Rp 35.000'},
                 {label:'Paket 10 GB', price:'Rp 60.000'},
             ],
+            pln: [
+                {label:'Rp 20.000', price:'Rp 20.000'},
+                {label:'Rp 50.000', price:'Rp 50.000'},
+                {label:'Rp 100.000', price:'Rp 100.000'},
+                {label:'Rp 200.000', price:'Rp 200.000'},
+                {label:'Rp 500.000', price:'Rp 500.000'},
+                {label:'Rp 1.000.000', price:'Rp 1.000.000'},
+            ],
+            ewallet: [
+                {label:'Rp 10.000', price:'Rp 10.500'},
+                {label:'Rp 25.000', price:'Rp 25.800'},
+                {label:'Rp 50.000', price:'Rp 51.000'},
+                {label:'Rp 100.000', price:'Rp 101.500'},
+                {label:'Rp 200.000', price:'Rp 201.500'},
+                {label:'Rp 500.000', price:'Rp 502.000'},
+            ],
+            travel: [
+                {label:'Tiket Domestik', price:'Mulai Rp 300.000'},
+                {label:'Tiket Internasional', price:'Mulai Rp 1.500.000'},
+                {label:'Hotel Bintang 3', price:'Mulai Rp 200.000/mlm'},
+                {label:'Hotel Bintang 4', price:'Mulai Rp 400.000/mlm'},
+                {label:'Hotel Bintang 5', price:'Mulai Rp 800.000/mlm'},
+                {label:'Paket Wisata', price:'Mulai Rp 500.000'},
+            ],
         };
-        const STORE_LINKS = {
-            tiktok: 'https://www.tiktok.com/coin',
-            capcut: 'https://www.capcut.com/capcut_pc_indus/pc_purchase_plan',
-            pln: 'https://layanan.pln.co.id',
-            esim: 'https://www.airalo.com',
-            pulsa: 'https://www.sepulsa.com',
+
+        // ── SMART REDIRECT LINKS (V3) ──
+        const SMART_LINKS = {
+            tiktok:  'https://www.tiktok.com/coin',
+            pulsa:   'https://www.hotelmurah.com/pulsa',
+            pln:     'https://www.hotelmurah.com/pln-murah',
+            ewallet: 'https://www.hotelmurah.com',
+            travel:  'https://www.hotelmurah.com/tiket-pesawat',
         };
 
         let selectedProduct = null;
@@ -1601,7 +1799,7 @@
         function renderNominalGrid(product) {
             const nominals = STORE_NOMINALS[product] || [];
             const grid = document.getElementById('nominalGrid');
-            grid.innerHTML = nominals.map((n, i) => `
+            grid.innerHTML = nominals.map((n) => `
                 <div class="nominal-chip" onclick="selectNominal(this,'${n.label}')">
                     ${n.label}
                     <span class="nc-price">${n.price}</span>
@@ -1635,22 +1833,163 @@
             } else {
                 btn.disabled = false;
                 const payInfo = selectedPayment ? ` via ${selectedPayment}` : '';
-                btn.textContent = `🚀 BAYAR${payInfo} — REDIRECT RESMI`;
+                btn.textContent = `⚡ BAYAR${payInfo} — SMART REDIRECT`;
             }
         }
 
-        function handleStoreRedirect() {
+        // ================================================================
+        // ======= SMART PAYMENT HUB V3 — NEW FUNCTIONS ===================
+        // ================================================================
+
+        // ── Contact Book ──
+        function toggleContactBook() {
+            const panel = document.getElementById('contactBookPanel');
+            panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+            if (panel.style.display === 'block') renderContactList();
+        }
+
+        function getContacts() {
+            try { return JSON.parse(localStorage.getItem('sultanContacts') || '[]'); } catch(e) { return []; }
+        }
+
+        function saveContacts(arr) {
+            localStorage.setItem('sultanContacts', JSON.stringify(arr));
+        }
+
+        function renderContactList() {
+            const contacts = getContacts();
+            const el = document.getElementById('contactList');
+            if (contacts.length === 0) {
+                el.innerHTML = '<div style="color:#555; font-size:12px; text-align:center; padding:12px;">Belum ada kontak tersimpan</div>';
+                return;
+            }
+            el.innerHTML = contacts.map((c, i) => `
+                <div class="contact-item" onclick="useContact('${c.nomor}')">
+                    <div>
+                        <div class="cn">${c.nama || 'No Name'}</div>
+                        <div class="cd">${c.nomor}</div>
+                    </div>
+                    <button class="del-btn" onclick="event.stopPropagation(); deleteContact(${i})">🗑</button>
+                </div>
+            `).join('');
+        }
+
+        function useContact(nomor) {
+            document.getElementById('topupNomor').value = nomor;
+            document.getElementById('contactBookPanel').style.display = 'none';
+            validateTopupBtn();
+        }
+
+        function saveCurrentContact() {
+            const nomor = document.getElementById('topupNomor').value.trim();
+            if (!nomor) { alert('Isi nomor HP dulu bos!'); return; }
+            const nama = document.getElementById('contactNameInput').value.trim() || nomor;
+            const contacts = getContacts();
+            // Prevent duplicate nomor
+            if (contacts.some(c => c.nomor === nomor)) {
+                showStoreToast('⚠️ Nomor sudah tersimpan!');
+                return;
+            }
+            contacts.unshift({ nomor, nama, saved: new Date().toLocaleDateString('id-ID') });
+            saveContacts(contacts);
+            document.getElementById('contactNameInput').value = '';
+            renderContactList();
+            showStoreToast(`✅ Kontak "${nama}" disimpan!`);
+        }
+
+        function deleteContact(idx) {
+            const contacts = getContacts();
+            contacts.splice(idx, 1);
+            saveContacts(contacts);
+            renderContactList();
+        }
+
+        // ── Transaction History ──
+        function getTransactions() {
+            try { return JSON.parse(localStorage.getItem('sultanTxHistory') || '[]'); } catch(e) { return []; }
+        }
+
+        function addTransaction(produk, nominal) {
+            const txs = getTransactions();
+            txs.unshift({
+                produk,
+                nominal,
+                tanggal: new Date().toLocaleString('id-ID', { dateStyle:'short', timeStyle:'short' })
+            });
+            localStorage.setItem('sultanTxHistory', JSON.stringify(txs.slice(0, 10)));
+            renderTxHistory();
+        }
+
+        function renderTxHistory() {
+            const txs = getTransactions().slice(0, 3);
+            const wrap = document.getElementById('txHistory');
+            const list = document.getElementById('txList');
+            if (txs.length === 0) { wrap.style.display = 'none'; return; }
+            wrap.style.display = 'block';
+            list.innerHTML = txs.map(t => `
+                <div class="tx-item">
+                    <div>
+                        <div class="tp">🛒 ${t.produk.toUpperCase()} — ${t.nominal}</div>
+                        <div class="td">${t.tanggal}</div>
+                    </div>
+                    <div class="tn">✅ Done</div>
+                </div>
+            `).join('');
+        }
+
+        // ── Smart Redirect Handler ──
+        async function handleSmartRedirect() {
             const nomor = document.getElementById('topupNomor').value.trim();
             if (!nomor) { alert('Isi Nomor HP/ID dulu bos!'); return; }
             if (!selectedProduct) { alert('Pilih produk dulu bos!'); return; }
             if (!selectedNominal) { alert('Pilih nominal dulu bos!'); return; }
 
-            const link = STORE_LINKS[selectedProduct];
-            showStoreToast(`✅ Membuka website resmi ${selectedProduct.toUpperCase()}...`);
-            setTimeout(() => window.open(link, '_blank'), 600);
-            addXP(10);
-            showAchievement(`🛒 Top Up ${selectedProduct.toUpperCase()} +10 XP!`);
+            const link = SMART_LINKS[selectedProduct];
+
+            // A — Auto-copy (except TikTok)
+            if (selectedProduct !== 'tiktok') {
+                try {
+                    await navigator.clipboard.writeText(nomor);
+                } catch(e) {
+                    const ta = document.createElement('textarea');
+                    ta.value = nomor; document.body.appendChild(ta); ta.select();
+                    document.execCommand('copy'); document.body.removeChild(ta);
+                }
+            }
+
+            // B — Show loading overlay
+            const overlay = document.getElementById('paymentLoadingOverlay');
+            overlay.style.display = 'flex';
+
+            // C — Wait 2.5 seconds then redirect
+            setTimeout(() => {
+                overlay.style.display = 'none';
+                window.open(link, '_blank');
+
+                // Save transaction
+                addTransaction(selectedProduct, selectedNominal);
+
+                // Auto-save nomor to contacts if not already there
+                const contacts = getContacts();
+                if (!contacts.some(c => c.nomor === nomor)) {
+                    contacts.unshift({ nomor, nama: nomor, saved: new Date().toLocaleDateString('id-ID') });
+                    if (contacts.length > 20) contacts.pop();
+                    saveContacts(contacts);
+                }
+
+                addXP(10);
+                showAchievement(`🛒 Top Up ${selectedProduct.toUpperCase()} +10 XP!`);
+                showStoreToast(`✅ Membuka payment gateway ${selectedProduct.toUpperCase()}...`);
+            }, 2500);
         }
+
+        // Legacy alias (keep for safety)
+        function handleStoreRedirect() { handleSmartRedirect(); }
+
+        // Initialize tx history on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            renderTxHistory();
+        });
 
         function buyPremiumWA(productName, price) {
             const pesan = `🛒 *ORDER AKUN PREMIUM SULTAN*\n\n` +
