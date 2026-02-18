@@ -115,12 +115,6 @@
         .leaderboard-item { background: white; border: 2px solid var(--imperial-red); padding: 15px; margin: 10px 0; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; }
         .rank-medal { font-size: 32px; }
         
-        .ar-viewer { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; border-radius: 15px; text-align: center; margin: 20px 0; }
-        
-        .waveform { height: 60px; background: #f0f0f0; border-radius: 10px; position: relative; overflow: hidden; }
-        .wave-bar { display: inline-block; width: 4px; background: var(--imperial-red); margin: 0 2px; animation: wave 1s infinite ease-in-out; }
-        @keyframes wave { 0%, 100% { height: 10px; } 50% { height: 50px; } }
-        
         .achievement-popup { position: fixed; top: 20px; right: 20px; background: linear-gradient(135deg, var(--emperor-gold), #DAA520); color: var(--imperial-red); padding: 20px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); z-index: 9999; animation: slideIn 0.5s; }
         @keyframes slideIn { from { transform: translateX(400px); } to { transform: translateX(0); } }
         
@@ -271,27 +265,43 @@
         .reward-btn-xp:disabled { background: #444; color: #888; cursor: not-allowed; }
         .reward-btn-dl { padding: 12px 20px; background: linear-gradient(135deg, #1a7a1a, #2da72d); color: #fff; border: none; border-radius: 10px; font-weight: 900; cursor: pointer; font-size: 14px; transition: 0.2s; }
         .reward-btn-dl:hover { transform: scale(1.05); }
-
         .cinema-loading { text-align: center; padding: 40px; color: var(--imperial-red); font-size: 18px; font-weight: 900; }
         .cinema-loading span { display: inline-block; animation: bounce 0.8s infinite alternate; }
         @keyframes bounce { to { transform: translateY(-8px); } }
-
         .cinema-close { position: sticky; top: 0; z-index: 10; display: flex; justify-content: flex-end; padding: 10px 16px; background: #111; border-radius: 16px 16px 0 0; }
         .cinema-close button { background: #8B0000; color: #FFD700; border: none; padding: 8px 18px; border-radius: 8px; font-weight: 900; cursor: pointer; font-size: 14px; }
+
+        /* ======= KARAOKE & RADAR STYLES (BARU) ======= */
+        .karaoke-card { background: #1a1a1a; border: 2px solid var(--emperor-gold); border-radius: 16px; overflow: hidden; color: white; position: relative; transition: 0.3s; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .karaoke-card:hover { transform: scale(1.03); box-shadow: 0 0 20px rgba(255,215,0,0.5); }
+        .karaoke-thumb { height: 150px; background-size: cover; background-position: center; position: relative; }
+        .karaoke-thumb::after { content: '🎤'; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 40px; background: rgba(0,0,0,0.5); }
+        .karaoke-info { padding: 15px; }
+        .karaoke-modal { position: fixed; inset: 0; background: #000; z-index: 9500; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .lyric-glow { font-family: 'Ma Shan Zheng', cursive; font-size: 3rem; color: var(--emperor-gold); text-shadow: 0 0 20px var(--imperial-red); animation: pulseText 1.5s infinite alternate; text-align: center; margin-top: 20px; }
+        @keyframes pulseText { from { opacity: 0.7; transform: scale(0.95); } to { opacity: 1; transform: scale(1.05); } }
+        
+        .radar-box { background: #111; color: #0f0; border: 2px solid #333; padding: 15px; border-radius: 10px; font-family: monospace; margin-top: 20px; position: relative; overflow: hidden; }
+        .radar-box::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(transparent, rgba(0, 255, 0, 0.1), transparent 30%); animation: radarSpin 4s linear infinite; pointer-events: none; }
+        @keyframes radarSpin { 100% { transform: rotate(360deg); } }
+        .ping-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 5px; }
+        .ping-good { background: #0f0; box-shadow: 0 0 10px #0f0; }
+        .ping-warn { background: #ff0; box-shadow: 0 0 10px #ff0; }
+        .ping-bad { background: #f00; box-shadow: 0 0 10px #f00; }
+
     </style>
 </head>
 <body>
+
     <div id="particle-container"></div>
     <div id="achievementContainer"></div>
 
-    <!-- ======= DOMPET ANGPAO MELAYANG ======= -->
     <div id="angpaoWidget">
         <div class="aw-label">💰 SALDO ANGPAO</div>
         <div class="aw-saldo" id="angpaoSaldoDisplay">Rp 0</div>
         <button class="aw-btn" onclick="bukaModalTarik()" id="tarikBtn">🏧 Tarik Cuan</button>
     </div>
 
-    <!-- ======= MODAL PENARIKAN ======= -->
     <div id="modalTarik" class="sultan-modal-overlay" style="display:none;">
         <div class="sultan-modal">
             <span class="close-modal" onclick="tutupModalTarik()">✕</span>
@@ -318,7 +328,6 @@
         </div>
     </div>
 
-    <!-- ======= MODAL CINEMA PLAYER ======= -->
     <div id="cinemaPlayerModal" class="cinema-modal-overlay" style="display:none;">
         <div class="cinema-modal">
             <div class="cinema-close">
@@ -340,12 +349,22 @@
         </div>
     </div>
 
+    <div id="karaokeModal" class="karaoke-modal" style="display:none;">
+        <button onclick="closeKaraoke()" style="position:absolute; top:20px; right:20px; background:none; border:none; color:white; font-size:30px; cursor:pointer;">✕</button>
+        <div style="width: 80%; max-width: 600px; aspect-ratio: 16/9; border: 4px solid var(--emperor-gold); border-radius: 20px; overflow: hidden; box-shadow: 0 0 50px rgba(255,215,0,0.5);">
+            <iframe id="karaokeIframe" src="" style="width:100%; height:100%; border:none;" allow="autoplay"></iframe>
+        </div>
+        <div class="lyric-glow">BERNYANYILAH SANG SULTAN!</div>
+        <button id="karaokeRewardBtn" disabled onclick="claimKaraokeXP()" class="mt-8 px-8 py-4 bg-red-600 text-white font-black text-xl rounded-full disabled:opacity-50 disabled:cursor-not-allowed transition hover:scale-105 border-4 border-yellow-500">
+            ⏳ TUNGGU 15 DETIK...
+        </button>
+    </div>
+
     <header class="p-10 md:p-14 text-center relative overflow-hidden z-10">
         <div class="absolute top-0 left-0 w-full h-4 bg-gradient-to-r from-red-900 via-yellow-500 to-red-900"></div>
         <div class="mt-6">
             <p class="text-[12px] md:text-sm tracking-[0.5em] font-black text-red-800 uppercase mb-4">Native Shaanxi Bloodline • Medan Soul • AI-Powered Learning</p>
             <h1 class="emperor-name">WANG WEIZE</h1>
-            <!-- ======= KALIGRAFI EMAS IMLEK ======= -->
             <span class="imlek-calligraphy">恭喜发财</span>
             <p class="mt-6 text-xl text-red-900 font-black italic max-w-2xl mx-auto border-l-4 border-yellow-500 pl-4 bg-white/60 p-4 rounded shadow-md">
                 "Darah Shaanxi, Jiwa Medan. Belajar Mandarin isinya daging semua biar lu kaga Boncos! 🚀 Sultan Omniverse Edition"
@@ -381,17 +400,30 @@
         <button onclick="tab('quiz')" id="n-quiz" class="px-4 py-2 bg-white text-red-900 font-black text-xs rounded shrink-0">Quiz 🎯</button>
         <button onclick="tab('ai-tutor')" id="n-ai-tutor" class="px-4 py-2 bg-white text-red-900 font-black text-xs rounded shrink-0">AI Tutor 🤖</button>
         <button onclick="tab('progress')" id="n-progress" class="px-4 py-2 bg-white text-red-900 font-black text-xs rounded shrink-0">Progress 📊</button>
-        <!-- ======= CINEMA TAB ======= -->
         <button onclick="tab('cinema')" id="n-cinema" class="px-4 py-2 bg-white text-red-900 font-black text-xs rounded shrink-0">Cinema 🎥</button>
+        <button onclick="tab('karaoke')" id="n-karaoke" class="px-4 py-2 bg-white text-red-900 font-black text-xs rounded shrink-0 border-2 border-red-600">Karaoke 🎤</button>
     </nav>
 
     <main class="max-w-6xl mx-auto p-4 md:p-8 space-y-10 relative z-10">
-        <!-- ORIGINAL HOME TAB -->
+
         <div id="home" class="tab-content text-center">
             <div class="glass-scroll p-12 space-y-8">
                 <h2 class="text-4xl font-black text-red-900">KEKAISARAN MANDARIN - SULTAN OMNIVERSE</h2>
                 <p class="text-lg font-bold opacity-80">Marga 汪 Tunggal • 8 Tahun Sekolah di Shaanxi, China (2006-2014)</p>
                 
+                <div class="radar-box max-w-md mx-auto text-left">
+                    <h3 class="text-green-400 font-bold border-b border-green-800 pb-2 mb-2 flex justify-between">
+                        <span>📡 RADAR LIVE TIKTOK</span>
+                        <span id="radarPing" class="text-white">-- ms</span>
+                    </h3>
+                    <div class="grid grid-cols-2 gap-2 text-sm">
+                        <div class="text-gray-400">Provider:</div>
+                        <div id="radarProvider" class="font-bold text-white">Deteksi...</div>
+                        <div class="text-gray-400">Status Sinyal:</div>
+                        <div id="radarStatus" class="font-bold text-gray-500">Menunggu Cek...</div>
+                    </div>
+                    <button onclick="checkSignal()" class="w-full mt-4 bg-green-900 hover:bg-green-700 text-green-100 py-2 rounded font-bold transition">🚀 CEK SINYAL SEKARANG</button>
+                </div>
                 <div class="bg-gradient-to-r from-purple-100 to-pink-100 p-6 rounded-2xl border-2 border-purple-600 mt-6">
                     <h3 class="font-black text-purple-800 mb-4">🚀 FITUR BARU ULTRA CANGGIH:</h3>
                     <div class="grid md:grid-cols-2 gap-4 text-left">
@@ -401,43 +433,23 @@
                             <div class="text-sm text-gray-600">Sistem belajar yang menyesuaikan dengan kemampuan Anda</div>
                         </div>
                         <div class="bg-white p-4 rounded-xl shadow">
-                            <div class="text-2xl mb-2">🎴</div>
-                            <div class="font-bold">Smart Flashcards</div>
-                            <div class="text-sm text-gray-600">Kartu pintar dengan spaced repetition algorithm</div>
+                            <div class="text-2xl mb-2">🎤</div>
+                            <div class="font-bold">Karaoke Sultan</div>
+                            <div class="text-sm text-gray-600">Nyanyi lagu Mandarin biar healing, dapet XP!</div>
                         </div>
                         <div class="bg-white p-4 rounded-xl shadow">
-                            <div class="text-2xl mb-2">🎯</div>
-                            <div class="font-bold">Interactive Quizzes</div>
-                            <div class="text-sm text-gray-600">Kuis interaktif dengan berbagai tingkat kesulitan</div>
-                        </div>
-                        <div class="bg-white p-4 rounded-xl shadow">
-                            <div class="text-2xl mb-2">📊</div>
-                            <div class="font-bold">Advanced Analytics</div>
-                            <div class="text-sm text-gray-600">Analisis mendalam progress pembelajaran Anda</div>
-                        </div>
-                        <div class="bg-white p-4 rounded-xl shadow">
-                            <div class="text-2xl mb-2">🎙️</div>
-                            <div class="font-bold">Voice Recognition 2.0</div>
-                            <div class="text-sm text-gray-600">Deteksi nada dengan akurasi tinggi + feedback real-time</div>
-                        </div>
-                        <div class="bg-white p-4 rounded-xl shadow">
-                            <div class="text-2xl mb-2">🏆</div>
-                            <div class="font-bold">Gamification System</div>
-                            <div class="text-sm text-gray-600">Level, XP, badges, achievements, dan leaderboard</div>
+                            <div class="text-2xl mb-2">📡</div>
+                            <div class="font-bold">Radar Live TikTok</div>
+                            <div class="text-sm text-gray-600">Anti lag sebelum live, pantau ping provider!</div>
                         </div>
                         <div class="bg-white p-4 rounded-xl shadow">
                             <div class="text-2xl mb-2">💰</div>
                             <div class="font-bold">Dompet Angpao</div>
                             <div class="text-sm text-gray-600">Kumpulkan saldo dari XP, tarik via DANA/OVO/GoPay!</div>
                         </div>
-                        <div class="bg-white p-4 rounded-xl shadow">
-                            <div class="text-2xl mb-2">🎥</div>
-                            <div class="font-bold">Cinema YouTube Sultan</div>
-                            <div class="text-sm text-gray-600">Tonton video Mandarin, baca komentar slang netizen!</div>
-                        </div>
                     </div>
                 </div>
-                
+
                 <div class="bg-white/50 p-6 rounded-2xl border-2 border-yellow-600 mt-6">
                     <h3 class="font-black text-red-800 mb-4">HUBUNGI SANG SULTAN:</h3>
                     <div class="flex flex-wrap justify-center gap-4">
@@ -449,7 +461,6 @@
             </div>
         </div>
 
-        <!-- ORIGINAL SILSILAH TAB -->
         <div id="silsilah" class="tab-content hidden-tab animate-fade-in">
             <div class="profil-container p-10 text-center">
                 <h2 class="text-4xl font-black text-red-900 mb-10" style="font-family: 'Playfair Display';">👑 SILSILAH KELUARGA 👑</h2>
@@ -473,7 +484,6 @@
             </div>
         </div>
 
-        <!-- ORIGINAL DASAR TAB -->
         <div id="dasar" class="tab-content hidden-tab text-center">
             <div class="glass-scroll p-8">
                 <h2 class="text-3xl font-black text-red-900 mb-4">🖌️ PAPAN TULIS SULTAN (MI ZI GE) - AI POWERED</h2>
@@ -509,7 +519,6 @@
             </div>
         </div>
 
-        <!-- ORIGINAL KAMUS TAB -->
         <div id="kamus" class="tab-content hidden-tab">
             <div class="learning-container">
                 <h2 class="text-3xl font-black text-center text-red-900 mb-4">📖 KAMUS MANDARIN SULTAN - ULTRA EDITION</h2>
@@ -534,7 +543,6 @@
             </div>
         </div>
 
-        <!-- FLASHCARD TAB -->
         <div id="flashcard" class="tab-content hidden-tab">
             <div class="learning-container">
                 <h2 class="text-3xl font-black text-center text-red-900 mb-8">🎴 SMART FLASHCARD SYSTEM</h2>
@@ -594,7 +602,6 @@
             </div>
         </div>
 
-        <!-- QUIZ TAB -->
         <div id="quiz" class="tab-content hidden-tab">
             <div class="learning-container">
                 <h2 class="text-3xl font-black text-center text-red-900 mb-8">🎯 QUIZ INTERAKTIF</h2>
@@ -643,7 +650,6 @@
             </div>
         </div>
 
-        <!-- AI TUTOR TAB -->
         <div id="ai-tutor" class="tab-content hidden-tab">
             <div class="learning-container">
                 <h2 class="text-3xl font-black text-center text-red-900 mb-8">🤖 AI PERSONAL TUTOR</h2>
@@ -752,7 +758,6 @@
             </div>
         </div>
 
-        <!-- PROGRESS TAB -->
         <div id="progress" class="tab-content hidden-tab">
             <div class="learning-container">
                 <h2 class="text-3xl font-black text-center text-red-900 mb-8">📊 PROGRESS & ANALYTICS</h2>
@@ -856,19 +861,14 @@
             </div>
         </div>
 
-        <!-- ======= CINEMA TAB (BARU) ======= -->
         <div id="cinema" class="tab-content hidden-tab">
             <div class="learning-container">
                 <h2 class="text-3xl font-black text-center text-red-900 mb-2">🎥 CINEMA SULTAN</h2>
                 <p class="text-center text-gray-600 mb-6 text-sm">Tonton video Mandarin, pelajari slang dari komentar netizen!</p>
-
-                <!-- Search Bar -->
                 <div class="cinema-search">
                     <input type="text" id="cinemaSearchInput" placeholder="🔍 Cari video Mandarin..." onkeydown="if(event.key==='Enter') cariCinema()">
                     <button onclick="cariCinema()">🔍 Cari</button>
                 </div>
-
-                <!-- Smart Chips -->
                 <div class="smart-chips">
                     <div class="chip" onclick="chipSearch('HSK 1 Mandarin', this)">📗 HSK 1</div>
                     <div class="chip" onclick="chipSearchTW('Trending Taiwan Mandarin', this)">🇹🇼 Trending Taiwan</div>
@@ -877,8 +877,6 @@
                     <div class="chip" onclick="chipSearch('belajar Mandarin pemula', this)">📚 Pemula</div>
                     <div class="chip" onclick="chipSearch('slang Mandarin China', this)">🗣️ Slang</div>
                 </div>
-
-                <!-- Video Grid -->
                 <div id="cinemaGrid" class="video-grid">
                     <div class="cinema-loading col-span-full py-20">
                         <span>🎥</span> Pilih filter atau cari video untuk mulai!
@@ -887,13 +885,19 @@
             </div>
         </div>
 
-    </main>
+        <div id="karaoke" class="tab-content hidden-tab">
+            <div class="learning-container">
+                <h2 class="text-3xl font-black text-center text-red-900 mb-2">🎤 KARAOKE SULTAN</h2>
+                <p class="text-center text-gray-600 mb-6 text-sm">Nyanyi dulu bos biar gak stress! (Reward: 100 XP)</p>
+                <div id="karaokeGrid" class="video-grid"></div>
+            </div>
+        </div>
 
+    </main>
     <script>
         // ================================================================
         // ============= ORIGINAL FUNCTIONALITY (TIDAK DIUBAH) =============
         // ================================================================
-
         const vocabData = [
             {h:"你好", p:"nǐ hǎo", a:"Halo", d:"easy", c:"perkenalan", ctx:"你好，很高兴认识你。(Halo, senang berkenalan denganmu.)"},
             {h:"谢谢", p:"xiè xiè", a:"Terima kasih", d:"easy", c:"perkenalan", ctx:"谢谢你的帮助。(Terima kasih atas bantuanmu.)"},
@@ -908,7 +912,6 @@
             {h:"喝水", p:"hē shuǐ", a:"Minum air", d:"easy", c:"makanan", ctx:"请喝水。(Silakan minum air.)"},
             {h:"去哪里", p:"qù nǎ lǐ", a:"Pergi ke mana", d:"medium", c:"perjalanan", ctx:"你要去哪里？(Mau pergi ke mana?)"},
         ];
-
         let currentDifficulty = 'all';
         let userStats = {
             totalWords: 0,
@@ -920,7 +923,6 @@
             studyTime: 0,
             accuracy: 0
         };
-
         function loadUserData() {
             const saved = localStorage.getItem('wangWeizeProgress');
             if (saved) {
@@ -928,11 +930,9 @@
                 updateStatsDisplay();
             }
         }
-
         function saveUserData() {
             localStorage.setItem('wangWeizeProgress', JSON.stringify(userStats));
         }
-
         function updateStatsDisplay() {
             document.getElementById('totalWords').textContent = userStats.totalWords;
             document.getElementById('studyStreak').textContent = userStats.studyStreak;
@@ -941,7 +941,6 @@
             document.getElementById('totalStudyTime').textContent = userStats.studyTime;
             document.getElementById('accuracyRate').textContent = userStats.accuracy + '%';
         }
-
         // ================================================================
         // ===== addXP — ORIGINAL LOGIC + INJEKSI SALDO ANGPAO ===========
         // ================================================================
@@ -954,15 +953,13 @@
             }
             updateStatsDisplay();
             saveUserData();
-
-            // ===== INJEKSI SALDO ANGPAO (ANTI-BUG: hanya tambah saat addXP dipanggil) =====
+            // ===== INJEKSI SALDO ANGPAO (ANTI-BUG) =====
             let saldo = parseInt(localStorage.getItem('saldoAngpao')) || 0;
             saldo += (amount * 5);
             localStorage.setItem('saldoAngpao', saldo);
             updateAngpaoUI();
             // ============================================================================
         }
-
         function showAchievement(message) {
             const popup = document.createElement('div');
             popup.className = 'achievement-popup';
@@ -970,7 +967,6 @@
             document.getElementById('achievementContainer').appendChild(popup);
             setTimeout(() => popup.remove(), 3000);
         }
-
         // TABS
         function tab(id) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden-tab'));
@@ -981,8 +977,8 @@
             
             if (id === 'flashcard') initFlashcard();
             if (id === 'progress') initProgress();
+            if (id === 'karaoke') renderKaraoke(); // Load Karaoke
         }
-
         // DRAWING LOGIC
         const dC = document.getElementById('drawCanvas'); 
         const dCtx = dC.getContext('2d');
@@ -991,7 +987,6 @@
         let painting = false;
         let strokes = [];
         let currentStroke = [];
-
         function initDraw() {
             dCtx.lineWidth = 8; 
             dCtx.lineCap = 'round'; 
@@ -1013,7 +1008,6 @@
             dC.addEventListener('mousemove', startDraw); 
             dC.addEventListener('touchmove', startDraw);
         }
-
         function drawGrid() {
             gCtx.clearRect(0,0,360,360); 
             gCtx.strokeStyle = 'rgba(139,0,0,0.3)'; 
@@ -1026,7 +1020,6 @@
             gCtx.lineTo(360,180); 
             gCtx.stroke();
         }
-
         function setPractice(h) {
             clearDraw(); 
             drawGrid();
@@ -1037,7 +1030,6 @@
                 gCtx.fillText(h, 180, 280); 
             }
         }
-
         function startDraw(e) {
             if(!painting) return; 
             e.preventDefault();
@@ -1050,14 +1042,12 @@
             dCtx.beginPath(); 
             dCtx.moveTo(x, y);
         }
-
         function clearDraw() { 
             dCtx.clearRect(0,0,360,360); 
             strokes = [];
             currentStroke = [];
             document.getElementById('strokeAnalysis').textContent = 'Mulai tulis untuk melihat analisis...';
         }
-
         function analyzeWritingRealtime() {
             const analysis = document.getElementById('strokeAnalysis');
             const strokeCount = strokes.length;
@@ -1067,7 +1057,6 @@
             else feedback += 'Mantap! Karakter kompleks! ⭐';
             analysis.textContent = feedback;
         }
-
         function analyzeWriting() {
             if (strokes.length === 0) { alert('Tulis dulu bos!'); return; }
             const strokeCount = strokes.length;
@@ -1082,7 +1071,6 @@
             alert(feedback);
             addXP(score);
         }
-
         function saveWriting() {
             if (strokes.length === 0) { alert('Tulis dulu bos!'); return; }
             const timestamp = new Date().toLocaleString('id-ID');
@@ -1092,7 +1080,6 @@
             alert('✅ Latihan tersimpan!');
             addXP(20);
         }
-
         function updateWritingHistory() {
             const history = document.getElementById('writingHistory');
             if (userStats.writingHistory.length === 0) { history.textContent = 'Belum ada riwayat latihan'; return; }
@@ -1100,7 +1087,6 @@
                 `<div class="mb-2 pb-2 border-b border-gray-200"><span class="font-bold">${h.date}</span> - ${h.strokes} goresan</div>`
             ).join('');
         }
-
         // VOCAB LOGIC
         function renderVocab(data) {
             document.getElementById('vocabGrid').innerHTML = data.map((v, i) => `
@@ -1122,14 +1108,12 @@
                 </div>
             `).join('');
         }
-
         function spk(t) { 
             const u = new SpeechSynthesisUtterance(t); 
             u.lang = 'zh-CN'; 
             u.rate = 0.8;
             window.speechSynthesis.speak(u); 
         }
-
         function mic(target, id) {
             if (!('webkitSpeechRecognition' in window)) { alert("Fitur Mic butuh Chrome/Edge terbaru bos!"); return; }
             const rec = new webkitSpeechRecognition();
@@ -1152,7 +1136,6 @@
             rec.onerror = () => { div.innerText = "❌ Error! Coba lagi."; };
             rec.start();
         }
-
         function searchVocab() {
             const k = document.getElementById('searchInput').value.toLowerCase();
             let filtered = vocabData;
@@ -1162,32 +1145,27 @@
             if (currentDifficulty !== 'all') { filtered = filtered.filter(v => v.d === currentDifficulty); }
             renderVocab(filtered);
         }
-
         function filterDifficulty(level) {
             currentDifficulty = level;
             document.querySelectorAll('.difficulty-btn').forEach(b => b.classList.remove('active'));
             document.getElementById('diff-' + level).classList.add('active');
             searchVocab();
         }
-
         function showWordDetail(hanzi, pinyin, arti, context) {
             alert(`📖 Detail Kata Lengkap:\n\n汉字: ${hanzi}\n拼音: ${pinyin}\nArti: ${arti}\n\n📚 Contoh Kalimat:\n${context}\n\n💡 Tips: Gunakan kata ini dalam percakapan sehari-hari!`);
         }
-
         // FLASHCARD SYSTEM
         let flashcardDeck = [];
         let currentCardIndex = 0;
         let isFlipped = false;
         let flashcardTimer;
         let studyStartTime;
-
         function initFlashcard() {
             flashcardDeck = vocabData.map(v => ({ front: v.h, back: v.a, pinyin: v.p, srs: 'new' }));
             currentCardIndex = 0;
             loadCard();
             startFlashcardTimer();
         }
-
         function loadCard() {
             if (currentCardIndex >= flashcardDeck.length) { alert('🎉 Selesai! Semua kartu sudah direview!'); return; }
             const card = flashcardDeck[currentCardIndex];
@@ -1198,12 +1176,10 @@
             document.querySelector('.flashcard').classList.remove('flipped');
             isFlipped = false;
         }
-
         function flipCard() {
             document.querySelector('.flashcard').classList.toggle('flipped');
             isFlipped = !isFlipped;
         }
-
         function rateCard(difficulty) {
             const card = flashcardDeck[currentCardIndex];
             if (difficulty === 'easy') { card.srs = 'master'; addXP(100); }
@@ -1214,7 +1190,6 @@
             else { alert('🎉 Flashcard selesai! Great job!'); addXP(200); showAchievement('Selesai review flashcard! +200 XP bonus!'); }
             updateSRSDisplay();
         }
-
         function updateSRSDisplay() {
             const counts = {new: 0, learning: 0, review: 0, master: 0};
             flashcardDeck.forEach(card => counts[card.srs]++);
@@ -1223,7 +1198,6 @@
             document.getElementById('srsReview').textContent = counts.review;
             document.getElementById('srsMaster').textContent = counts.master;
         }
-
         function startFlashcardTimer() {
             studyStartTime = Date.now();
             flashcardTimer = setInterval(() => {
@@ -1233,18 +1207,15 @@
                 document.getElementById('flashcardTimer').textContent = `${mins}:${secs}`;
             }, 1000);
         }
-
         function addToFlashcard(hanzi, arti) {
             alert(`✅ "${hanzi}" ditambahkan ke flashcard!`);
             addXP(10);
         }
-
         // QUIZ SYSTEM
         let quizData = [];
         let currentQuizIndex = 0;
         let quizScore = 0;
         let quizType = 'translation';
-
         function startQuiz(type) {
             quizType = type;
             currentQuizIndex = 0;
@@ -1254,7 +1225,6 @@
             document.getElementById('quizContainer').classList.remove('hidden');
             loadQuizQuestion();
         }
-
         function loadQuizQuestion() {
             if (currentQuizIndex >= quizData.length) { showQuizResults(); return; }
             const q = quizData[currentQuizIndex];
@@ -1274,7 +1244,6 @@
             }
             document.getElementById('quizFeedback').classList.add('hidden');
         }
-
         function checkAnswer(index, correct, selected) {
             const options = document.querySelectorAll('.quiz-option');
             if (selected === correct) {
@@ -1293,7 +1262,6 @@
             document.getElementById('quizScore').textContent = quizScore;
             setTimeout(() => { currentQuizIndex++; loadQuizQuestion(); }, 2000);
         }
-
         function showQuizResults() {
             document.getElementById('quizContainer').classList.add('hidden');
             document.getElementById('quizResults').classList.remove('hidden');
@@ -1309,19 +1277,16 @@
             saveUserData();
             updateStatsDisplay();
         }
-
         function resetQuiz() {
             document.getElementById('quizResults').classList.add('hidden');
             currentQuizIndex = 0;
             quizScore = 0;
         }
-
         // AI TUTOR FEATURES
         document.getElementById('analyzeChar')?.addEventListener('input', function(e) {
             const char = e.target.value;
             if (char.length === 1) { analyzeCharacter(char); }
         });
-
         function analyzeCharacter(char) {
             const radicals = {
                 '你': ['人 (rén - manusia)', '尔 (ěr)'],
@@ -1339,16 +1304,13 @@
             document.getElementById('etymology').textContent = etymology[char] || 'Etimologi tidak tersedia';
             document.getElementById('strokeOrder').textContent = 'Lihat animasi goresan untuk detail urutan';
         }
-
         function playTone(tone) {
             const toneTexts = ['mā', 'má', 'mǎ', 'mà'];
             spk(toneTexts[tone - 1]);
         }
-
         function startToneQuiz() {
             alert('🎵 Tone Quiz akan segera hadir! Fitur ini dalam pengembangan.');
         }
-
         function loadContextSentences() {
             const topic = document.getElementById('contextTopic').value;
             const sentences = {
@@ -1374,12 +1336,10 @@
                 </div>
             `).join('');
         }
-
         // PROGRESS FEATURES
         function initProgress() {
             renderStreakCalendar();
         }
-
         function renderStreakCalendar() {
             const calendar = document.getElementById('streakCalendar');
             const days = 30;
@@ -1390,9 +1350,8 @@
             }
             calendar.innerHTML = html;
         }
-
         // ================================================================
-        // =================== WINDOW LOAD (ORIGINAL + ANGPAO) ============
+        // =================== WINDOW LOAD ================================
         // ================================================================
         window.addEventListener('load', function() {
             initDraw(); 
@@ -1402,9 +1361,9 @@
             updateWritingHistory();
             updateSRSDisplay();
             
-            // ====== IMLEK PARTICLES (ARRAY DIGANTI) ======
+            // ====== IMLEK PARTICLES ======
             const pc = document.getElementById('particle-container');
-            const sym = ['🏮', '🧧', '🪙', '🐉', '🧨']; // ← ARRAY BARU IMLEK
+            const sym = ['🏮', '🧧', '🪙', '🐉', '🧨']; 
             for(let i=0; i<25; i++) {
                 const p = document.createElement('div'); 
                 p.className = 'imperial-particle';
@@ -1415,7 +1374,6 @@
                 pc.appendChild(p);
             }
             
-            // Study streak update
             const lastStudy = localStorage.getItem('lastStudyDate');
             const today = new Date().toDateString();
             if (lastStudy !== today) {
@@ -1429,33 +1387,24 @@
                 localStorage.setItem('lastStudyDate', today);
                 saveUserData();
             }
-
-            // ====== BUG FIX ANGPAO: HANYA BACA, DILARANG TAMBAH SALDO ======
-            updateAngpaoUI(); // hanya read saldo dari localStorage, tidak addXP
-            // ===============================================================
+            updateAngpaoUI(); 
+            
+            // Initialize Radar
+            checkSignal();
         });
-
 
         // ================================================================
         // =================== DOMPET ANGPAO LOGIC ========================
         // ================================================================
-
         function updateAngpaoUI() {
-            // HANYA BACA dari localStorage, tidak pernah menulis/menambah di sini
             const saldo = parseInt(localStorage.getItem('saldoAngpao')) || 0;
             const formatted = 'Rp ' + saldo.toLocaleString('id-ID');
             document.getElementById('angpaoSaldoDisplay').textContent = formatted;
             
             const btn = document.getElementById('tarikBtn');
-            if (saldo >= 1000000) {
-                btn.disabled = false;
-                btn.textContent = '🏧 Tarik Cuan';
-            } else {
-                btn.disabled = false; // tetap bisa klik tapi akan dicek di modal
-                btn.textContent = '🏧 Tarik Cuan';
-            }
+            btn.textContent = '🏧 Tarik Cuan';
+            btn.disabled = false;
         }
-
         function bukaModalTarik() {
             const saldo = parseInt(localStorage.getItem('saldoAngpao')) || 0;
             if (saldo < 1000000) {
@@ -1466,23 +1415,19 @@
             document.getElementById('wdNominal').max = saldo;
             document.getElementById('modalTarik').style.display = 'flex';
         }
-
         function tutupModalTarik() {
             document.getElementById('modalTarik').style.display = 'none';
         }
-
         function submitTarik() {
             const platform = document.getElementById('wdPlatform').value;
             const nama = document.getElementById('wdNama').value.trim();
             const nomor = document.getElementById('wdNomor').value.trim();
             const nominal = parseInt(document.getElementById('wdNominal').value);
             const saldo = parseInt(localStorage.getItem('saldoAngpao')) || 0;
-
             if (!nama) { alert('Isi nama dulu bos!'); return; }
             if (!nomor) { alert('Isi nomor HP/rekening dulu bos!'); return; }
             if (!nominal || nominal < 1000000) { alert('Minimal tarik Rp 1.000.000 bos!'); return; }
             if (nominal > saldo) { alert('Saldo tidak cukup bos! Saldo kamu: Rp ' + saldo.toLocaleString('id-ID')); return; }
-
             const pesan = `🧧 *PENARIKAN ANGPAO SULTAN*\n\n` +
                 `Platform: ${platform}\n` +
                 `Nama: ${nama}\n` +
@@ -1490,73 +1435,52 @@
                 `Nominal: Rp ${nominal.toLocaleString('id-ID')}\n\n` +
                 `Saldo tersisa: Rp ${(saldo - nominal).toLocaleString('id-ID')}\n\n` +
                 `Dikirim dari App Wang Weize Sultan Omniverse 🏮`;
-
             const waUrl = `https://wa.me/6288277200044?text=${encodeURIComponent(pesan)}`;
             window.open(waUrl, '_blank');
             tutupModalTarik();
         }
-
-        // Klik luar modal untuk tutup
         document.getElementById('modalTarik').addEventListener('click', function(e) {
             if (e.target === this) tutupModalTarik();
         });
 
-
         // ================================================================
         // =================== CINEMA YOUTUBE SULTAN ======================
         // ================================================================
-
         const YT_API_KEY = 'AIzaSyDa43LypgkQYvRWTAAfbkdRewhfuYWKmH8';
         let currentVideoId = null;
-
-        // Chip search biasa
         function chipSearch(query, el) {
             document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
             el.classList.add('active');
             document.getElementById('cinemaSearchInput').value = query;
             fetchYouTubeVideos(query, false);
         }
-
-        // Chip Trending Taiwan
         function chipSearchTW(query, el) {
             document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
             el.classList.add('active');
             document.getElementById('cinemaSearchInput').value = query;
-            fetchYouTubeVideos(query, true); // regionCode TW
+            fetchYouTubeVideos(query, true); 
         }
-
         function cariCinema() {
             const q = document.getElementById('cinemaSearchInput').value.trim();
             if (!q) { alert('Ketik dulu mau cari apa bos!'); return; }
             document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
             fetchYouTubeVideos(q, false);
         }
-
-        // ===== LAPIS 1: FETCH VIDEO SEARCH =====
         async function fetchYouTubeVideos(query, isTaiwan = false) {
             const grid = document.getElementById('cinemaGrid');
             grid.innerHTML = `<div class="cinema-loading col-span-full py-16"><span>🔍</span> Mencari video "${query}"...</div>`;
-
             try {
                 let url = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query)}&type=video&maxResults=12&key=${YT_API_KEY}`;
                 if (isTaiwan) url += `&regionCode=TW`;
-
                 const res = await fetch(url);
                 const data = await res.json();
-
                 if (!data.items || data.items.length === 0) {
                     grid.innerHTML = `<div class="cinema-loading col-span-full py-16">😔 Tidak ada video ditemukan.</div>`;
                     return;
                 }
-
-                // Kumpulkan videoIds untuk fetch statistik
                 const videoIds = data.items.map(item => item.id.videoId).filter(Boolean).join(',');
-
-                // ===== LAPIS 2: FETCH STATISTIK & DURASI =====
                 const statsRes = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=statistics,contentDetails&id=${videoIds}&key=${YT_API_KEY}`);
                 const statsData = await statsRes.json();
-
-                // Buat map videoId -> stats
                 const statsMap = {};
                 if (statsData.items) {
                     statsData.items.forEach(item => {
@@ -1566,8 +1490,6 @@
                         };
                     });
                 }
-
-                // Render grid
                 grid.innerHTML = data.items.map(item => {
                     const vid = item.id.videoId;
                     const snippet = item.snippet;
@@ -1575,7 +1497,6 @@
                     const stats = statsMap[vid] || {};
                     const views = stats.views ? formatViews(parseInt(stats.views)) : '';
                     const dur = stats.duration || '';
-
                     return `
                         <div class="video-card" onclick="bukaVideoPlayer('${vid}', \`${escapeJs(snippet.title)}\`)">
                             <div class="video-thumb">
@@ -1593,22 +1514,17 @@
                         </div>
                     `;
                 }).join('');
-
             } catch (err) {
                 console.error('Cinema Error:', err);
                 grid.innerHTML = `<div class="cinema-loading col-span-full py-16">❌ Gagal memuat video. Cek koneksi atau API key. Error: ${err.message}</div>`;
             }
         }
-
-        // ===== LAPIS 3: BUKA PLAYER + FETCH KOMENTAR =====
         async function bukaVideoPlayer(videoId, title) {
             currentVideoId = videoId;
             document.getElementById('cinemaIframe').src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
             document.getElementById('cinemaPlayerTitle').textContent = title;
             document.getElementById('cinemaComments').innerHTML = '<div style="color:#888; font-size:13px;">⏳ Memuat komentar slang netizen...</div>';
             document.getElementById('cinemaPlayerModal').style.display = 'flex';
-
-            // Reset reward button
             const xpBtn = document.getElementById('claimXpBtn');
             xpBtn.disabled = true;
             xpBtn.textContent = '⏳ Klaim 50 XP (10 detik...)';
@@ -1623,12 +1539,9 @@
                     xpBtn.textContent = '🎁 Klaim 50 XP!';
                 }
             }, 1000);
-
-            // Fetch komentar
             try {
                 const comRes = await fetch(`https://www.googleapis.com/youtube/v3/commentThreads?part=snippet&videoId=${videoId}&maxResults=3&order=relevance&key=${YT_API_KEY}`);
                 const comData = await comRes.json();
-
                 if (comData.items && comData.items.length > 0) {
                     document.getElementById('cinemaComments').innerHTML = `
                         <h3 style="color:#FFD700; font-size:15px; font-weight:900; margin-bottom:12px;">💬 Komentar Netizen (Belajar Slang!)</h3>
@@ -1649,17 +1562,14 @@
                 document.getElementById('cinemaComments').innerHTML = `<div style="color:#888; font-size:13px;">⚠️ Gagal memuat komentar: ${err.message}</div>`;
             }
         }
-
         function tutupCinemaPlayer() {
             document.getElementById('cinemaPlayerModal').style.display = 'none';
-            document.getElementById('cinemaIframe').src = ''; // stop video
+            document.getElementById('cinemaIframe').src = ''; 
             currentVideoId = null;
         }
-
         document.getElementById('cinemaPlayerModal').addEventListener('click', function(e) {
             if (e.target === this) tutupCinemaPlayer();
         });
-
         function claimVideoXP() {
             const btn = document.getElementById('claimXpBtn');
             if (btn.disabled) return;
@@ -1668,12 +1578,10 @@
             btn.disabled = true;
             btn.textContent = '✅ XP Diklaim!';
         }
-
         function downloadVideo() {
             if (!currentVideoId) return;
             window.open(`https://ssyoutube.com/watch?v=${currentVideoId}`, '_blank');
         }
-
         // ===== HELPER FUNCTIONS =====
         function parseDuration(iso) {
             if (!iso) return '';
@@ -1685,21 +1593,118 @@
             if (h > 0) return `${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
             return `${m}:${String(s).padStart(2,'0')}`;
         }
-
         function formatViews(n) {
             if (n >= 1000000) return (n/1000000).toFixed(1) + 'M';
             if (n >= 1000) return (n/1000).toFixed(0) + 'K';
             return n.toString();
         }
-
         function escapeHtml(str) {
             if (!str) return '';
             return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
         }
-
         function escapeJs(str) {
             if (!str) return '';
             return str.replace(/\\/g,'\\\\').replace(/`/g,'\\`').replace(/\$/g,'\\$');
+        }
+
+        // ================================================================
+        // ======= FITUR BARU 1: KARAOKE SULTAN (ISOLATED LOGIC) ==========
+        // ================================================================
+        const karaokeSongs = [
+            { id: "fjHSCvlR_JQ", title: "Tian Mi Mi (甜蜜蜜)", artist: "Teresa Teng", img: "https://img.youtube.com/vi/fjHSCvlR_JQ/mqdefault.jpg" },
+            { id: "XrddrK2gioU", title: "Yue Liang Dai Biao Wo De Xin", artist: "Teresa Teng", img: "https://img.youtube.com/vi/XrddrK2gioU/mqdefault.jpg" },
+            { id: "JvyPPCFfEHM", title: "Tong Hua (童话)", artist: "Guang Liang", img: "https://img.youtube.com/vi/JvyPPCFfEHM/mqdefault.jpg" }
+        ];
+
+        function renderKaraoke() {
+            const grid = document.getElementById('karaokeGrid');
+            grid.innerHTML = karaokeSongs.map(s => `
+                <div class="karaoke-card" onclick="openKaraoke('${s.id}')">
+                    <div class="karaoke-thumb" style="background-image: url('${s.img}');"></div>
+                    <div class="karaoke-info">
+                        <div class="font-bold text-lg text-yellow-400">${s.title}</div>
+                        <div class="text-sm text-gray-400">${s.artist}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        let karaokeTimer;
+        function openKaraoke(videoId) {
+            const modal = document.getElementById('karaokeModal');
+            const iframe = document.getElementById('karaokeIframe');
+            const btn = document.getElementById('karaokeRewardBtn');
+            
+            modal.style.display = 'flex';
+            iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&controls=0`;
+            
+            btn.disabled = true;
+            btn.innerHTML = '⏳ TUNGGU 15 DETIK...';
+            
+            let timeLeft = 15;
+            if(karaokeTimer) clearInterval(karaokeTimer);
+            karaokeTimer = setInterval(() => {
+                timeLeft--;
+                if(timeLeft > 0) {
+                    btn.innerHTML = `⏳ TUNGGU ${timeLeft} DETIK...`;
+                } else {
+                    clearInterval(karaokeTimer);
+                    btn.disabled = false;
+                    btn.innerHTML = '🎁 KLAIM 100 XP!';
+                    btn.classList.add('animate-bounce');
+                }
+            }, 1000);
+        }
+
+        function claimKaraokeXP() {
+            addXP(100);
+            showAchievement('🎤 Konser Selesai! +100 XP');
+            closeKaraoke();
+        }
+
+        function closeKaraoke() {
+            document.getElementById('karaokeModal').style.display = 'none';
+            document.getElementById('karaokeIframe').src = '';
+            if(karaokeTimer) clearInterval(karaokeTimer);
+        }
+
+        // ================================================================
+        // ======= FITUR BARU 2: RADAR SINYAL TIKTOK (ISOLATED LOGIC) =====
+        // ================================================================
+        async function checkSignal() {
+            const statusEl = document.getElementById('radarStatus');
+            const pingEl = document.getElementById('radarPing');
+            const provEl = document.getElementById('radarProvider');
+            
+            statusEl.innerHTML = '🔄 Mengukur...';
+            pingEl.innerHTML = '-- ms';
+            
+            try {
+                // 1. Get Provider Info (Free API)
+                const ipRes = await fetch('https://ipapi.co/json/');
+                const ipData = await ipRes.json();
+                provEl.innerText = ipData.org || ipData.isp || 'Unknown Provider';
+                
+                // 2. Measure Ping (Fetch tiny image)
+                const start = Date.now();
+                await fetch('https://www.google.com/favicon.ico', { mode: 'no-cors', cache: 'no-store' });
+                const end = Date.now();
+                const ping = end - start;
+                
+                pingEl.innerText = `${ping} ms`;
+                
+                if(ping < 100) {
+                    statusEl.innerHTML = '<span class="ping-dot ping-good"></span> <span class="text-green-400">🟢 GAS LIVE! LANCAR JAYA!</span>';
+                } else if(ping < 300) {
+                    statusEl.innerHTML = '<span class="ping-dot ping-warn"></span> <span class="text-yellow-400">🟡 Hati-hati Delay</span>';
+                } else {
+                    statusEl.innerHTML = '<span class="ping-dot ping-bad"></span> <span class="text-red-500">🔴 JANGAN LIVE! BAKAL BONCOS!</span>';
+                }
+                
+            } catch (e) {
+                console.error(e);
+                statusEl.innerText = '❌ Gagal cek sinyal';
+            }
         }
 
     </script>
