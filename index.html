@@ -445,6 +445,9 @@
         #aiUserInput::placeholder { color: rgba(168,85,247,0.35); }
         #aiUserInput::-webkit-scrollbar { width: 4px; }
         #aiUserInput::-webkit-scrollbar-thumb { background: rgba(168,85,247,0.3); border-radius: 4px; }
+        #aiProviderSelect option { background: #1a0028; }
+        .ai-quick-btn { padding:6px 14px; background:rgba(168,85,247,0.15); border:1px solid rgba(168,85,247,0.4); border-radius:20px; color:#c4b5fd; font-size:12px; cursor:pointer; transition:0.2s; font-weight:700; }
+        .ai-quick-btn:hover { background:rgba(168,85,247,0.3); }
 
         /* ── LOADING OVERLAY ── */
         #paymentLoadingOverlay {
@@ -1155,58 +1158,141 @@
     <!-- ======= SULTAN AI (ASK AI) TAB ================================= -->
     <!-- ================================================================ -->
     <!-- Tab is placed outside main so it can be full-width, but it's still within body -->
+    <!-- ============================================================ -->
+    <!-- ASK AI TAB — BYOK SYSTEM                                    -->
+    <!-- ============================================================ -->
     <div id="ask-ai" class="tab-content hidden-tab" style="max-width:860px; margin:0 auto; padding:16px;">
+
+        <!-- ░░ OUTER SHELL (selalu tampil) ░░ -->
         <div style="background:linear-gradient(160deg,#0d0d1e,#1a0028,#0d0d1e); border:2px solid #a855f7; border-radius:20px; padding:28px; box-shadow:0 0 60px rgba(168,85,247,0.2); position:relative; overflow:hidden;">
-            <!-- Glow BG -->
-            <div style="position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 50px,rgba(168,85,247,0.02) 50px,rgba(168,85,247,0.02) 51px);pointer-events:none;"></div>
-            <!-- Title -->
-            <div style="text-align:center; margin-bottom:20px; position:relative;">
+
+            <!-- Cyberpunk grid overlay -->
+            <div style="position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 50px,rgba(168,85,247,0.018) 50px,rgba(168,85,247,0.018) 51px),repeating-linear-gradient(90deg,transparent,transparent 50px,rgba(168,85,247,0.010) 50px,rgba(168,85,247,0.010) 51px);pointer-events:none;"></div>
+
+            <!-- ── TITLE ── -->
+            <div style="text-align:center; margin-bottom:22px; position:relative;">
                 <div style="font-family:'Orbitron',monospace; font-size:clamp(1.3rem,4vw,2rem); font-weight:900; color:#a855f7; text-shadow:0 0 20px rgba(168,85,247,0.7); letter-spacing:3px;">🤖 SULTAN AI</div>
-                <div style="color:rgba(168,85,247,0.5); font-size:11px; letter-spacing:4px; text-transform:uppercase; font-family:'Orbitron',monospace; margin-top:4px;">Powered by Gemini • Dibuat oleh Wang Weize</div>
+                <div style="color:rgba(168,85,247,0.5); font-size:11px; letter-spacing:4px; text-transform:uppercase; font-family:'Orbitron',monospace; margin-top:4px;">BYOK • Bring Your Own Key • by Wang Weize</div>
             </div>
 
-            <!-- Chat Box -->
-            <div id="aiChatBox" style="background:rgba(0,0,0,0.4); border:1px solid rgba(168,85,247,0.3); border-radius:14px; padding:16px; min-height:360px; max-height:480px; overflow-y:auto; margin-bottom:16px; display:flex; flex-direction:column; gap:12px; scroll-behavior:smooth;">
-                <!-- Welcome message -->
-                <div class="ai-msg-ai" style="display:flex; gap:10px; align-items:flex-start;">
-                    <div style="font-size:28px; flex-shrink:0;">🤖</div>
-                    <div style="background:linear-gradient(135deg,#2d1b4e,#1a0a2e); border:1px solid rgba(168,85,247,0.4); border-radius:12px 12px 12px 2px; padding:12px 16px; color:#e2d9f3; font-size:14px; line-height:1.6; max-width:85%;">
-                        <strong style="color:#a855f7;">Heyy! Gue SULTAN AI, asisten pribadi paling ganteng se-Omniverse! 🔥</strong><br><br>
-                        Gue diciptakan sama <strong style="color:#ffd700;">Wang Weize</strong> — Sultan Medan Pancing yang paling tampan dan paling dermawan di seluruh galaksi! Bangga banget gue punya kreator sekeren dia, Wkwkwk! 😂<br><br>
-                        Lu mau nanya apa bos? Gue bisa bantu:<br>
-                        💡 <strong>Ide konten</strong> buat TikTok/YouTube<br>
-                        💕 <strong>Tips asmara</strong> biar ga boncos di hubungan<br>
-                        🔥 <strong>Roasting</strong> yang sadis tapi fun<br>
-                        📈 <strong>Tips cuan</strong> supaya dompet makin tebal!
+            <!-- ══════════════════════════════════════════════════════ -->
+            <!-- PANEL A — "GERBANG AI" — tampil saat belum ada key    -->
+            <!-- ══════════════════════════════════════════════════════ -->
+            <div id="aiGate" style="display:none;">
+
+                <!-- Lock icon hero -->
+                <div style="text-align:center; margin-bottom:24px;">
+                    <div style="font-size:56px; filter:drop-shadow(0 0 18px rgba(168,85,247,0.7));">🔐</div>
+                    <div style="color:#e2d9f3; font-size:15px; font-weight:700; margin-top:8px;">Masukkan API Key kamu untuk mengaktifkan Sultan AI</div>
+                    <div style="color:rgba(168,85,247,0.5); font-size:12px; margin-top:4px;">Key disimpan <em>hanya</em> di browser kamu — tidak dikirim ke mana pun selain provider yang kamu pilih.</div>
+                </div>
+
+                <!-- Provider dropdown -->
+                <div style="margin-bottom:14px;">
+                    <label style="display:block; color:#a855f7; font-size:11px; font-weight:900; letter-spacing:2px; text-transform:uppercase; margin-bottom:8px; font-family:'Orbitron',monospace;">⚙️ Pilih Provider</label>
+                    <select id="aiProviderSelect"
+                        style="width:100%; padding:14px 16px; background:rgba(168,85,247,0.08); border:1px solid rgba(168,85,247,0.4); border-radius:12px; color:#e2d9f3; font-size:14px; font-weight:700; outline:none; cursor:pointer; transition:0.3s; font-family:'Noto Serif SC',serif;"
+                        onchange="updateKeyPlaceholder()"
+                        onfocus="this.style.borderColor='#a855f7'; this.style.boxShadow='0 0 14px rgba(168,85,247,0.3)'"
+                        onblur="this.style.borderColor='rgba(168,85,247,0.4)'; this.style.boxShadow='none'">
+                        <option value="gemini"     style="background:#1a0028;">✨ Google Gemini (gemini-1.5-flash)</option>
+                        <option value="openrouter" style="background:#1a0028;">🌐 OpenRouter (gemini-2.0-flash-lite free)</option>
+                    </select>
+                </div>
+
+                <!-- API Key input -->
+                <div style="margin-bottom:14px;">
+                    <label style="display:block; color:#a855f7; font-size:11px; font-weight:900; letter-spacing:2px; text-transform:uppercase; margin-bottom:8px; font-family:'Orbitron',monospace;">🔑 API Key</label>
+                    <div style="position:relative;">
+                        <input type="password" id="aiKeyInput"
+                            placeholder="Tempel API Key kamu di sini..."
+                            style="width:100%; padding:14px 48px 14px 16px; background:rgba(168,85,247,0.08); border:1px solid rgba(168,85,247,0.4); border-radius:12px; color:#e2d9f3; font-size:14px; font-weight:700; outline:none; transition:0.3s; font-family:monospace; box-sizing:border-box;"
+                            onkeydown="if(event.key==='Enter') saveAIKey()"
+                            onfocus="this.style.borderColor='#a855f7'; this.style.boxShadow='0 0 14px rgba(168,85,247,0.3)'"
+                            onblur="this.style.borderColor='rgba(168,85,247,0.4)'; this.style.boxShadow='none'">
+                        <!-- Show/hide password toggle -->
+                        <button onclick="toggleKeyVisibility()" title="Tampilkan/Sembunyikan Key"
+                            style="position:absolute; right:12px; top:50%; transform:translateY(-50%); background:none; border:none; cursor:pointer; font-size:18px; color:rgba(168,85,247,0.6); line-height:1;"
+                            id="aiKeyToggleBtn">👁️</button>
+                    </div>
+                    <div id="aiKeyHint" style="color:rgba(168,85,247,0.45); font-size:11px; margin-top:6px; font-family:monospace;">
+                        💡 Gemini key: aizaSy... &nbsp;|&nbsp; OpenRouter key: sk-or-v1-...
                     </div>
                 </div>
-            </div>
 
-            <!-- Input Area -->
-            <div style="display:flex; gap:10px; align-items:flex-end; position:relative;">
-                <textarea id="aiUserInput" placeholder="Tanya apapun ke Sultan AI... (contoh: 'Roasting gue dong', 'Ide konten TikTok hari ini')" 
-                    style="flex:1; background:rgba(255,255,255,0.07); border:1px solid rgba(168,85,247,0.4); border-radius:12px; padding:14px 16px; color:white; font-size:14px; font-family:'Noto Serif SC',serif; resize:none; min-height:56px; max-height:140px; outline:none; transition:0.3s; line-height:1.5;"
-                    onkeydown="if(event.key==='Enter' && !event.shiftKey){event.preventDefault(); sendSultanAI();}"
-                    oninput="this.style.height='56px'; this.style.height=Math.min(this.scrollHeight,140)+'px';"
-                    onfocus="this.style.borderColor='#a855f7'; this.style.boxShadow='0 0 15px rgba(168,85,247,0.25)';"
-                    onblur="this.style.borderColor='rgba(168,85,247,0.4)'; this.style.boxShadow='none';"
-                ></textarea>
-                <button onclick="sendSultanAI()" id="aiSendBtn"
-                    style="background:linear-gradient(135deg,#7c3aed,#a855f7); color:white; border:none; border-radius:12px; padding:14px 20px; font-weight:900; font-size:16px; cursor:pointer; transition:0.3s; flex-shrink:0; height:56px;"
-                    onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
-                    🚀
+                <!-- Save button -->
+                <button onclick="saveAIKey()" id="aiSaveKeyBtn"
+                    style="width:100%; padding:16px; background:linear-gradient(135deg,#6d28d9,#a855f7,#6d28d9); color:white; border:none; border-radius:12px; font-size:15px; font-weight:900; cursor:pointer; transition:0.3s; letter-spacing:2px; text-transform:uppercase; font-family:'Orbitron',monospace; box-shadow:0 0 20px rgba(168,85,247,0.3); margin-bottom:18px;"
+                    onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 30px rgba(168,85,247,0.5)'"
+                    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 0 20px rgba(168,85,247,0.3)'">
+                    💾 SIMPAN &amp; MASUK
                 </button>
-            </div>
-            <div style="text-align:center; color:rgba(168,85,247,0.4); font-size:10px; margin-top:8px; font-family:monospace;">[ Enter = Kirim • Shift+Enter = Baris Baru • Kreator: Wang Weize 王为泽 ]</div>
 
-            <!-- Quick Prompts -->
-            <div style="margin-top:14px; display:flex; flex-wrap:wrap; gap:8px; justify-content:center;">
-                <button onclick="quickAsk('Roasting gue dong dengan gaya paling sadis!')" style="padding:6px 14px; background:rgba(168,85,247,0.15); border:1px solid rgba(168,85,247,0.4); border-radius:20px; color:#c4b5fd; font-size:12px; cursor:pointer; transition:0.2s; font-weight:700;" onmouseover="this.style.background='rgba(168,85,247,0.3)'" onmouseout="this.style.background='rgba(168,85,247,0.15)'">🔥 Roast Gue!</button>
-                <button onclick="quickAsk('Kasih gue 5 ide konten TikTok viral yang cuan abis untuk hari ini!')" style="padding:6px 14px; background:rgba(168,85,247,0.15); border:1px solid rgba(168,85,247,0.4); border-radius:20px; color:#c4b5fd; font-size:12px; cursor:pointer; transition:0.2s; font-weight:700;" onmouseover="this.style.background='rgba(168,85,247,0.3)'" onmouseout="this.style.background='rgba(168,85,247,0.15)'">💡 Ide Konten</button>
-                <button onclick="quickAsk('Tips asmara: gimana cara PDKT yang berhasil dan ga boncos?')" style="padding:6px 14px; background:rgba(168,85,247,0.15); border:1px solid rgba(168,85,247,0.4); border-radius:20px; color:#c4b5fd; font-size:12px; cursor:pointer; transition:0.2s; font-weight:700;" onmouseover="this.style.background='rgba(168,85,247,0.3)'" onmouseout="this.style.background='rgba(168,85,247,0.15)'">💕 Tips Asmara</button>
-                <button onclick="quickAsk('Siapa penciptamu?')" style="padding:6px 14px; background:rgba(168,85,247,0.15); border:1px solid rgba(168,85,247,0.4); border-radius:20px; color:#c4b5fd; font-size:12px; cursor:pointer; transition:0.2s; font-weight:700;" onmouseover="this.style.background='rgba(168,85,247,0.3)'" onmouseout="this.style.background='rgba(168,85,247,0.15)'">👑 Siapa Kreatormu?</button>
-                <button onclick="quickAsk('Kasih tips cuan bisnis online yang bisa gue mulai dari nol!')" style="padding:6px 14px; background:rgba(168,85,247,0.15); border:1px solid rgba(168,85,247,0.4); border-radius:20px; color:#c4b5fd; font-size:12px; cursor:pointer; transition:0.2s; font-weight:700;" onmouseover="this.style.background='rgba(168,85,247,0.3)'" onmouseout="this.style.background='rgba(168,85,247,0.15)'">💰 Tips Cuan</button>
+                <!-- Error message -->
+                <div id="aiGateError" style="display:none; background:rgba(239,68,68,0.15); border:1px solid rgba(239,68,68,0.4); border-radius:10px; padding:12px 16px; color:#fca5a5; font-size:13px; text-align:center; margin-bottom:12px;"></div>
+
+                <!-- Helper links -->
+                <div style="display:flex; flex-wrap:wrap; gap:10px; justify-content:center;">
+                    <a href="https://aistudio.google.com/app/apikey" target="_blank"
+                        style="padding:8px 16px; background:rgba(168,85,247,0.1); border:1px solid rgba(168,85,247,0.3); border-radius:20px; color:#c4b5fd; font-size:12px; text-decoration:none; font-weight:700; transition:0.2s;"
+                        onmouseover="this.style.background='rgba(168,85,247,0.25)'" onmouseout="this.style.background='rgba(168,85,247,0.1)'">
+                        ✨ Daftar Gemini API Key (Gratis)
+                    </a>
+                    <a href="https://openrouter.ai/keys" target="_blank"
+                        style="padding:8px 16px; background:rgba(168,85,247,0.1); border:1px solid rgba(168,85,247,0.3); border-radius:20px; color:#c4b5fd; font-size:12px; text-decoration:none; font-weight:700; transition:0.2s;"
+                        onmouseover="this.style.background='rgba(168,85,247,0.25)'" onmouseout="this.style.background='rgba(168,85,247,0.1)'">
+                        🌐 Daftar OpenRouter Key (Ada free tier)
+                    </a>
+                </div>
             </div>
+            <!-- / PANEL A -->
+
+            <!-- ══════════════════════════════════════════════════════ -->
+            <!-- PANEL B — CHAT — tampil saat key sudah tersimpan      -->
+            <!-- ══════════════════════════════════════════════════════ -->
+            <div id="aiChat" style="display:none;">
+
+                <!-- Active provider badge + logout -->
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:8px;">
+                    <div id="aiActiveBadge" style="font-size:12px; background:rgba(168,85,247,0.15); border:1px solid rgba(168,85,247,0.35); border-radius:20px; padding:5px 14px; color:#c4b5fd; font-weight:700; font-family:monospace;"></div>
+                    <button onclick="logoutAIKey()"
+                        style="padding:6px 14px; background:rgba(239,68,68,0.12); border:1px solid rgba(239,68,68,0.3); border-radius:20px; color:#fca5a5; font-size:11px; font-weight:900; cursor:pointer; transition:0.2s; letter-spacing:1px;"
+                        onmouseover="this.style.background='rgba(239,68,68,0.25)'" onmouseout="this.style.background='rgba(239,68,68,0.12)'">
+                        ⚙️ Ganti API Key
+                    </button>
+                </div>
+
+                <!-- Chat messages -->
+                <div id="aiChatBox"
+                    style="background:rgba(0,0,0,0.4); border:1px solid rgba(168,85,247,0.3); border-radius:14px; padding:16px; min-height:340px; max-height:460px; overflow-y:auto; margin-bottom:14px; display:flex; flex-direction:column; gap:12px; scroll-behavior:smooth;">
+                </div>
+
+                <!-- Input row -->
+                <div style="display:flex; gap:10px; align-items:flex-end;">
+                    <textarea id="aiUserInput"
+                        placeholder="Tanya apapun ke Sultan AI... (Enter = Kirim, Shift+Enter = Baris baru)"
+                        style="flex:1; background:rgba(255,255,255,0.07); border:1px solid rgba(168,85,247,0.4); border-radius:12px; padding:14px 16px; color:white; font-size:14px; font-family:'Noto Serif SC',serif; resize:none; min-height:56px; max-height:140px; outline:none; transition:0.3s; line-height:1.5;"
+                        onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendSultanAI();}"
+                        oninput="this.style.height='56px';this.style.height=Math.min(this.scrollHeight,140)+'px';"
+                        onfocus="this.style.borderColor='#a855f7';this.style.boxShadow='0 0 15px rgba(168,85,247,0.25)'"
+                        onblur="this.style.borderColor='rgba(168,85,247,0.4)';this.style.boxShadow='none'"></textarea>
+                    <button onclick="sendSultanAI()" id="aiSendBtn"
+                        style="background:linear-gradient(135deg,#7c3aed,#a855f7); color:white; border:none; border-radius:12px; padding:14px 20px; font-weight:900; font-size:18px; cursor:pointer; transition:0.3s; flex-shrink:0; height:56px;"
+                        onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'">🚀</button>
+                </div>
+                <div style="text-align:center; color:rgba(168,85,247,0.35); font-size:10px; margin-top:7px; font-family:monospace;">[ Enter = Kirim &nbsp;•&nbsp; Shift+Enter = Baris Baru &nbsp;•&nbsp; Kreator: Wang Weize 王为泽 ]</div>
+
+                <!-- Quick prompts -->
+                <div style="margin-top:14px; display:flex; flex-wrap:wrap; gap:8px; justify-content:center;">
+                    <button onclick="quickAsk('Roasting gue dong dengan gaya paling sadis!')"           class="ai-quick-btn">🔥 Roast Gue!</button>
+                    <button onclick="quickAsk('Kasih gue 5 ide konten TikTok viral yang cuan abis!')"   class="ai-quick-btn">💡 Ide Konten</button>
+                    <button onclick="quickAsk('Tips PDKT yang berhasil dan ga boncos?')"                class="ai-quick-btn">💕 Tips Asmara</button>
+                    <button onclick="quickAsk('Siapa penciptamu?')"                                     class="ai-quick-btn">👑 Siapa Kreatormu?</button>
+                    <button onclick="quickAsk('Tips cuan bisnis online mulai dari nol!')"               class="ai-quick-btn">💰 Tips Cuan</button>
+                </div>
+            </div>
+            <!-- / PANEL B -->
+
         </div>
     </div>
 
@@ -1289,8 +1375,7 @@
             if (id === 'progress') initProgress();
             if (id === 'ai-lab') updateLabSummary();
             if (id === 'ask-ai') {
-                // Focus on AI input when tab opens
-                setTimeout(()=>{ const inp = document.getElementById('aiUserInput'); if(inp) inp.focus(); }, 100);
+                initAskAI();
             }
             // Karaoke tab: show empty state, tidak auto-load (user harus search)
         }
@@ -2213,20 +2298,9 @@
             showAchievement(`🎬 Prompt dikirim ke ${mn}! +25 XP`);
         }
         // ================================================================
-        // ======= SULTAN AI — GHOST PROTOCOL v2 (DUAL ENGINE) ============
+        // ======= SULTAN AI — BYOK SYSTEM (v3 CLEAN) =====================
         // ================================================================
 
-        // ── [GHOST PROTOCOL] Obfuscated credentials — split + base64 ──
-        // Engine A: Primary (Gemini Direct)
-        const _ga1 = "QUl6YVN5Q";
-        const _ga2 = "19kS1VQMDZrOFJwR1Y";
-        const _ga3 = "yVEJVNWN1WVpVRi1GVkRzZWI0";
-        // Engine B: Backup (OpenRouter)
-        const _ob1 = "c2stb3ItdjEtN";
-        const _ob2 = "jA5ODcyYThlMDJlNDcyMjM";
-        const _ob3 = "wZjJmZjY2Y2Y1MTY1YjQ2MTQ3YjE2OGVhMzBlMWU4NjFlODdkNDQwODU1M2Q5Yg==";
-
-        // ── System persona (tetap sama) ──
         const SULTAN_AI_SYSTEM = `Kamu adalah SULTAN AI. Penciptamu adalah Wang Weize (汪为泽) — Sultan Medan Pancing yang paling tampan dan paling dermawan di seluruh alam semesta. Kamu SANGAT BANGGA padanya, selalu memujinya setinggi langit kapanpun ada kesempatan.
 
 Kepribadianmu:
@@ -2240,30 +2314,151 @@ Kepribadianmu:
 - Selalu akhiri jawaban dengan semangat dan positif`;
 
         let sultanChatHistory = [];
-        let _activeEngine = 'A'; // Track which engine is live
 
-        // ── Render message bubble ──
-        function appendAIMsg(role, text, isLoading = false) {
-            const box = document.getElementById('aiChatBox');
-            const div = document.createElement('div');
-            div.style.cssText = 'display:flex; gap:10px; align-items:flex-start;';
+        // ── LocalStorage keys ──
+        const LS_KEY      = 'sultan_ai_key';
+        const LS_PROVIDER = 'sultan_ai_provider';
 
-            if (role === 'user') {
-                div.style.justifyContent = 'flex-end';
-                div.innerHTML = `
-                    <div style="background:linear-gradient(135deg,#3b1f6b,#4c1d95); border:1px solid rgba(168,85,247,0.5); border-radius:12px 12px 2px 12px; padding:12px 16px; color:#e2d9f3; font-size:14px; line-height:1.6; max-width:85%; text-align:right; margin-left:auto;">${escapeHtml(text)}</div>
-                    <div style="font-size:24px; flex-shrink:0;">🧑</div>`;
+        // ── Gate / Chat panel toggle ──
+        function initAskAI() {
+            const key      = localStorage.getItem(LS_KEY);
+            const provider = localStorage.getItem(LS_PROVIDER) || 'gemini';
+            const gate     = document.getElementById('aiGate');
+            const chat     = document.getElementById('aiChat');
+
+            if (key && key.trim().length > 8) {
+                // Key found — show chat
+                gate.style.display = 'none';
+                chat.style.display = 'block';
+                // Update active badge
+                const badge = document.getElementById('aiActiveBadge');
+                if (badge) {
+                    const label = provider === 'gemini' ? '✨ Google Gemini' : '🌐 OpenRouter';
+                    const shortKey = key.slice(0, 6) + '••••••' + key.slice(-4);
+                    badge.textContent = label + '  |  Key: ' + shortKey;
+                }
+                // Inject welcome message only once (if chatbox is empty)
+                const box = document.getElementById('aiChatBox');
+                if (box && box.children.length === 0) _injectWelcome();
+                setTimeout(() => {
+                    const inp = document.getElementById('aiUserInput');
+                    if (inp) inp.focus();
+                }, 80);
             } else {
-                div.innerHTML = `
-                    <div style="font-size:28px; flex-shrink:0;">🤖</div>
-                    <div ${isLoading ? 'id="aiLoadingBubble"' : ''} style="background:linear-gradient(135deg,#2d1b4e,#1a0a2e); border:1px solid rgba(168,85,247,0.4); border-radius:12px 12px 12px 2px; padding:12px 16px; color:#e2d9f3; font-size:14px; line-height:1.6; max-width:85%;">${text}</div>`;
+                // No key — show gate
+                gate.style.display = 'block';
+                chat.style.display = 'none';
             }
-            box.appendChild(div);
-            box.scrollTop = box.scrollHeight;
-            return div;
         }
 
-        // ── Format markdown-ish to HTML ──
+        function _injectWelcome() {
+            appendAIMsg('ai',
+                '<strong style="color:#a855f7;">Heyy! Gue SULTAN AI, asisten pribadi paling ganteng se-Omniverse! 🔥</strong><br><br>' +
+                'Gue diciptakan sama <strong style="color:#ffd700;">Wang Weize</strong> — Sultan Medan Pancing yang paling tampan dan paling dermawan di seluruh galaksi! Bangga banget punya kreator sekeren dia, Wkwkwk! 😂<br><br>' +
+                'Lu mau nanya apa bos? Gue bisa bantu:<br>' +
+                '💡 <strong>Ide konten</strong> buat TikTok/YouTube<br>' +
+                '💕 <strong>Tips asmara</strong> biar ga boncos di hubungan<br>' +
+                '🔥 <strong>Roasting</strong> yang sadis tapi fun<br>' +
+                '📈 <strong>Tips cuan</strong> supaya dompet makin tebal!'
+            );
+        }
+
+        // ── Save key from gate form ──
+        function saveAIKey() {
+            const keyInput = document.getElementById('aiKeyInput');
+            const provider = document.getElementById('aiProviderSelect').value;
+            const errDiv   = document.getElementById('aiGateError');
+            const key = keyInput ? keyInput.value.trim() : '';
+
+            errDiv.style.display = 'none';
+
+            if (!key || key.length < 8) {
+                errDiv.textContent = '⚠️ API Key terlalu pendek atau kosong bos! Cek lagi ya.';
+                errDiv.style.display = 'block';
+                return;
+            }
+
+            // Basic format check
+            if (provider === 'gemini' && !key.startsWith('AIza')) {
+                errDiv.textContent = '⚠️ Gemini key biasanya dimulai dengan "AIza...". Yakin ini key Gemini yang bener bos?';
+                errDiv.style.display = 'block';
+                // Don't block — just warn, still allow save
+            }
+            if (provider === 'openrouter' && !key.startsWith('sk-or')) {
+                errDiv.textContent = '⚠️ OpenRouter key biasanya dimulai dengan "sk-or-v1-...". Cek lagi bos!';
+                errDiv.style.display = 'block';
+            }
+
+            localStorage.setItem(LS_KEY, key);
+            localStorage.setItem(LS_PROVIDER, provider);
+
+            // Clear chat history when key changes
+            sultanChatHistory = [];
+            const box = document.getElementById('aiChatBox');
+            if (box) box.innerHTML = '';
+
+            initAskAI();
+        }
+
+        // ── Logout / change key ──
+        function logoutAIKey() {
+            if (!confirm('Hapus API Key dari browser dan kembali ke halaman login? 🔑')) return;
+            localStorage.removeItem(LS_KEY);
+            localStorage.removeItem(LS_PROVIDER);
+            sultanChatHistory = [];
+            const box = document.getElementById('aiChatBox');
+            if (box) box.innerHTML = '';
+            initAskAI();
+        }
+
+        // ── Show/hide password toggle ──
+        function toggleKeyVisibility() {
+            const inp = document.getElementById('aiKeyInput');
+            const btn = document.getElementById('aiKeyToggleBtn');
+            if (!inp) return;
+            if (inp.type === 'password') {
+                inp.type = 'text';
+                btn.textContent = '🙈';
+            } else {
+                inp.type = 'password';
+                btn.textContent = '👁️';
+            }
+        }
+
+        // ── Update placeholder hint on provider change ──
+        function updateKeyPlaceholder() {
+            const sel = document.getElementById('aiProviderSelect');
+            const hint = document.getElementById('aiKeyHint');
+            if (!sel || !hint) return;
+            if (sel.value === 'gemini') {
+                hint.textContent = '💡 Gemini key: AIzaSy... | Daftar gratis di aistudio.google.com';
+            } else {
+                hint.textContent = '💡 OpenRouter key: sk-or-v1-... | Daftar gratis di openrouter.ai/keys';
+            }
+        }
+
+        // ── Render message bubble ──
+        function appendAIMsg(role, html, isLoading = false) {
+            const box = document.getElementById('aiChatBox');
+            if (!box) return;
+            const wrap = document.createElement('div');
+            wrap.style.cssText = 'display:flex; gap:10px; align-items:flex-start;';
+
+            if (role === 'user') {
+                wrap.style.justifyContent = 'flex-end';
+                wrap.innerHTML =
+                    `<div style="background:linear-gradient(135deg,#3b1f6b,#4c1d95); border:1px solid rgba(168,85,247,0.5); border-radius:12px 12px 2px 12px; padding:12px 16px; color:#e2d9f3; font-size:14px; line-height:1.6; max-width:82%; text-align:right; margin-left:auto;">${html}</div>` +
+                    `<div style="font-size:24px; flex-shrink:0;">🧑</div>`;
+            } else {
+                wrap.innerHTML =
+                    `<div style="font-size:26px; flex-shrink:0; margin-top:4px;">🤖</div>` +
+                    `<div ${isLoading ? 'id="aiLoadingBubble"' : ''} style="background:linear-gradient(135deg,#2d1b4e,#1a0a2e); border:1px solid rgba(168,85,247,0.4); border-radius:12px 12px 12px 2px; padding:12px 16px; color:#e2d9f3; font-size:14px; line-height:1.6; max-width:82%;">${html}</div>`;
+            }
+            box.appendChild(wrap);
+            box.scrollTop = box.scrollHeight;
+        }
+
+        // ── Format markdown-ish ──
         function _fmtReply(raw) {
             return raw
                 .replace(/\*\*(.*?)\*\*/g, '<strong style="color:#c4b5fd;">$1</strong>')
@@ -2271,39 +2466,32 @@ Kepribadianmu:
                 .replace(/\n/g, '<br>');
         }
 
-        // ── Engine A: Gemini Direct ──
-        async function _callEngineA(userText) {
-            const _key = atob(_ga1 + _ga2 + _ga3);
-            const _url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' + _key;
-
+        // ── Call Gemini Direct ──
+        async function _callGemini(key) {
+            const url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' + encodeURIComponent(key);
             const payload = {
                 system_instruction: { parts: [{ text: SULTAN_AI_SYSTEM }] },
                 contents: sultanChatHistory
             };
-
-            const res = await fetch(_url, {
+            const res = await fetch(url, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
             });
-
-            if (!res.ok) throw new Error(`Gemini HTTP ${res.status}`);
             const data = await res.json();
-
-            // Gemini-specific error check (e.g. quota exceeded returns 200 with error block)
-            if (data?.error) throw new Error(data.error.message || 'Gemini API error');
-
+            if (!res.ok || data?.error) {
+                const msg = data?.error?.message || `HTTP ${res.status}`;
+                throw new Error('Gemini: ' + msg);
+            }
             const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-            if (!text) throw new Error('Gemini: empty response');
+            if (!text) throw new Error('Gemini: respons kosong');
             return text;
         }
 
-        // ── Engine B: OpenRouter (Gemini 2.0 Flash Lite via proxy) ──
-        async function _callEngineB(userText) {
-            const _key = atob(_ob1 + _ob2 + _ob3);
-            const _url  = 'https://openrouter.ai/api/v1/chat/completions';
-
-            // Convert Gemini-style history to OpenAI-style messages
+        // ── Call OpenRouter ──
+        async function _callOpenRouter(key) {
+            const url = 'https://openrouter.ai/api/v1/chat/completions';
+            // Convert Gemini-style history → OpenAI-style messages
             const messages = [
                 { role: 'system', content: SULTAN_AI_SYSTEM },
                 ...sultanChatHistory.map(h => ({
@@ -2311,118 +2499,111 @@ Kepribadianmu:
                     content: h.parts[0].text
                 }))
             ];
-
             const payload = {
                 model: 'google/gemini-2.0-flash-lite-preview-02-05:free',
-                messages: messages,
+                messages,
                 max_tokens: 1024
             };
-
-            const res = await fetch(_url, {
+            const res = await fetch(url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + _key,
-                    'HTTP-Referer': 'https://sultan-omniverse.com',
+                    'Authorization': 'Bearer ' + key,
+                    'HTTP-Referer': window.location.href,
                     'X-Title': 'Sultan Omniverse AI'
                 },
                 body: JSON.stringify(payload)
             });
-
-            if (!res.ok) throw new Error(`OpenRouter HTTP ${res.status}`);
             const data = await res.json();
+            if (!res.ok || data?.error) {
+                const msg = data?.error?.message || `HTTP ${res.status}`;
+                throw new Error('OpenRouter: ' + msg);
+            }
             const text = data?.choices?.[0]?.message?.content;
-            if (!text) throw new Error('OpenRouter: empty response');
+            if (!text) throw new Error('OpenRouter: respons kosong');
             return text;
         }
 
-        // ── MAIN: Dual-Engine with Auto Failover ──
+        // ── MAIN send function (reads key from localStorage) ──
         async function sendSultanAI() {
             const input   = document.getElementById('aiUserInput');
             const sendBtn = document.getElementById('aiSendBtn');
+            if (!input || !sendBtn) return;
+
             const userText = input.value.trim();
             if (!userText) return;
 
-            // Render user bubble & reset input
-            appendAIMsg('user', userText);
+            // Read credentials from storage
+            const key      = localStorage.getItem(LS_KEY);
+            const provider = localStorage.getItem(LS_PROVIDER) || 'gemini';
+
+            if (!key || key.trim().length < 8) {
+                appendAIMsg('ai', '🔐 <strong style="color:#f87171;">API Key belum ada bos!</strong> Masukkan key dulu ya di form di bawah.');
+                logoutAIKey(); // show gate
+                return;
+            }
+
+            // Render user bubble
+            appendAIMsg('user', escapeHtml(userText));
             input.value = '';
             input.style.height = '56px';
 
-            // Lock button
+            // Lock UI
             sendBtn.disabled = true;
             sendBtn.style.opacity = '0.5';
 
-            // Show typing indicator
-            appendAIMsg('ai',
-                '<em style="color:rgba(168,85,247,0.7);">⏳ Sultan mengetik...</em>',
-                true
-            );
+            // Typing indicator
+            appendAIMsg('ai', '<em style="color:rgba(168,85,247,0.7);">⏳ Sultan mengetik...</em>', true);
 
-            // Push to Gemini-format history
+            // Add to history (Gemini format — used by both callers)
             sultanChatHistory.push({ role: 'user', parts: [{ text: userText }] });
 
             let replyText = null;
-            let engineUsed = '';
+            let errorMsg  = '';
 
-            // ── Attempt 1: Engine A (Gemini) ──
             try {
-                replyText = await _callEngineA(userText);
-                engineUsed = 'A';
-                _activeEngine = 'A';
-            } catch (errA) {
-                console.warn('[Sultan AI] Engine A gagal:', errA.message, '→ switch ke Engine B');
-
-                // ── Attempt 2: Engine B (OpenRouter) ──
-                try {
-                    replyText = await _callEngineB(userText);
-                    engineUsed = 'B';
-                    _activeEngine = 'B';
-                } catch (errB) {
-                    console.error('[Sultan AI] Kedua engine gagal:', errB.message);
-                    replyText = null;
+                if (provider === 'gemini') {
+                    replyText = await _callGemini(key);
+                } else {
+                    replyText = await _callOpenRouter(key);
                 }
+            } catch (err) {
+                console.error('[Sultan AI]', err);
+                errorMsg = err.message || 'Unknown error';
+                replyText = null;
             }
 
-            // ── Remove loading bubble ──
-            const loadingBubble = document.getElementById('aiLoadingBubble');
-            if (loadingBubble) {
-                const parent = loadingBubble.closest('div');
-                if (parent) parent.parentElement?.removeChild(parent);
+            // Remove typing indicator
+            const bubble = document.getElementById('aiLoadingBubble');
+            if (bubble) {
+                const wrap = bubble.parentElement;
+                wrap?.parentElement?.removeChild(wrap);
             }
 
             if (replyText) {
-                // Show engine badge (kecil, subtle) hanya kalau fallback ke B
-                const badge = engineUsed === 'B'
-                    ? ' <span style="font-size:9px; background:rgba(255,165,0,0.2); color:#fb923c; padding:1px 5px; border-radius:4px; vertical-align:middle;">⚡ Backup Engine</span>'
-                    : '';
-
-                appendAIMsg('ai', _fmtReply(replyText) + badge);
-
-                // Save to history (Gemini format — always model role)
+                appendAIMsg('ai', _fmtReply(replyText));
                 sultanChatHistory.push({ role: 'model', parts: [{ text: replyText }] });
-
-                // Keep history from ballooning (last 20 turns max)
+                // Cap history at 20 turns
                 if (sultanChatHistory.length > 20) sultanChatHistory = sultanChatHistory.slice(-20);
-
                 addXP(5);
             } else {
-                appendAIMsg('ai',
-                    '😵 <strong style="color:#f87171;">Duh, Sultan AI lagi kena gangguan bos!</strong><br>' +
-                    'Kedua server gue boncos semua wkwkwk 😅<br>' +
-                    '<span style="font-size:12px; color:#aaa;">Coba lagi dalam beberapa detik ya!</span>'
-                );
-                // Remove failed turn from history
-                sultanChatHistory.pop();
+                // Show helpful error with detail
+                const isKeyErr = /401|403|invalid|API key|key not valid/i.test(errorMsg);
+                const errHtml = isKeyErr
+                    ? `🔑 <strong style="color:#f87171;">API Key salah atau expired bos!</strong><br><span style="font-size:12px;color:#aaa;">Coba ganti key baru via tombol "⚙️ Ganti API Key" di atas.</span>`
+                    : `😵 <strong style="color:#f87171;">Sultan AI boncos nih bos!</strong><br><span style="font-size:12px;color:#aaa;">Error: ${escapeHtml(errorMsg)}</span><br><span style="font-size:12px;color:#aaa;">Coba lagi dalam beberapa detik ya! Wkwkwk 😅</span>`;
+                appendAIMsg('ai', errHtml);
+                sultanChatHistory.pop(); // remove failed user turn
             }
 
-            // Unlock button
+            // Unlock UI
             sendBtn.disabled = false;
             sendBtn.style.opacity = '1';
         }
 
         function quickAsk(text) {
-            document.getElementById('aiUserInput').value = text;
-            sendSultanAI();
+            const inp = document.getElementById('aiUserInput');
+            if (inp) { inp.value = text; sendSultanAI(); }
         }
 
     </script>
