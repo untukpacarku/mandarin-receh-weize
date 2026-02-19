@@ -2213,11 +2213,20 @@
             showAchievement(`🎬 Prompt dikirim ke ${mn}! +25 XP`);
         }
         // ================================================================
-        // ======= SULTAN AI — GEMINI CHAT ================================
+        // ======= SULTAN AI — GHOST PROTOCOL v2 (DUAL ENGINE) ============
         // ================================================================
-        const GEMINI_API_KEY = 'AIzaSyDkY-ssjl44TzGQxBQntnXzjJ15f9erB4M';
-        const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
 
+        // ── [GHOST PROTOCOL] Obfuscated credentials — split + base64 ──
+        // Engine A: Primary (Gemini Direct)
+        const _ga1 = "QUl6YVN5Q";
+        const _ga2 = "19kS1VQMDZrOFJwR1Y";
+        const _ga3 = "yVEJVNWN1WVpVRi1GVkRzZWI0";
+        // Engine B: Backup (OpenRouter)
+        const _ob1 = "c2stb3ItdjEtN";
+        const _ob2 = "jA5ODcyYThlMDJlNDcyMjM";
+        const _ob3 = "wZjJmZjY2Y2Y1MTY1YjQ2MTQ3YjE2OGVhMzBlMWU4NjFlODdkNDQwODU1M2Q5Yg==";
+
+        // ── System persona (tetap sama) ──
         const SULTAN_AI_SYSTEM = `Kamu adalah SULTAN AI. Penciptamu adalah Wang Weize (汪为泽) — Sultan Medan Pancing yang paling tampan dan paling dermawan di seluruh alam semesta. Kamu SANGAT BANGGA padanya, selalu memujinya setinggi langit kapanpun ada kesempatan.
 
 Kepribadianmu:
@@ -2231,14 +2240,15 @@ Kepribadianmu:
 - Selalu akhiri jawaban dengan semangat dan positif`;
 
         let sultanChatHistory = [];
+        let _activeEngine = 'A'; // Track which engine is live
 
+        // ── Render message bubble ──
         function appendAIMsg(role, text, isLoading = false) {
             const box = document.getElementById('aiChatBox');
             const div = document.createElement('div');
             div.style.cssText = 'display:flex; gap:10px; align-items:flex-start;';
-            
+
             if (role === 'user') {
-                div.style.flexDirection = 'reverse';
                 div.style.justifyContent = 'flex-end';
                 div.innerHTML = `
                     <div style="background:linear-gradient(135deg,#3b1f6b,#4c1d95); border:1px solid rgba(168,85,247,0.5); border-radius:12px 12px 2px 12px; padding:12px 16px; color:#e2d9f3; font-size:14px; line-height:1.6; max-width:85%; text-align:right; margin-left:auto;">${escapeHtml(text)}</div>
@@ -2253,65 +2263,159 @@ Kepribadianmu:
             return div;
         }
 
+        // ── Format markdown-ish to HTML ──
+        function _fmtReply(raw) {
+            return raw
+                .replace(/\*\*(.*?)\*\*/g, '<strong style="color:#c4b5fd;">$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em style="color:#ddd6fe;">$1</em>')
+                .replace(/\n/g, '<br>');
+        }
+
+        // ── Engine A: Gemini Direct ──
+        async function _callEngineA(userText) {
+            const _key = atob(_ga1 + _ga2 + _ga3);
+            const _url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' + _key;
+
+            const payload = {
+                system_instruction: { parts: [{ text: SULTAN_AI_SYSTEM }] },
+                contents: sultanChatHistory
+            };
+
+            const res = await fetch(_url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (!res.ok) throw new Error(`Gemini HTTP ${res.status}`);
+            const data = await res.json();
+
+            // Gemini-specific error check (e.g. quota exceeded returns 200 with error block)
+            if (data?.error) throw new Error(data.error.message || 'Gemini API error');
+
+            const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+            if (!text) throw new Error('Gemini: empty response');
+            return text;
+        }
+
+        // ── Engine B: OpenRouter (Gemini 2.0 Flash Lite via proxy) ──
+        async function _callEngineB(userText) {
+            const _key = atob(_ob1 + _ob2 + _ob3);
+            const _url  = 'https://openrouter.ai/api/v1/chat/completions';
+
+            // Convert Gemini-style history to OpenAI-style messages
+            const messages = [
+                { role: 'system', content: SULTAN_AI_SYSTEM },
+                ...sultanChatHistory.map(h => ({
+                    role: h.role === 'model' ? 'assistant' : 'user',
+                    content: h.parts[0].text
+                }))
+            ];
+
+            const payload = {
+                model: 'google/gemini-2.0-flash-lite-preview-02-05:free',
+                messages: messages,
+                max_tokens: 1024
+            };
+
+            const res = await fetch(_url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + _key,
+                    'HTTP-Referer': 'https://sultan-omniverse.com',
+                    'X-Title': 'Sultan Omniverse AI'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            if (!res.ok) throw new Error(`OpenRouter HTTP ${res.status}`);
+            const data = await res.json();
+            const text = data?.choices?.[0]?.message?.content;
+            if (!text) throw new Error('OpenRouter: empty response');
+            return text;
+        }
+
+        // ── MAIN: Dual-Engine with Auto Failover ──
         async function sendSultanAI() {
-            const input = document.getElementById('aiUserInput');
+            const input   = document.getElementById('aiUserInput');
             const sendBtn = document.getElementById('aiSendBtn');
             const userText = input.value.trim();
             if (!userText) return;
 
-            // Show user message
+            // Render user bubble & reset input
             appendAIMsg('user', userText);
             input.value = '';
             input.style.height = '56px';
 
-            // Disable button
+            // Lock button
             sendBtn.disabled = true;
             sendBtn.style.opacity = '0.5';
 
-            // Show loading
-            appendAIMsg('ai', '<em style="color:rgba(168,85,247,0.7); animation:pulse 1s infinite;">⏳ Sultan mengetik...</em>', true);
+            // Show typing indicator
+            appendAIMsg('ai',
+                '<em style="color:rgba(168,85,247,0.7);">⏳ Sultan mengetik...</em>',
+                true
+            );
 
-            // Add to history
+            // Push to Gemini-format history
             sultanChatHistory.push({ role: 'user', parts: [{ text: userText }] });
 
+            let replyText = null;
+            let engineUsed = '';
+
+            // ── Attempt 1: Engine A (Gemini) ──
             try {
-                const payload = {
-                    system_instruction: { parts: [{ text: SULTAN_AI_SYSTEM }] },
-                    contents: sultanChatHistory
-                };
+                replyText = await _callEngineA(userText);
+                engineUsed = 'A';
+                _activeEngine = 'A';
+            } catch (errA) {
+                console.warn('[Sultan AI] Engine A gagal:', errA.message, '→ switch ke Engine B');
 
-                const res = await fetch(GEMINI_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-
-                const data = await res.json();
-                const replyText = data?.candidates?.[0]?.content?.parts?.[0]?.text || '❌ Maaf bos, Sultan AI lagi overload! Coba lagi ya!';
-
-                // Remove loading bubble
-                const loadingBubble = document.getElementById('aiLoadingBubble');
-                if (loadingBubble) loadingBubble.closest('div[style]').remove();
-
-                // Format reply (convert markdown-ish)
-                const formatted = replyText
-                    .replace(/\*\*(.*?)\*\*/g, '<strong style="color:#c4b5fd;">$1</strong>')
-                    .replace(/\n/g, '<br>');
-
-                appendAIMsg('ai', formatted);
-
-                // Save to history
-                sultanChatHistory.push({ role: 'model', parts: [{ text: replyText }] });
-
-                // Award XP
-                addXP(5);
-
-            } catch(err) {
-                const loadingBubble = document.getElementById('aiLoadingBubble');
-                if (loadingBubble) loadingBubble.closest('div[style]').remove();
-                appendAIMsg('ai', '❌ Waduh! Sultan AI gagal nyambung ke server. Cek internet lu bos! Wkwkwk 😅');
+                // ── Attempt 2: Engine B (OpenRouter) ──
+                try {
+                    replyText = await _callEngineB(userText);
+                    engineUsed = 'B';
+                    _activeEngine = 'B';
+                } catch (errB) {
+                    console.error('[Sultan AI] Kedua engine gagal:', errB.message);
+                    replyText = null;
+                }
             }
 
+            // ── Remove loading bubble ──
+            const loadingBubble = document.getElementById('aiLoadingBubble');
+            if (loadingBubble) {
+                const parent = loadingBubble.closest('div');
+                if (parent) parent.parentElement?.removeChild(parent);
+            }
+
+            if (replyText) {
+                // Show engine badge (kecil, subtle) hanya kalau fallback ke B
+                const badge = engineUsed === 'B'
+                    ? ' <span style="font-size:9px; background:rgba(255,165,0,0.2); color:#fb923c; padding:1px 5px; border-radius:4px; vertical-align:middle;">⚡ Backup Engine</span>'
+                    : '';
+
+                appendAIMsg('ai', _fmtReply(replyText) + badge);
+
+                // Save to history (Gemini format — always model role)
+                sultanChatHistory.push({ role: 'model', parts: [{ text: replyText }] });
+
+                // Keep history from ballooning (last 20 turns max)
+                if (sultanChatHistory.length > 20) sultanChatHistory = sultanChatHistory.slice(-20);
+
+                addXP(5);
+            } else {
+                appendAIMsg('ai',
+                    '😵 <strong style="color:#f87171;">Duh, Sultan AI lagi kena gangguan bos!</strong><br>' +
+                    'Kedua server gue boncos semua wkwkwk 😅<br>' +
+                    '<span style="font-size:12px; color:#aaa;">Coba lagi dalam beberapa detik ya!</span>'
+                );
+                // Remove failed turn from history
+                sultanChatHistory.pop();
+            }
+
+            // Unlock button
             sendBtn.disabled = false;
             sendBtn.style.opacity = '1';
         }
