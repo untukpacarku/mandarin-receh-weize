@@ -470,6 +470,369 @@
         #paymentLoadingOverlay .lo-sub { color: #888; font-size: 12px; margin-top: 10px; letter-spacing: 1px; font-family: monospace; }
         #paymentLoadingOverlay .lo-dots { color: var(--emperor-gold); font-size: 28px; animation: blink 1s infinite; letter-spacing: 4px; margin-top: 8px; }
         @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.2; } }
+
+        /* ================================================================ */
+        /* ======= WANG DYNASTY HEADER — NEW CSS ========================= */
+        /* ================================================================ */
+        .wang-dynasty-header {
+            padding: 60px 20px 40px;
+            background:
+                radial-gradient(ellipse at top, rgba(139,0,0,0.12) 0%, transparent 65%),
+                url('https://www.transparenttextures.com/patterns/silk.png');
+            background-color: var(--rice-paper);
+            position: relative;
+            border-bottom: 6px double var(--imperial-red);
+        }
+        .dynasty-top-bar {
+            position: absolute; top: 0; left: 0; width: 100%; height: 8px;
+            background: repeating-linear-gradient(90deg, var(--imperial-red) 0px, var(--imperial-red) 30px, var(--emperor-gold) 30px, var(--emperor-gold) 36px);
+        }
+        .dynasty-bottom-bar {
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 8px;
+            background: repeating-linear-gradient(90deg, var(--emperor-gold) 0px, var(--emperor-gold) 30px, var(--imperial-red) 30px, var(--imperial-red) 36px);
+            margin-top: 30px;
+        }
+
+        /* Lanterns */
+        .lantern {
+            position: absolute; top: 18px; font-size: 3rem;
+            animation: lanternSwing 4s ease-in-out infinite;
+            filter: drop-shadow(0 4px 12px rgba(139,0,0,0.5));
+            transform-origin: top center;
+        }
+        .lantern-left { left: 30px; animation-delay: 0s; }
+        .lantern-right { right: 30px; animation-delay: 0.8s; }
+        @keyframes lanternSwing {
+            0%, 100% { transform: rotate(-8deg); }
+            50% { transform: rotate(8deg); }
+        }
+
+        /* Imperial Emblem */
+        .imperial-emblem-wrap {
+            position: relative; display: inline-block; margin-bottom: 24px; margin-top: 10px;
+        }
+        .imperial-frame-outer {
+            width: 160px; height: 160px; margin: 0 auto;
+            border: 8px double var(--imperial-red);
+            border-radius: 50%;
+            background: radial-gradient(circle, #fff8e7 40%, #f5e0b0 100%);
+            box-shadow:
+                0 0 0 4px var(--emperor-gold),
+                0 0 0 8px var(--imperial-red),
+                0 0 40px rgba(139,0,0,0.4),
+                0 0 80px rgba(255,215,0,0.15);
+            display: flex; align-items: center; justify-content: center;
+            position: relative;
+        }
+        .imperial-frame-outer::before {
+            content: '';
+            position: absolute; inset: 8px;
+            border: 3px solid var(--emperor-gold);
+            border-radius: 50%;
+            opacity: 0.6;
+        }
+        .imperial-frame-inner { display: flex; align-items: center; justify-content: center; }
+        .wang-character {
+            font-family: 'Ma Shan Zheng', cursive;
+            font-size: 90px;
+            color: var(--imperial-red);
+            text-shadow:
+                3px 3px 0 var(--emperor-gold),
+                0 0 30px rgba(139,0,0,0.4);
+            line-height: 1;
+            animation: glowGold 2.5s ease-in-out infinite alternate;
+        }
+        .dragon-left, .dragon-right {
+            position: absolute; top: 50%; transform: translateY(-50%);
+            font-size: 2.2rem; filter: drop-shadow(0 0 10px rgba(255,215,0,0.5));
+            animation: dragonFloat 3s ease-in-out infinite alternate;
+        }
+        .dragon-left { left: -60px; transform: translateY(-50%) scaleX(-1); }
+        .dragon-right { right: -60px; }
+        @keyframes dragonFloat {
+            0% { transform: translateY(-50%) translateX(0); }
+            100% { transform: translateY(-60%) translateX(4px); }
+        }
+        .dragon-left { animation-delay: 0.4s; }
+
+        /* Name block */
+        .dynasty-name-block { margin-bottom: 14px; }
+        .wang-imperial-name {
+            font-family: 'Cormorant Garamond', 'Playfair Display', serif;
+            font-size: clamp(1.8rem, 5vw, 3.5rem);
+            font-weight: 700;
+            color: var(--imperial-red);
+            text-shadow:
+                2px 2px 0 var(--emperor-gold),
+                0 0 30px rgba(139,0,0,0.3);
+            letter-spacing: 6px;
+            text-transform: uppercase;
+        }
+        .dynasty-separator {
+            display: flex; align-items: center; justify-content: center;
+            gap: 12px; margin: 12px auto; max-width: 400px;
+        }
+        .sep-line {
+            flex: 1; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--emperor-gold), transparent);
+        }
+        .sep-diamond { color: var(--emperor-gold); font-size: 14px; }
+
+        /* Bloodline ribbon */
+        .bloodline-ribbon {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--imperial-red) 0%, #a00000 50%, var(--imperial-red) 100%);
+            padding: 10px 32px;
+            clip-path: polygon(16px 0%, calc(100% - 16px) 0%, 100% 50%, calc(100% - 16px) 100%, 16px 100%, 0% 50%);
+            box-shadow: 0 4px 20px rgba(139,0,0,0.5), inset 0 1px 0 rgba(255,215,0,0.3);
+            margin: 4px 0;
+            position: relative;
+        }
+        .bloodline-ribbon::before, .bloodline-ribbon::after {
+            content: '';
+            position: absolute; top: 3px; bottom: 3px;
+            left: 22px; right: 22px;
+            border-top: 1px solid rgba(255,215,0,0.3);
+            border-bottom: 1px solid rgba(255,215,0,0.3);
+            pointer-events: none;
+        }
+        .ribbon-text {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(0.85rem, 2.5vw, 1.05rem);
+            font-weight: 700;
+            color: var(--emperor-gold);
+            letter-spacing: 3px;
+            text-shadow: 0 0 10px rgba(255,215,0,0.5);
+            white-space: nowrap;
+        }
+        .ribbon-dot { margin: 0 10px; }
+        .flag-emoji { font-style: normal; }
+
+        /* ================================================================ */
+        /* ======= SULTAN MAGIC AI STUDIO — CSS ========================== */
+        /* ================================================================ */
+        #ai-lab.magic-studio {
+            background: linear-gradient(160deg, #1a0000 0%, #2d0a00 40%, #1a0000 100%);
+            border: 3px solid var(--emperor-gold);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 0 60px rgba(255,215,0,0.15), inset 0 0 80px rgba(139,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        #ai-lab.magic-studio::before {
+            content: '';
+            position: absolute; inset: 0;
+            background:
+                repeating-linear-gradient(0deg, transparent, transparent 50px, rgba(255,215,0,0.018) 50px, rgba(255,215,0,0.018) 51px),
+                repeating-linear-gradient(90deg, transparent, transparent 50px, rgba(255,215,0,0.012) 50px, rgba(255,215,0,0.012) 51px);
+            pointer-events: none;
+        }
+        .magic-studio-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.3rem, 4vw, 2rem);
+            font-weight: 900;
+            color: var(--emperor-gold);
+            text-shadow: 0 0 20px rgba(255,215,0,0.6), 2px 2px 0 rgba(139,0,0,0.5);
+            letter-spacing: 3px;
+            text-align: center;
+            margin-bottom: 6px;
+        }
+        .magic-studio-subtitle {
+            text-align: center;
+            color: rgba(255,215,0,0.5);
+            font-size: 11px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 28px;
+            font-family: monospace;
+        }
+
+        /* Engine & config selects */
+        .magic-config-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+        @media (max-width: 600px) { .magic-config-grid { grid-template-columns: 1fr; } }
+        .magic-config-group {
+            background: rgba(255,215,0,0.04);
+            border: 1px solid rgba(255,215,0,0.2);
+            border-radius: 10px;
+            padding: 14px;
+        }
+        .magic-config-label {
+            font-family: monospace;
+            font-size: 9px;
+            letter-spacing: 3px;
+            color: rgba(255,215,0,0.6);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            display: block;
+        }
+        .magic-select {
+            width: 100%;
+            padding: 10px 12px;
+            background: rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,215,0,0.3);
+            border-radius: 8px;
+            color: var(--emperor-gold);
+            font-size: 13px;
+            font-weight: 700;
+            outline: none;
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: 'Cormorant Garamond', serif;
+        }
+        .magic-select:focus { border-color: var(--emperor-gold); box-shadow: 0 0 10px rgba(255,215,0,0.25); }
+        .magic-select option { background: #1a0000; }
+
+        /* Prompt area */
+        .magic-prompt-area {
+            background: rgba(255,215,0,0.03);
+            border: 1px solid rgba(255,215,0,0.2);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        .magic-prompt-area::before {
+            content: '// DESCRIBE YOUR IMAGINATION';
+            position: absolute;
+            top: -10px; left: 15px;
+            background: #1a0000;
+            color: rgba(255,215,0,0.5);
+            font-size: 10px;
+            font-family: monospace;
+            padding: 0 8px;
+            letter-spacing: 2px;
+        }
+        .magic-textarea {
+            width: 100%; min-height: 110px;
+            background: transparent; border: none;
+            color: #ffeeba;
+            font-size: 15px;
+            font-family: 'Cormorant Garamond', serif;
+            outline: none; resize: vertical; line-height: 1.7;
+        }
+        .magic-textarea::placeholder { color: rgba(255,215,0,0.25); font-style: italic; }
+
+        /* Generate button */
+        .magic-generate-btn {
+            width: 100%; padding: 20px;
+            background: linear-gradient(135deg, #8B0000, #C41E3A, #8B0000);
+            color: var(--emperor-gold);
+            border: 3px solid var(--emperor-gold);
+            border-radius: 14px;
+            font-size: 18px; font-weight: 900;
+            cursor: pointer; transition: 0.3s;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-family: 'Playfair Display', serif;
+            box-shadow: 0 0 30px rgba(255,215,0,0.2);
+            position: relative; overflow: hidden;
+        }
+        .magic-generate-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 40px rgba(255,215,0,0.4); }
+        .magic-generate-btn:disabled { background: #333; color: #666; border-color: #555; cursor: not-allowed; transform: none; box-shadow: none; }
+
+        /* Loading Screen */
+        #magicLoadingScreen {
+            display: none;
+            background: rgba(10,0,0,0.98);
+            border: 2px solid var(--emperor-gold);
+            border-radius: 14px;
+            padding: 40px 24px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .magic-progress-bar-bg {
+            height: 16px;
+            background: rgba(255,215,0,0.1);
+            border: 1px solid rgba(255,215,0,0.3);
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        .magic-progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--imperial-red), var(--emperor-gold));
+            border-radius: 8px;
+            transition: width 0.5s ease;
+            box-shadow: 0 0 15px rgba(255,215,0,0.4);
+        }
+        .magic-terminal-text {
+            font-family: monospace;
+            font-size: 13px;
+            color: #00ff88;
+            text-align: left;
+            background: rgba(0,255,100,0.04);
+            border: 1px solid rgba(0,255,100,0.15);
+            border-radius: 8px;
+            padding: 14px;
+            min-height: 80px;
+        }
+        .magic-terminal-text .t-cursor { animation: blink 0.8s infinite; display: inline-block; }
+
+        /* Video Result */
+        #magicVideoResult {
+            display: none;
+            margin-top: 20px;
+        }
+        .magic-video-wrapper {
+            position: relative;
+            padding-top: 56.25%;
+            background: #000;
+            border-radius: 14px;
+            overflow: hidden;
+            border: 3px solid var(--emperor-gold);
+            box-shadow: 0 0 40px rgba(255,215,0,0.2);
+        }
+        .magic-video-wrapper iframe {
+            position: absolute; inset: 0;
+            width: 100%; height: 100%;
+            border: none;
+            pointer-events: none;
+        }
+        .magic-watermark {
+            position: absolute;
+            bottom: 14px; right: 14px;
+            background: rgba(0,0,0,0.72);
+            color: var(--emperor-gold);
+            font-size: 10px;
+            font-family: monospace;
+            padding: 4px 10px;
+            border-radius: 4px;
+            letter-spacing: 1px;
+            border: 1px solid rgba(255,215,0,0.3);
+            pointer-events: none;
+            z-index: 10;
+        }
+        .magic-result-info {
+            background: rgba(255,215,0,0.05);
+            border: 1px solid rgba(255,215,0,0.15);
+            border-radius: 10px;
+            padding: 16px;
+            margin-top: 14px;
+            font-family: monospace;
+            font-size: 12px;
+            color: rgba(255,215,0,0.7);
+        }
+        .magic-download-btn {
+            width: 100%; padding: 16px;
+            background: linear-gradient(135deg, #006400, #008000);
+            color: #fff;
+            border: 2px solid #00a000;
+            border-radius: 12px;
+            font-size: 16px; font-weight: 900;
+            cursor: pointer; transition: 0.3s;
+            letter-spacing: 2px;
+            margin-top: 14px;
+            font-family: 'Playfair Display', serif;
+        }
+        .magic-download-btn:hover { transform: scale(1.02); box-shadow: 0 6px 25px rgba(0,200,0,0.3); }
+
     </style>
 </head>
 <body>
@@ -560,23 +923,62 @@
         <div id="karaokeXpBarLabel" style="color:rgba(255,215,0,0.6); font-size:11px; margin-top:4px; font-family:monospace;">0 / 30 detik</div>
     </div>
 
-    <!-- HEADER -->
-    <header class="p-10 md:p-14 text-center relative overflow-hidden z-10">
-        <div class="absolute top-0 left-0 w-full h-4 bg-gradient-to-r from-red-900 via-yellow-500 to-red-900"></div>
-        <div class="mt-6">
-            <p class="text-[12px] md:text-sm tracking-[0.5em] font-black text-red-800 uppercase mb-4">Native Shaanxi Bloodline • Medan Soul • AI-Powered Learning</p>
-            <h1 class="emperor-name">WANG WEIZE</h1>
-            <span class="imlek-calligraphy">恭喜发财</span>
-            <p class="mt-6 text-xl text-red-900 font-black italic max-w-2xl mx-auto border-l-4 border-yellow-500 pl-4 bg-white/60 p-4 rounded shadow-md">
-                "Darah Shaanxi, Jiwa Medan. Belajar Mandarin isinya daging semua biar lu kaga Boncos! 🚀 Sultan Omniverse Edition"
-            </p>
-            <div class="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
-                <div class="stat-card"><div class="text-3xl font-black text-red-900" id="totalWords">0</div><div class="text-sm">Kata Dikuasai</div></div>
-                <div class="stat-card"><div class="text-3xl font-black text-red-900" id="studyStreak">0</div><div class="text-sm">Hari Beruntun</div></div>
-                <div class="stat-card"><div class="text-3xl font-black text-red-900" id="totalXP">0</div><div class="text-sm">Total XP</div></div>
-                <div class="stat-card"><div class="level-badge" id="userLevel">Lv 1</div><div class="text-sm">Level Sultan</div></div>
+    <!-- WANG DYNASTY IMPERIAL HEADER -->
+    <header class="wang-dynasty-header text-center relative overflow-hidden z-10">
+        <!-- Top ornamental bar -->
+        <div class="dynasty-top-bar"></div>
+
+        <!-- Lanterns decoration -->
+        <div class="lantern lantern-left">🏮</div>
+        <div class="lantern lantern-right">🏮</div>
+
+        <!-- Imperial Emblem -->
+        <div class="imperial-emblem-wrap">
+            <!-- Outer octagonal frame -->
+            <div class="imperial-frame-outer">
+                <div class="imperial-frame-inner">
+                    <!-- 汪 character -->
+                    <div class="wang-character">汪</div>
+                </div>
+            </div>
+
+            <!-- Dragon flourishes -->
+            <div class="dragon-left">🐉</div>
+            <div class="dragon-right">🐉</div>
+        </div>
+
+        <!-- Name block -->
+        <div class="dynasty-name-block">
+            <h1 class="wang-imperial-name">WANG WEIZE &amp; JANE BEATRIX</h1>
+            <div class="dynasty-separator">
+                <span class="sep-line"></span>
+                <span class="sep-diamond">◆</span>
+                <span class="sep-line"></span>
+            </div>
+
+            <!-- Cultural ribbon tagline -->
+            <div class="bloodline-ribbon">
+                <span class="ribbon-text">
+                    Shaanxi Bloodline <span class="flag-emoji">🇨🇳</span>
+                    <span class="ribbon-dot">•</span>
+                    Medan Soul <span class="flag-emoji">🇮🇩</span>
+                </span>
             </div>
         </div>
+
+        <!-- Calligraphy tagline -->
+        <span class="imlek-calligraphy" style="margin-top:12px;">汪氏家族 • 恭喜发财</span>
+
+        <!-- Stats row -->
+        <div class="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto px-4">
+            <div class="stat-card"><div class="text-3xl font-black text-red-900" id="totalWords">0</div><div class="text-sm">Kata Dikuasai</div></div>
+            <div class="stat-card"><div class="text-3xl font-black text-red-900" id="studyStreak">0</div><div class="text-sm">Hari Beruntun</div></div>
+            <div class="stat-card"><div class="text-3xl font-black text-red-900" id="totalXP">0</div><div class="text-sm">Total XP</div></div>
+            <div class="stat-card"><div class="level-badge" id="userLevel">Lv 1</div><div class="text-sm">Level Sultan</div></div>
+        </div>
+
+        <!-- Bottom ornamental bar -->
+        <div class="dynasty-bottom-bar"></div>
     </header>
 
     <!-- NAV -->
@@ -1060,96 +1462,78 @@
         </div>
 
         <!-- ================================================================ -->
-        <!-- ======= AI DIRECTOR LAB TAB (BARU) ============================ -->
+        <!-- ======= SULTAN MAGIC AI STUDIO ================================ -->
         <!-- ================================================================ -->
-        <div id="ai-lab" class="tab-content hidden-tab">
-            <div class="lab-title">⚡ AI DIRECTOR LAB</div>
-            <div class="lab-subtitle">▸ Generate AI Video & Image ▸ Powered by Top Models</div>
+        <div id="ai-lab" class="tab-content hidden-tab magic-studio">
 
-            <!-- Model Cards -->
-            <div style="margin-bottom:8px; color:rgba(0,240,255,0.5); font-family:'Orbitron',monospace; font-size:9px; letter-spacing:3px;">// SELECT AI MODEL</div>
-            <div class="lab-model-cards" id="modelCards">
-                <div class="lab-model-card video-type selected" onclick="selectModel(this,'veo3','https://labs.google/fx/tools/video-fx')" data-model="veo3">
-                    <span class="model-emoji">🎬</span>
-                    <div class="model-name">VEO 3</div>
-                    <span class="model-type-badge type-video">VIDEO</span>
-                    <div style="color:#888; font-size:10px; margin-top:4px;">Google DeepMind</div>
-                </div>
-                <div class="lab-model-card video-type" onclick="selectModel(this,'sora2','https://sora.openai.com')" data-model="sora2">
-                    <span class="model-emoji">🌀</span>
-                    <div class="model-name">SORA 2</div>
-                    <span class="model-type-badge type-video">VIDEO</span>
-                    <div style="color:#888; font-size:10px; margin-top:4px;">OpenAI</div>
-                </div>
-                <div class="lab-model-card image-type" onclick="selectModel(this,'dalle3','https://labs.openai.com')" data-model="dalle3">
-                    <span class="model-emoji">🎨</span>
-                    <div class="model-name">DALL·E 3</div>
-                    <span class="model-type-badge type-image">IMAGE</span>
-                    <div style="color:#888; font-size:10px; margin-top:4px;">OpenAI</div>
-                </div>
-                <div class="lab-model-card image-type" onclick="selectModel(this,'mj6','https://www.midjourney.com/imagine')" data-model="mj6">
-                    <span class="model-emoji">🌌</span>
-                    <div class="model-name">MIDJOURNEY v6</div>
-                    <span class="model-type-badge type-image">IMAGE</span>
-                    <div style="color:#888; font-size:10px; margin-top:4px;">Midjourney Inc.</div>
-                </div>
-            </div>
+            <div class="magic-studio-title">🪄 SULTAN MAGIC AI STUDIO</div>
+            <div class="magic-studio-subtitle">▸ Neural Video Generation ▸ Powered by Omniverse Engine ▸</div>
 
-            <!-- Prompt Area -->
-            <div class="lab-prompt-area">
-                <textarea class="lab-textarea" id="labPrompt" placeholder="Deskripsikan visi kreatif liarmu... Contoh: 'Naga emas melayang di atas kota Medan saat Imlek, sinematik 4K, efek volumetric light, gaya film Hollywood...'"></textarea>
-                <div style="color:rgba(0,240,255,0.3); font-size:10px; text-align:right; margin-top:6px; font-family:monospace;" id="labCharCount">0 / 2000 chars</div>
-            </div>
-
-            <!-- Spec Dropdowns -->
-            <div class="lab-specs-grid">
-                <div class="lab-spec-group">
-                    <span class="lab-spec-label">📐 Resolusi Output</span>
-                    <select class="lab-select" id="labResolution">
-                        <option value="HD (720p)">HD • 720p</option>
-                        <option value="Full HD (1080p)" selected>Full HD • 1080p</option>
-                        <option value="4K Cinematic">4K Cinematic</option>
+            <!-- Config Row -->
+            <div class="magic-config-grid">
+                <div class="magic-config-group">
+                    <span class="magic-config-label">🤖 AI Engine</span>
+                    <select class="magic-select" id="magicEngine">
+                        <option value="sora3">🌀 SORA 3 (Ultra-Realism)</option>
+                        <option value="veo3" selected>🎬 VEO 3 (Cinematic)</option>
+                        <option value="runway">✂️ RUNWAY GEN-3 (VFX)</option>
+                        <option value="kling">🎋 KLING AI (Asian Style)</option>
                     </select>
                 </div>
-                <div class="lab-spec-group" id="labDurationGroup">
-                    <span class="lab-spec-label">⏱️ Durasi (Video)</span>
-                    <select class="lab-select" id="labDuration">
-                        <option value="5 Detik">5 Detik</option>
-                        <option value="10 Detik" selected>10 Detik</option>
-                        <option value="1 Menit (Extension)">1 Menit (Ext)</option>
-                    </select>
-                </div>
-                <div class="lab-spec-group">
-                    <span class="lab-spec-label">📺 Aspect Ratio</span>
-                    <select class="lab-select" id="labAspect">
-                        <option value="16:9 (YouTube/Sinema)" selected>16:9 — YouTube</option>
-                        <option value="9:16 (TikTok/Shorts)">9:16 — TikTok/Shorts</option>
-                        <option value="1:1 (Square/Instagram)">1:1 — Square</option>
-                    </select>
-                </div>
-                <div class="lab-spec-group">
-                    <span class="lab-spec-label">🎨 Gaya Visual</span>
-                    <select class="lab-select" id="labStyle">
-                        <option value="Cinematic Realistic">Cinematic Realistic</option>
-                        <option value="Anime / Animated">Anime / Animated</option>
-                        <option value="Cyberpunk Neon">Cyberpunk Neon</option>
-                        <option value="Imperial Chinese Art">Imperial Chinese Art</option>
-                        <option value="Photorealistic">Photorealistic</option>
-                        <option value="Watercolor Painting">Watercolor Painting</option>
+                <div class="magic-config-group">
+                    <span class="magic-config-label">⏱️ Durasi Video</span>
+                    <select class="magic-select" id="magicDuration">
+                        <option value="short">10 Detik</option>
+                        <option value="short" selected>30 Detik</option>
+                        <option value="short">1 Menit</option>
+                        <option value="long">10 Menit</option>
+                        <option value="long">1 Jam</option>
                     </select>
                 </div>
             </div>
 
-            <!-- Summary Box -->
-            <div style="background: rgba(0,240,255,0.04); border: 1px solid rgba(0,240,255,0.15); border-radius: 10px; padding: 16px; margin-bottom: 20px; font-family: monospace; font-size: 12px; color: rgba(0,240,255,0.7);">
-                <span style="color: rgba(0,240,255,0.4); font-size:9px; letter-spacing:2px; display:block; margin-bottom:8px;">// GENERATION CONFIG</span>
-                <div id="labSummary">Model: VEO 3 | Resolusi: Full HD (1080p) | Durasi: 10 Detik | Aspect: 16:9 | Style: Cinematic Realistic</div>
+            <!-- Prompt -->
+            <div class="magic-prompt-area">
+                <textarea class="magic-textarea" id="magicPrompt" placeholder="Describe your imagination... Contoh: 'A golden imperial dragon soaring over Shanghai at night, cinematic 8K volumetric light, oil painting style, epic score...'"></textarea>
+                <div style="color:rgba(255,215,0,0.3); font-size:10px; text-align:right; margin-top:6px; font-family:monospace;" id="magicCharCount">0 / 2000</div>
             </div>
 
-            <button class="lab-generate-btn" onclick="handleLabGenerate()">
-                ⚡ GENERATE &amp; REDIRECT OFFICIAL ⚡
+            <!-- Generate Button -->
+            <button class="magic-generate-btn" id="magicGenerateBtn" onclick="handleMagicGenerate()">
+                🎬 GENERATE VIDEO
             </button>
-            <p style="color:rgba(0,240,255,0.3); font-size:10px; text-align:center; margin-top:12px; font-family: monospace;">[ PROMPT AKAN DISALIN KE CLIPBOARD → WEBSITE RESMI AKAN TERBUKA OTOMATIS ]</p>
+
+            <!-- Loading Screen -->
+            <div id="magicLoadingScreen">
+                <div style="font-family:'Playfair Display',serif; font-size:1.5rem; color:var(--emperor-gold); margin-bottom:16px; letter-spacing:3px;">
+                    🧠 Neural Network Active
+                </div>
+                <div class="magic-progress-bar-bg">
+                    <div class="magic-progress-bar-fill" id="magicProgressBar"></div>
+                </div>
+                <div style="color:rgba(255,215,0,0.6); font-size:12px; margin-bottom:14px;" id="magicProgressPct">0%</div>
+                <div class="magic-terminal-text" id="magicTerminal">
+                    &gt; Booting Sultan Omniverse Engine...<span class="t-cursor">█</span>
+                </div>
+            </div>
+
+            <!-- Video Result -->
+            <div id="magicVideoResult">
+                <div style="color:rgba(255,215,0,0.6); font-size:11px; font-family:monospace; letter-spacing:2px; margin-bottom:10px; text-align:center;">
+                    ✅ GENERATION COMPLETE — PLAYING YOUR AI VIDEO
+                </div>
+                <div class="magic-video-wrapper">
+                    <iframe id="magicIframe" src="" allowfullscreen allow="autoplay; encrypted-media"></iframe>
+                    <div class="magic-watermark">🪄 Generated by Sultan Omniverse AI</div>
+                </div>
+                <div class="magic-result-info" id="magicResultInfo">
+                    // Engine: — | Prompt: —
+                </div>
+                <button class="magic-download-btn" id="magicDownloadBtn" onclick="downloadMagicVideo()">
+                    ⬇️ DOWNLOAD VIDEO (MP4)
+                </button>
+            </div>
+
         </div>
 
     </main>
@@ -1633,6 +2017,13 @@
             // Lab dropdowns
             ['labResolution','labDuration','labAspect','labStyle'].forEach(id=>{
                 const el=document.getElementById(id); if(el) el.addEventListener('change', updateLabSummary);
+            });
+
+            // Magic AI Studio char counter
+            const mp = document.getElementById('magicPrompt');
+            if (mp) mp.addEventListener('input', () => {
+                const cc = document.getElementById('magicCharCount');
+                if (cc) cc.textContent = `${mp.value.length} / 2000`;
             });
         });
 
@@ -2222,80 +2613,150 @@
         }
 
         // ================================================================
-        // ======= AI DIRECTOR LAB — LOGIC (BARU) =========================
+        // ======= SULTAN MAGIC AI STUDIO — LOGIC =========================
         // ================================================================
-        let selectedModel = { id: 'veo3', url: 'https://labs.google/fx/tools/video-fx', type: 'video' };
 
-        const MODEL_URLS = {
-            veo3: 'https://labs.google/fx/tools/video-fx',
-            sora2: 'https://sora.openai.com',
-            dalle3: 'https://labs.openai.com',
-            mj6: 'https://www.midjourney.com/imagine',
+        // Char counter for magic prompt — initialized in main window.addEventListener('load') below
+
+        let _magicCurrentVideoId = null;
+
+        const MAGIC_ENGINE_NAMES = {
+            sora3: 'SORA 3 (Ultra-Realism)',
+            veo3: 'VEO 3 (Cinematic)',
+            runway: 'RUNWAY GEN-3 (VFX)',
+            kling: 'KLING AI (Asian Style)',
         };
-        const MODEL_TYPES = { veo3:'video', sora2:'video', dalle3:'image', mj6:'image' };
 
-        function selectModel(el, modelId, url) {
-            document.querySelectorAll('.lab-model-card').forEach(c => c.classList.remove('selected'));
-            el.classList.add('selected');
-            selectedModel = { id: modelId, url: url, type: MODEL_TYPES[modelId] };
+        function _getMagicYTKeywords(engineId, promptText) {
+            const lower = promptText.toLowerCase();
+            const isAnime = /anime|animasi|cartoon|animated|wuxia|fantasy|xianxia/i.test(lower);
 
-            // Show/hide duration (only for video)
-            const dg = document.getElementById('labDurationGroup');
-            if(dg) dg.style.opacity = selectedModel.type === 'video' ? '1' : '0.3';
-            updateLabSummary();
+            if (isAnime || engineId === 'kling') {
+                return promptText + ' anime raw amv no text';
+            }
+            return promptText + ' cinematic 4k stock footage no text';
         }
 
-        function updateLabSummary() {
-            const res = document.getElementById('labResolution')?.value || 'Full HD';
-            const dur = document.getElementById('labDuration')?.value || '10 Detik';
-            const asp = document.getElementById('labAspect')?.value || '16:9';
-            const sty = document.getElementById('labStyle')?.value || 'Cinematic';
-            const modelNames = { veo3:'VEO 3', sora2:'SORA 2', dalle3:'DALL·E 3', mj6:'Midjourney v6' };
-            const mn = modelNames[selectedModel.id] || selectedModel.id;
-            const durText = selectedModel.type === 'video' ? ` | Durasi: ${dur}` : '';
-            document.getElementById('labSummary').textContent =
-                `Model: ${mn} | Resolusi: ${res}${durText} | Ratio: ${asp} | Style: ${sty}`;
+        function _getMagicVideoDuration(durationSelectVal) {
+            // durationSelectVal is the value attribute of selected <option>
+            return durationSelectVal;
         }
 
-        async function handleLabGenerate() {
-            const prompt = document.getElementById('labPrompt').value.trim();
-            if (!prompt) { alert('Tulis prompt dulu bos! Keluarkan imajinasi liarmu! 🎬'); return; }
-
-            const res = document.getElementById('labResolution').value;
-            const dur = document.getElementById('labDuration').value;
-            const asp = document.getElementById('labAspect').value;
-            const sty = document.getElementById('labStyle').value;
-            const modelNames = { veo3:'VEO 3 (Google)', sora2:'SORA 2 (OpenAI)', dalle3:'DALL·E 3 (OpenAI)', mj6:'Midjourney v6' };
-            const mn = modelNames[selectedModel.id] || selectedModel.id;
-
-            let fullPrompt = `🎬 AI DIRECTOR LAB — SULTAN OMNIVERSE\n`;
-            fullPrompt += `═══════════════════════════════\n`;
-            fullPrompt += `MODEL: ${mn}\n`;
-            fullPrompt += `RESOLUSI: ${res}\n`;
-            if (selectedModel.type === 'video') fullPrompt += `DURASI: ${dur}\n`;
-            fullPrompt += `ASPECT RATIO: ${asp}\n`;
-            fullPrompt += `GAYA VISUAL: ${sty}\n`;
-            fullPrompt += `═══════════════════════════════\n`;
-            fullPrompt += `PROMPT:\n${prompt}\n`;
-            fullPrompt += `═══════════════════════════════\n`;
-            fullPrompt += `[Generated by Sultan Omniverse AI Lab 🏮]`;
-
-            try {
-                await navigator.clipboard.writeText(fullPrompt);
-            } catch(e) {
-                // Fallback
-                const ta = document.createElement('textarea');
-                ta.value = fullPrompt; document.body.appendChild(ta); ta.select();
-                document.execCommand('copy'); document.body.removeChild(ta);
+        async function handleMagicGenerate() {
+            const prompt = document.getElementById('magicPrompt').value.trim();
+            if (!prompt) {
+                alert('✍️ Describe your imagination dulu bos! Jangan kosong!');
+                return;
             }
 
-            const toast = document.getElementById('labToast');
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 3500);
-            setTimeout(() => window.open(selectedModel.url, '_blank'), 800);
+            const engineId = document.getElementById('magicEngine').value;
+            const durationEl = document.getElementById('magicDuration');
+            const durationVal = durationEl.options[durationEl.selectedIndex].value; // 'short' or 'long'
+            const engineName = MAGIC_ENGINE_NAMES[engineId] || engineId;
 
-            addXP(25);
-            showAchievement(`🎬 Prompt dikirim ke ${mn}! +25 XP`);
+            // UI: hide result, show loading, disable btn
+            document.getElementById('magicVideoResult').style.display = 'none';
+            document.getElementById('magicLoadingScreen').style.display = 'block';
+            document.getElementById('magicGenerateBtn').disabled = true;
+            document.getElementById('magicIframe').src = '';
+            _magicCurrentVideoId = null;
+
+            // ── PSYCHOLOGICAL LOADING (30–40 sec) ──
+            const loadingSteps = [
+                { pct: 8,  text: '> Booting Sultan Omniverse Neural Engine v9.4...' },
+                { pct: 22, text: '> Initiating Neural Network — Allocating 512 GPU nodes...' },
+                { pct: 38, text: '> Analyzing prompt semantics & style tokens...' },
+                { pct: 55, text: '> Rendering Physics & Lighting — Ray tracing engaged...' },
+                { pct: 70, text: '> Temporal coherence engine stabilized...' },
+                { pct: 82, text: '> Finalizing 8K Output — Upscaling with AI sharpening...' },
+                { pct: 94, text: '> Encoding video stream — Applying Sultan watermark...' },
+                { pct: 100, text: '> ✅ GENERATION COMPLETE — Loading player...' },
+            ];
+
+            const TOTAL_DURATION = 32000; // 32 seconds total
+
+            const terminalEl = document.getElementById('magicTerminal');
+            const progressBar = document.getElementById('magicProgressBar');
+            const progressPct = document.getElementById('magicProgressPct');
+
+            let stepIdx = 0;
+
+            function runStep() {
+                if (stepIdx >= loadingSteps.length) return;
+                const step = loadingSteps[stepIdx];
+                progressBar.style.width = step.pct + '%';
+                progressPct.textContent = step.pct + '%';
+                terminalEl.innerHTML = step.text + '<span class="t-cursor">█</span>';
+                stepIdx++;
+            }
+
+            runStep();
+            const stepInterval = setInterval(() => {
+                if (stepIdx < loadingSteps.length) runStep();
+                else clearInterval(stepInterval);
+            }, Math.floor(TOTAL_DURATION / loadingSteps.length));
+
+            // ── FETCH YOUTUBE (SECRETLY) WHILE LOADING ──
+            let videoId = null;
+            try {
+                const ytKeywords = _getMagicYTKeywords(engineId, prompt);
+                const videoDuration = durationVal; // 'short' or 'long'
+
+                let ytUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(ytKeywords)}&type=video&maxResults=5&key=${YT_API_KEY}`;
+                if (videoDuration === 'short') ytUrl += '&videoDuration=short';
+                if (videoDuration === 'long')  ytUrl += '&videoDuration=long';
+
+                const res = await fetch(ytUrl);
+                const data = await res.json();
+                if (data.items && data.items.length > 0) {
+                    const validItems = data.items.filter(i => i.id?.videoId);
+                    if (validItems.length > 0) {
+                        // Pick first valid result
+                        videoId = validItems[0].id.videoId;
+                    }
+                }
+            } catch(e) {
+                console.warn('[Magic AI] YouTube fetch failed:', e);
+            }
+
+            // ── WAIT FOR LOADING ANIMATION TO FINISH ──
+            await new Promise(resolve => setTimeout(resolve, TOTAL_DURATION + 500));
+
+            clearInterval(stepInterval);
+            document.getElementById('magicLoadingScreen').style.display = 'none';
+            document.getElementById('magicGenerateBtn').disabled = false;
+
+            if (!videoId) {
+                alert('😵 Sinyal lemah bos! Coba lagi atau ganti prompt ya!');
+                return;
+            }
+
+            // ── DISPLAY RESULT ──
+            _magicCurrentVideoId = videoId;
+            const iframeParams = 'autoplay=1&controls=0&modestbranding=1&showinfo=0&rel=0&loop=1&playlist=' + videoId;
+            document.getElementById('magicIframe').src = `https://www.youtube.com/embed/${videoId}?${iframeParams}`;
+
+            document.getElementById('magicResultInfo').textContent =
+                `// Engine: ${engineName} | Prompt: "${prompt.substring(0, 80)}${prompt.length > 80 ? '...' : ''}"`;
+
+            document.getElementById('magicVideoResult').style.display = 'block';
+            document.getElementById('magicVideoResult').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+            addXP(30);
+            showAchievement('🎬 Video AI Generated! +30 XP — Sultan Magic!');
+        }
+
+        function downloadMagicVideo() {
+            if (!_magicCurrentVideoId) return;
+            window.open(`https://ssyoutube.com/watch?v=${_magicCurrentVideoId}`, '_blank');
+        }
+
+        // ── Keep legacy handleLabGenerate as a shim (so nothing breaks if called) ──
+        function handleLabGenerate() { handleMagicGenerate(); }
+        function updateLabSummary() {}
+        function selectModel(el, modelId, url) {
+            document.querySelectorAll('.lab-model-card').forEach(c => c.classList.remove('selected'));
+            if (el) el.classList.add('selected');
         }
         // ================================================================
         // ======= SULTAN AI — BYOK SYSTEM (v3 CLEAN) =====================
