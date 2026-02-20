@@ -833,9 +833,564 @@
         }
         .magic-download-btn:hover { transform: scale(1.02); box-shadow: 0 6px 25px rgba(0,200,0,0.3); }
 
+        /* ================================================================ */
+        /* ======= CINEMATIC INTRO SCREEN ================================= */
+        /* ================================================================ */
+        #cinematicIntro {
+            position: fixed; inset: 0; z-index: 999999;
+            background: #000;
+            display: flex; align-items: center; justify-content: center;
+            flex-direction: column;
+            transition: opacity 0.8s ease;
+        }
+        #cinematicIntro.fade-out { opacity: 0; pointer-events: none; }
+        .intro-ink-ring {
+            width: 220px; height: 220px; border-radius: 50%;
+            border: 4px solid transparent;
+            position: relative;
+            animation: inkExpand 1.2s cubic-bezier(0.25,0.46,0.45,0.94) forwards;
+        }
+        @keyframes inkExpand {
+            0%  { transform: scale(0); border-color: rgba(139,0,0,0); box-shadow: none; }
+            60% { transform: scale(1.1); border-color: var(--imperial-red); box-shadow: 0 0 60px rgba(139,0,0,0.8), inset 0 0 60px rgba(139,0,0,0.3); }
+            100%{ transform: scale(1); border-color: var(--emperor-gold); box-shadow: 0 0 40px rgba(255,215,0,0.6), inset 0 0 40px rgba(255,215,0,0.1); }
+        }
+        .intro-wang {
+            position: absolute; font-family: 'Ma Shan Zheng', cursive;
+            font-size: 120px; color: transparent;
+            animation: inkWrite 1.5s 0.5s ease forwards;
+            line-height: 1;
+        }
+        @keyframes inkWrite {
+            0%  { color: transparent; text-shadow: none; transform: scale(0.5); }
+            100%{ color: var(--imperial-red); text-shadow: 0 0 30px rgba(255,215,0,0.8), 4px 4px 0 var(--emperor-gold); transform: scale(1); }
+        }
+        .intro-title {
+            font-family: 'Cormorant Garamond', serif;
+            color: transparent; font-size: 1.4rem; letter-spacing: 8px;
+            font-weight: 700; margin-top: 30px;
+            animation: fadeInGold 1s 1.2s ease forwards;
+        }
+        .intro-subtitle {
+            color: transparent; font-size: 0.75rem; letter-spacing: 5px;
+            font-family: monospace; margin-top: 8px;
+            animation: fadeInGold 1s 1.6s ease forwards;
+        }
+        @keyframes fadeInGold {
+            to { color: var(--emperor-gold); text-shadow: 0 0 20px rgba(255,215,0,0.5); }
+        }
+        .intro-progress-bar {
+            width: 200px; height: 3px;
+            background: rgba(255,215,0,0.15);
+            border-radius: 2px; margin-top: 40px; overflow: hidden;
+            animation: fadeInGold 0.5s 0.3s ease forwards; opacity: 0;
+        }
+        .intro-progress-fill {
+            height: 100%; width: 0%;
+            background: linear-gradient(90deg, var(--imperial-red), var(--emperor-gold));
+            animation: loadProgress 2.5s 0.3s ease forwards;
+        }
+        @keyframes loadProgress { to { width: 100%; } }
+
+        /* ================================================================ */
+        /* ======= DRAGON CURSOR TRAIL ==================================== */
+        /* ================================================================ */
+        #dragonCanvas {
+            position: fixed; inset: 0; z-index: 9998;
+            pointer-events: none;
+        }
+
+        /* ================================================================ */
+        /* ======= INK SPLASH TAB TRANSITION ============================== */
+        /* ================================================================ */
+        #inkSplash {
+            position: fixed; inset: 0; z-index: 99998;
+            pointer-events: none; display: none;
+        }
+        .ink-circle {
+            position: absolute; border-radius: 50%;
+            background: radial-gradient(circle, rgba(20,0,0,0.95) 0%, rgba(0,0,0,0.98) 60%, transparent 100%);
+            transform: scale(0); transform-origin: center;
+            animation: inkBurst 0.5s cubic-bezier(0.36,0.07,0.19,0.97) forwards;
+        }
+        @keyframes inkBurst {
+            0%  { transform: scale(0); opacity: 1; }
+            60% { transform: scale(8); opacity: 0.95; }
+            100%{ transform: scale(16); opacity: 0; }
+        }
+
+        /* ================================================================ */
+        /* ======= ANGPAO RAIN EVENT ====================================== */
+        /* ================================================================ */
+        .rain-angpao {
+            position: fixed; z-index: 99000; font-size: 2.5rem;
+            cursor: pointer; pointer-events: all;
+            animation: angpaoFall linear forwards;
+            filter: drop-shadow(0 4px 12px rgba(139,0,0,0.8));
+            transition: transform 0.1s;
+            user-select: none;
+        }
+        .rain-angpao:hover { transform: scale(1.3) rotate(10deg) !important; }
+        @keyframes angpaoFall {
+            0%  { top: -80px; opacity: 1; }
+            90% { opacity: 1; }
+            100%{ top: 105vh; opacity: 0; }
+        }
+        #angpaoEventBanner {
+            position: fixed; top: 0; left: 0; width: 100%; z-index: 98000;
+            background: linear-gradient(135deg, #8B0000, #C41E3A, #8B0000);
+            color: var(--emperor-gold); text-align: center;
+            padding: 10px 20px; font-weight: 900; font-size: 14px;
+            letter-spacing: 2px; border-bottom: 3px solid var(--emperor-gold);
+            box-shadow: 0 4px 20px rgba(139,0,0,0.6);
+            transform: translateY(-100%); transition: transform 0.5s ease;
+            font-family: 'Playfair Display', serif;
+        }
+        #angpaoEventBanner.show { transform: translateY(0); }
+
+        /* ================================================================ */
+        /* ======= DAILY FORTUNE POPUP ==================================== */
+        /* ================================================================ */
+        #fortuneOverlay {
+            position: fixed; inset: 0; z-index: 97000;
+            background: rgba(0,0,0,0.85); display: none;
+            align-items: center; justify-content: center;
+        }
+        #fortuneOverlay.show { display: flex; }
+        .fortune-scroll {
+            background: linear-gradient(145deg, #fdf3d0, #f5e0b0);
+            border: 5px double var(--imperial-red);
+            border-radius: 20px; padding: 40px 36px;
+            max-width: 460px; width: 92%;
+            box-shadow: 0 0 0 3px var(--emperor-gold), 0 20px 60px rgba(0,0,0,0.5);
+            text-align: center; position: relative;
+            animation: scrollUnfurl 0.6s cubic-bezier(0.34,1.56,0.64,1) forwards;
+        }
+        @keyframes scrollUnfurl {
+            0%  { transform: scaleY(0); opacity: 0; }
+            100%{ transform: scaleY(1); opacity: 1; }
+        }
+        .fortune-scroll::before {
+            content: '';
+            position: absolute; top: 12px; left: 12px; right: 12px; bottom: 12px;
+            border: 1px solid rgba(139,0,0,0.2); border-radius: 14px;
+            pointer-events: none;
+        }
+        .fortune-chengyu {
+            font-family: 'Ma Shan Zheng', cursive;
+            font-size: 3.5rem; color: var(--imperial-red);
+            text-shadow: 2px 2px 0 var(--emperor-gold);
+            margin-bottom: 8px;
+        }
+        .fortune-pinyin { color: #8B4513; font-weight: 700; letter-spacing: 3px; margin-bottom: 16px; font-size: 0.9rem; }
+        .fortune-meaning { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; color: #3a1a00; line-height: 1.6; margin-bottom: 20px; }
+        .fortune-prediction {
+            background: linear-gradient(135deg, var(--imperial-red), #8B0000);
+            color: var(--emperor-gold); border-radius: 12px;
+            padding: 14px 20px; font-size: 0.9rem; line-height: 1.6;
+            font-weight: 700; margin-bottom: 20px;
+        }
+        .fortune-lucky { font-size: 0.8rem; color: #8B4513; margin-bottom: 20px; letter-spacing: 2px; }
+        .fortune-close-btn {
+            background: linear-gradient(135deg, var(--imperial-red), #C41E3A);
+            color: var(--emperor-gold); border: 2px solid var(--emperor-gold);
+            border-radius: 10px; padding: 12px 28px;
+            font-weight: 900; cursor: pointer; font-size: 14px;
+            transition: 0.2s; letter-spacing: 2px; margin: 4px;
+        }
+        .fortune-close-btn:hover { transform: scale(1.05); }
+        .fortune-share-btn {
+            background: linear-gradient(135deg, #004d00, #006400);
+            color: #fff; border: 2px solid #00a000;
+            border-radius: 10px; padding: 12px 28px;
+            font-weight: 900; cursor: pointer; font-size: 14px;
+            transition: 0.2s; letter-spacing: 2px; margin: 4px;
+        }
+        .fortune-share-btn:hover { transform: scale(1.05); }
+
+        /* ================================================================ */
+        /* ======= FLASH SALE TIMER (STORE) =============================== */
+        /* ================================================================ */
+        #flashSaleBar {
+            background: linear-gradient(135deg, #1a0000, #2d0000);
+            border: 2px solid var(--emperor-gold);
+            border-radius: 12px; padding: 14px 20px;
+            margin-bottom: 20px; display: flex;
+            align-items: center; justify-content: space-between;
+            flex-wrap: wrap; gap: 10px;
+        }
+        .flash-sale-label {
+            font-family: 'Playfair Display', serif;
+            color: var(--emperor-gold); font-size: 15px; font-weight: 900;
+            letter-spacing: 2px;
+        }
+        .flash-timer-digits {
+            display: flex; gap: 6px; align-items: center;
+        }
+        .flash-digit {
+            background: var(--imperial-red); color: var(--emperor-gold);
+            border-radius: 6px; padding: 6px 12px;
+            font-size: 1.4rem; font-weight: 900; font-family: monospace;
+            box-shadow: 0 3px 10px rgba(139,0,0,0.5);
+            min-width: 48px; text-align: center;
+        }
+        .flash-sep { color: var(--emperor-gold); font-size: 1.4rem; font-weight: 900; }
+
+        /* ================================================================ */
+        /* ======= VIRAL SHARE CARD MODAL ================================= */
+        /* ================================================================ */
+        #shareCardOverlay {
+            position: fixed; inset: 0; z-index: 96000;
+            background: rgba(0,0,0,0.88); display: none;
+            align-items: center; justify-content: center;
+        }
+        #shareCardOverlay.show { display: flex; }
+        .share-card-modal {
+            background: #1a0000; border: 3px solid var(--emperor-gold);
+            border-radius: 20px; padding: 28px;
+            max-width: 460px; width: 92%; text-align: center;
+        }
+        #shareCardCanvas {
+            border-radius: 12px; max-width: 100%;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+        }
+        .share-close-btn {
+            background: var(--imperial-red); color: var(--emperor-gold);
+            border: 2px solid var(--emperor-gold); border-radius: 10px;
+            padding: 12px 24px; font-weight: 900; cursor: pointer;
+            margin: 8px; transition: 0.2s; letter-spacing: 1px;
+        }
+        .share-dl-btn {
+            background: linear-gradient(135deg, #004d00, #006400);
+            color: #fff; border: 2px solid #00a000; border-radius: 10px;
+            padding: 12px 24px; font-weight: 900; cursor: pointer;
+            margin: 8px; transition: 0.2s; letter-spacing: 1px;
+        }
+        .share-dl-btn:hover, .share-close-btn:hover { transform: scale(1.04); }
+
+        /* ================================================================ */
+        /* ======= CHARACTER PUZZLE MINI GAME ============================= */
+        /* ================================================================ */
+        #puzzleOverlay {
+            position: fixed; inset: 0; z-index: 95000;
+            background: rgba(0,0,0,0.9); display: none;
+            align-items: center; justify-content: center;
+        }
+        #puzzleOverlay.show { display: flex; }
+        .puzzle-modal {
+            background: linear-gradient(145deg, #1a0000, #2d0a00);
+            border: 4px double var(--emperor-gold);
+            border-radius: 20px; padding: 32px;
+            max-width: 500px; width: 92%; text-align: center;
+            box-shadow: 0 0 60px rgba(255,215,0,0.2);
+        }
+        .puzzle-title { font-family: 'Playfair Display', serif; color: var(--emperor-gold); font-size: 1.5rem; font-weight: 900; margin-bottom: 6px; }
+        .puzzle-timer-display { font-size: 2rem; font-weight: 900; font-family: monospace; color: #fff; margin: 10px 0; }
+        .puzzle-timer-display.danger { color: #f87171; animation: pulse 0.5s infinite; }
+        .puzzle-char-target { font-family: 'Ma Shan Zheng', cursive; font-size: 6rem; color: var(--imperial-red); text-shadow: 3px 3px 0 var(--emperor-gold); margin: 16px 0; }
+        .puzzle-pieces-area { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 16px 0; min-height: 80px; padding: 14px; background: rgba(255,215,0,0.05); border: 1px solid rgba(255,215,0,0.15); border-radius: 10px; }
+        .puzzle-drop-area { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 10px 0; min-height: 80px; padding: 14px; background: rgba(0,0,0,0.3); border: 2px dashed rgba(255,215,0,0.4); border-radius: 10px; }
+        .puzzle-piece {
+            font-family: 'Ma Shan Zheng', cursive; font-size: 2.2rem;
+            background: var(--imperial-red); color: var(--emperor-gold);
+            padding: 10px 16px; border-radius: 10px;
+            cursor: grab; border: 2px solid var(--emperor-gold);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            transition: 0.2s; user-select: none;
+        }
+        .puzzle-piece:hover { transform: scale(1.15) rotate(-3deg); background: #C41E3A; }
+        .puzzle-piece.dropped { background: #006400; border-color: #00a000; cursor: default; }
+        .puzzle-start-btn, .puzzle-close-btn {
+            padding: 12px 28px; border-radius: 12px; font-weight: 900;
+            cursor: pointer; margin: 6px; font-size: 15px; transition: 0.2s;
+            letter-spacing: 1px;
+        }
+        .puzzle-start-btn { background: linear-gradient(135deg, var(--imperial-red), #C41E3A); color: var(--emperor-gold); border: 2px solid var(--emperor-gold); }
+        .puzzle-close-btn { background: #333; color: #aaa; border: 2px solid #555; }
+        .puzzle-start-btn:hover { transform: scale(1.05); }
+
+        /* ================================================================ */
+        /* ======= DEBUG PANEL ============================================ */
+        /* ================================================================ */
+        #debugPanel {
+            position: fixed; bottom: 140px; left: 16px;
+            z-index: 99997; background: rgba(0,0,0,0.97);
+            border: 2px solid #00ff88; border-radius: 14px;
+            padding: 20px; min-width: 280px;
+            font-family: monospace; font-size: 12px; color: #00ff88;
+            display: none; box-shadow: 0 0 40px rgba(0,255,100,0.2);
+        }
+        #debugPanel h4 { color: #ffd700; font-size: 14px; margin-bottom: 14px; letter-spacing: 2px; }
+        .debug-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .debug-row input { background: rgba(0,255,100,0.1); border: 1px solid #00ff88; color: #00ff88; border-radius: 4px; padding: 4px 8px; width: 80px; font-family: monospace; outline: none; }
+        .debug-btn { background: #00ff88; color: #000; border: none; border-radius: 4px; padding: 4px 10px; font-weight: 900; cursor: pointer; font-size: 11px; }
+
+        /* ================================================================ */
+        /* ======= CHANGELOG POPUP ======================================== */
+        /* ================================================================ */
+        #changelogOverlay {
+            position: fixed; inset: 0; z-index: 94000;
+            background: rgba(0,0,0,0.8); display: none;
+            align-items: center; justify-content: center;
+        }
+        #changelogOverlay.show { display: flex; }
+        .changelog-modal {
+            background: linear-gradient(145deg, #fff8e7, #f5e6d3);
+            border: 4px double var(--imperial-red);
+            border-radius: 20px; padding: 32px;
+            max-width: 480px; width: 92%;
+            box-shadow: 0 0 0 3px var(--emperor-gold), 0 20px 60px rgba(0,0,0,0.5);
+            position: relative;
+        }
+        .changelog-badge {
+            background: var(--imperial-red); color: var(--emperor-gold);
+            font-size: 10px; font-weight: 900; letter-spacing: 2px;
+            padding: 4px 12px; border-radius: 20px; display: inline-block;
+            margin-bottom: 12px;
+        }
+        .changelog-item { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 10px; font-size: 13px; }
+        .changelog-icon { font-size: 18px; line-height: 1.4; }
+        .changelog-text { color: #3a1a00; line-height: 1.5; }
+        .changelog-close { background: linear-gradient(135deg, var(--imperial-red), #C41E3A); color: var(--emperor-gold); border: 2px solid var(--emperor-gold); border-radius: 10px; padding: 12px 32px; font-weight: 900; cursor: pointer; width: 100%; margin-top: 16px; font-size: 15px; letter-spacing: 2px; transition: 0.2s; }
+        .changelog-close:hover { transform: translateY(-2px); }
+
+        /* ================================================================ */
+        /* ======= LANDSCAPE WARNING ====================================== */
+        /* ================================================================ */
+        #landscapeWarn {
+            display: none; position: fixed; inset: 0; z-index: 999998;
+            background: #1a0000;
+            align-items: center; justify-content: center;
+            flex-direction: column; text-align: center; padding: 40px;
+        }
+        #landscapeWarn .lw-icon { font-size: 5rem; animation: rotateHint 2s ease-in-out infinite; }
+        @keyframes rotateHint { 0%,100%{transform:rotate(0)} 50%{transform:rotate(-90deg)} }
+        #landscapeWarn h2 { font-family: 'Playfair Display', serif; color: var(--emperor-gold); font-size: 1.5rem; margin: 20px 0 10px; }
+        #landscapeWarn p { color: rgba(255,215,0,0.6); font-size: 0.9rem; }
+
+        /* ================================================================ */
+        /* ======= OFFLINE BANNER ========================================= */
+        /* ================================================================ */
+        #offlineBanner {
+            position: fixed; bottom: 130px; left: 50%; transform: translateX(-50%);
+            z-index: 99996; background: #1a1a1a; color: #f87171;
+            border: 2px solid #f87171; border-radius: 30px;
+            padding: 10px 24px; font-size: 13px; font-weight: 900;
+            letter-spacing: 1px; box-shadow: 0 4px 20px rgba(248,113,113,0.3);
+            display: none; white-space: nowrap;
+        }
+        #offlineBanner.show { display: block; }
+
+        /* ================================================================ */
+        /* ======= RENDER STATS (POST VIDEO) ============================== */
+        /* ================================================================ */
+        .render-stats-box {
+            background: rgba(0,0,0,0.6);
+            border: 1px solid rgba(255,215,0,0.2);
+            border-radius: 10px; padding: 14px 18px;
+            font-family: monospace; font-size: 11px;
+            color: rgba(255,215,0,0.5);
+            margin-top: 10px;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
+        }
+        .rs-item { display: flex; justify-content: space-between; }
+        .rs-val { color: #00ff88; }
+
+        /* ================================================================ */
+        /* ======= STREAK FREEZE ITEM IN STORE ============================ */
+        /* ================================================================ */
+        .streak-freeze-card {
+            background: linear-gradient(145deg, #001a33, #002244);
+            border: 2px solid #00a8ff;
+            border-radius: 16px; padding: 22px;
+            text-align: center; transition: 0.3s; cursor: pointer;
+        }
+        .streak-freeze-card:hover { transform: translateY(-4px); box-shadow: 0 10px 30px rgba(0,168,255,0.2); }
+        .sf-icon { font-size: 3rem; margin-bottom: 8px; display: block; }
+        .sf-name { color: #00a8ff; font-weight: 900; font-size: 15px; margin-bottom: 4px; }
+        .sf-desc { color: #888; font-size: 11px; margin-bottom: 14px; }
+        .sf-price { color: var(--emperor-gold); font-size: 1.4rem; font-weight: 900; font-family: monospace; }
+        .sf-owned { background: rgba(0,168,255,0.1); color: #00a8ff; font-size: 11px; margin-top: 6px; }
+
+        /* ================================================================ */
+        /* ======= THEME VARS MORNING/NIGHT =============================== */
+        /* ================================================================ */
+        body.theme-morning { --rice-paper: #fff8f0; }
+        body.theme-noon    { --rice-paper: #FDF6E3; }
+        body.theme-night   { --rice-paper: #1a0a00; color: #f0d5b0; }
+        body.theme-night .glass-scroll { background: rgba(30,10,0,0.95); }
+        body.theme-night .stat-card { background: #1a0a00; border-color: var(--emperor-gold); }
+        body.theme-night .learning-container { background: #1a0a00; color: #f0d5b0; }
+        body.theme-night .vocab-card { background: #1a0a00; color: #f0d5b0; }
+
+        /* Theme toggle button */
+        #themeToggleBtn {
+            position: fixed; top: 80px; right: 16px; z-index: 4999;
+            background: linear-gradient(135deg, #1a0000, #2d0a00);
+            border: 2px solid var(--emperor-gold);
+            border-radius: 50%; width: 42px; height: 42px;
+            color: var(--emperor-gold); font-size: 18px;
+            cursor: pointer; transition: 0.3s;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 15px rgba(139,0,0,0.4);
+        }
+        #themeToggleBtn:hover { transform: scale(1.1) rotate(20deg); }
+
+        /* ================================================================ */
+        /* ======= PAGE TITLE BLINK ======================================= */
+        /* ================================================================ */
+        /* handled in JS only */
+
+        /* ================================================================ */
+        /* ======= NAV ACTIVE IMPROVEMENT ================================= */
+        /* ================================================================ */
+        .nav-active-glow { box-shadow: 0 0 20px rgba(255,215,0,0.5) !important; }
+
+        /* ================================================================ */
+        /* ======= GENERAL POLISH ======================================== */
+        /* ================================================================ */
+        ::selection { background: var(--imperial-red); color: var(--emperor-gold); }
+        * { box-sizing: border-box; }
+        @media (max-width: 480px) {
+            .lantern { font-size: 2rem; }
+            .wang-character { font-size: 70px; }
+            .imperial-frame-outer { width: 120px; height: 120px; }
+            .dragon-left { left: -40px; }
+            .dragon-right { right: -40px; }
+        }
+
     </style>
 </head>
 <body>
+
+    <!-- ================================================================ -->
+    <!-- ======= CINEMATIC INTRO ======================================== -->
+    <!-- ================================================================ -->
+    <div id="cinematicIntro">
+        <div class="intro-ink-ring">
+            <div class="intro-wang">汪</div>
+        </div>
+        <div class="intro-title">WANG DYNASTY</div>
+        <div class="intro-subtitle">SULTAN OMNIVERSE v4.0 • LOADING...</div>
+        <div class="intro-progress-bar"><div class="intro-progress-fill"></div></div>
+    </div>
+
+    <!-- Dragon cursor trail canvas -->
+    <canvas id="dragonCanvas"></canvas>
+
+    <!-- Ink splash transition overlay -->
+    <div id="inkSplash"></div>
+
+    <!-- Offline banner -->
+    <div id="offlineBanner">📡 OFFLINE — Koneksi terputus bos!</div>
+
+    <!-- Landscape warning (mobile) -->
+    <div id="landscapeWarn">
+        <div class="lw-icon">📱</div>
+        <h2>Putar ke Portrait</h2>
+        <p>Istana Digital Wang Dynasty<br>paling indah dilihat dalam mode Portrait 🏮</p>
+    </div>
+
+    <!-- Angpao event banner -->
+    <div id="angpaoEventBanner">
+        🧧 JAM HOKI SULTAN! KLIK ANGPAO YANG JATUH UNTUK KLAIM XP! 🧧
+    </div>
+
+    <!-- Theme toggle -->
+    <button id="themeToggleBtn" onclick="cycleTheme()" title="Ganti Tema">🌅</button>
+
+    <!-- ================================================================ -->
+    <!-- ======= FORTUNE POPUP ========================================== -->
+    <!-- ================================================================ -->
+    <div id="fortuneOverlay" onclick="if(event.target===this)closeFortune()">
+        <div class="fortune-scroll">
+            <div style="font-family:'Ma Shan Zheng',cursive; font-size:0.85rem; color:var(--imperial-red); letter-spacing:4px; margin-bottom:16px;">✦ 今日运势 ✦</div>
+            <div class="fortune-chengyu" id="fortuneChengyu">龙马精神</div>
+            <div class="fortune-pinyin" id="fortunePinyin">lóng mǎ jīng shén</div>
+            <div class="fortune-meaning" id="fortuneMeaning">Semangat kuda naga — penuh tenaga dan vitalitas yang tak terbendung</div>
+            <div class="fortune-prediction" id="fortunePrediction">🔮 Hari ini energimu meluap-luap! Proyek yang terbengkalai akan menemukan momentum baru. Angka hoki 8 & 88 menyertaimu.</div>
+            <div class="fortune-lucky" id="fortuneLucky">🎨 Warna Hoki: Merah Kerajaan • 🔢 Angka: 8, 18, 88 • ⏰ Jam Hoki: 08:08</div>
+            <div>
+                <button class="fortune-close-btn" onclick="closeFortune()">🏮 Terima Nasib</button>
+                <button class="fortune-share-btn" onclick="shareFortuneCard()">📸 Bagikan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================================================================ -->
+    <!-- ======= SHARE CARD MODAL ======================================= -->
+    <!-- ================================================================ -->
+    <div id="shareCardOverlay" onclick="if(event.target===this)closeShareCard()">
+        <div class="share-card-modal">
+            <div style="color:var(--emperor-gold); font-family:'Playfair Display',serif; font-size:1.2rem; font-weight:900; margin-bottom:16px; letter-spacing:2px;">📸 KARTU BERBAGI</div>
+            <canvas id="shareCardCanvas" width="400" height="560"></canvas>
+            <div style="margin-top:14px;">
+                <button class="share-dl-btn" onclick="downloadShareCard()">⬇️ Download PNG</button>
+                <button class="share-close-btn" onclick="closeShareCard()">✕ Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================================================================ -->
+    <!-- ======= CHARACTER PUZZLE OVERLAY =============================== -->
+    <!-- ================================================================ -->
+    <div id="puzzleOverlay" onclick="if(event.target===this)closePuzzle()">
+        <div class="puzzle-modal">
+            <div class="puzzle-title">🧩 CHARACTER PUZZLE</div>
+            <div style="color:rgba(255,215,0,0.5); font-size:11px; letter-spacing:3px; margin-bottom:16px;">SUSUN KARAKTER YANG BENAR DALAM 30 DETIK!</div>
+            <div id="puzzleTimerDisplay" class="puzzle-timer-display">30</div>
+            <div style="color:rgba(255,215,0,0.6); font-size:12px; margin-bottom:6px; font-family:monospace;">TARGET:</div>
+            <div class="puzzle-char-target" id="puzzleTarget">汪</div>
+            <div style="color:rgba(255,215,0,0.6); font-size:11px; margin-bottom:6px; font-family:monospace;">PILIH RADIKAL YANG BENAR:</div>
+            <div class="puzzle-pieces-area" id="puzzlePieces"></div>
+            <div style="color:rgba(255,215,0,0.6); font-size:11px; margin-bottom:6px; font-family:monospace;">JAWABAN KAMU:</div>
+            <div class="puzzle-drop-area" id="puzzleAnswer"></div>
+            <div id="puzzleResult" style="font-weight:900; font-size:1.2rem; min-height:30px; margin:10px 0;"></div>
+            <div>
+                <button class="puzzle-start-btn" id="puzzleStartBtn" onclick="startPuzzle()">🎮 MAIN SEKARANG</button>
+                <button class="puzzle-close-btn" onclick="closePuzzle()">✕ Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================================================================ -->
+    <!-- ======= CHANGELOG POPUP ======================================== -->
+    <!-- ================================================================ -->
+    <div id="changelogOverlay" onclick="if(event.target===this)closeChangelog()">
+        <div class="changelog-modal">
+            <div style="text-align:center; margin-bottom:16px;">
+                <div class="changelog-badge">🆕 WANG DYNASTY v4.0 UPDATE</div>
+                <div style="font-family:'Playfair Display',serif; font-size:1.4rem; font-weight:900; color:var(--imperial-red);">汪 Sultan Omniverse</div>
+                <div style="font-size:11px; color:#888; margin-top:4px; letter-spacing:2px;">SUPER CANGGIH EDITION</div>
+            </div>
+            <div class="changelog-item"><span class="changelog-icon">🎬</span><span class="changelog-text"><strong>Cinematic Intro</strong> — Layar pembuka animasi tinta seperti film 🐉</span></div>
+            <div class="changelog-item"><span class="changelog-icon">🐉</span><span class="changelog-text"><strong>Dragon Cursor Trail</strong> — Jejak partikel emas mengikuti mouse/finger</span></div>
+            <div class="changelog-item"><span class="changelog-icon">🧧</span><span class="changelog-text"><strong>Angpao Rain Event</strong> — Hujan angpao di jam hoki! Klik untuk klaim XP</span></div>
+            <div class="changelog-item"><span class="changelog-icon">🔮</span><span class="changelog-text"><strong>Daily Fortune</strong> — Ramalan 成语 harianmu + angka hoki</span></div>
+            <div class="changelog-item"><span class="changelog-icon">🧩</span><span class="changelog-text"><strong>Character Puzzle</strong> — Game susun radikal karakter Mandarin</span></div>
+            <div class="changelog-item"><span class="changelog-icon">🪄</span><span class="changelog-text"><strong>Magic AI Studio</strong> — Generate video AI dengan YouTube Engine</span></div>
+            <div class="changelog-item"><span class="changelog-icon">🌅</span><span class="changelog-text"><strong>Dynamic Theme</strong> — Tema berubah otomatis pagi/siang/malam</span></div>
+            <div class="changelog-item"><span class="changelog-icon">📸</span><span class="changelog-text"><strong>Share Card Generator</strong> — Buat kartu hasil quiz untuk IG/WA</span></div>
+            <button class="changelog-close" onclick="closeChangelog()">🏮 MASUKI ISTANA DIGITAL 🏮</button>
+        </div>
+    </div>
+
+    <!-- ================================================================ -->
+    <!-- ======= DEBUG PANEL ============================================ -->
+    <!-- ================================================================ -->
+    <div id="debugPanel">
+        <h4>⚙️ DEBUG PANEL — SULTAN EYES ONLY</h4>
+        <div class="debug-row"><span>Set XP:</span><input type="number" id="dbXP" value="100"><button class="debug-btn" onclick="dbSetXP()">SET</button></div>
+        <div class="debug-row"><span>Set Saldo:</span><input type="number" id="dbSaldo" value="1000000"><button class="debug-btn" onclick="dbSetSaldo()">SET</button></div>
+        <div class="debug-row"><span>Streak Freeze:</span><span id="dbFreezeCount" style="color:#ffd700;">0</span><button class="debug-btn" onclick="dbAddFreeze()">+1</button></div>
+        <div class="debug-row"><span>Trigger Fortune:</span><button class="debug-btn" onclick="openFortune()">OPEN</button></div>
+        <div class="debug-row"><span>Trigger Angpao:</span><button class="debug-btn" onclick="triggerAngpaoRain()">RAIN</button></div>
+        <div class="debug-row"><span>Open Puzzle:</span><button class="debug-btn" onclick="openPuzzle()">PLAY</button></div>
+        <div class="debug-row" style="margin-top:10px; padding-top:10px; border-top:1px solid #00ff88;">
+            <span style="color:#f87171;">RESET ALL DATA:</span>
+            <button class="debug-btn" style="background:#f87171;" onclick="if(confirm('Reset semua data?')){localStorage.clear();location.reload();}">RESET</button>
+        </div>
+    </div>
 
     <div id="particle-container"></div>
     <div id="achievementContainer"></div>
@@ -1036,12 +1591,12 @@
                 <div class="bg-gradient-to-r from-purple-100 to-pink-100 p-6 rounded-2xl border-2 border-purple-600 mt-6">
                     <h3 class="font-black text-purple-800 mb-4">🚀 FITUR SULTAN OMNIVERSE:</h3>
                     <div class="grid md:grid-cols-3 gap-4 text-left">
-                        <div class="bg-white p-4 rounded-xl shadow"><div class="text-2xl mb-2">🎤</div><div class="font-bold">Karaoke Sultan</div><div class="text-sm text-gray-600">Nyanyi lagu Mandarin biar healing!</div></div>
-                        <div class="bg-white p-4 rounded-xl shadow"><div class="text-2xl mb-2">🛒</div><div class="font-bold">Sultan Super Store</div><div class="text-sm text-gray-600">Top Up & Akun Premium murah cuan!</div></div>
-                        <div class="bg-white p-4 rounded-xl shadow"><div class="text-2xl mb-2">🎬</div><div class="font-bold">AI Director Lab</div><div class="text-sm text-gray-600">Generate video/gambar dengan AI terbaik!</div></div>
-                        <div class="bg-white p-4 rounded-xl shadow"><div class="text-2xl mb-2">📡</div><div class="font-bold">Radar Live TikTok</div><div class="text-sm text-gray-600">Anti lag, pantau ping provider!</div></div>
-                        <div class="bg-white p-4 rounded-xl shadow"><div class="text-2xl mb-2">💰</div><div class="font-bold">Dompet Angpao</div><div class="text-sm text-gray-600">Kumpulkan saldo dari XP, tarik ke DANA!</div></div>
-                        <div class="bg-white p-4 rounded-xl shadow"><div class="text-2xl mb-2">🤖</div><div class="font-bold">AI Adaptive Learning</div><div class="text-sm text-gray-600">Belajar Mandarin adaptif & personal!</div></div>
+                        <div class="bg-white p-4 rounded-xl shadow cursor-pointer hover:shadow-lg transition" onclick="tab('karaoke')"><div class="text-2xl mb-2">🎤</div><div class="font-bold">Karaoke Sultan</div><div class="text-sm text-gray-600">Nyanyi lagu Mandarin biar healing!</div></div>
+                        <div class="bg-white p-4 rounded-xl shadow cursor-pointer hover:shadow-lg transition" onclick="tab('store')"><div class="text-2xl mb-2">🛒</div><div class="font-bold">Sultan Super Store</div><div class="text-sm text-gray-600">Top Up & Akun Premium murah cuan!</div></div>
+                        <div class="bg-white p-4 rounded-xl shadow cursor-pointer hover:shadow-lg transition" onclick="tab('ai-lab')"><div class="text-2xl mb-2">🎬</div><div class="font-bold">Magic AI Studio</div><div class="text-sm text-gray-600">Generate video AI canggih!</div></div>
+                        <div class="bg-white p-4 rounded-xl shadow cursor-pointer hover:shadow-lg transition" onclick="openFortune()"><div class="text-2xl mb-2">🔮</div><div class="font-bold">Ramalan Harian</div><div class="text-sm text-gray-600">Nasib & 成语 harianmu!</div></div>
+                        <div class="bg-white p-4 rounded-xl shadow cursor-pointer hover:shadow-lg transition" onclick="openPuzzle()"><div class="text-2xl mb-2">🧩</div><div class="font-bold">Character Puzzle</div><div class="text-sm text-gray-600">Game susun radikal Mandarin!</div></div>
+                        <div class="bg-white p-4 rounded-xl shadow cursor-pointer hover:shadow-lg transition" onclick="tab('ask-ai')"><div class="text-2xl mb-2">🤖</div><div class="font-bold">Sultan AI BYOK</div><div class="text-sm text-gray-600">Chat AI pakai key sendiri!</div></div>
                     </div>
                 </div>
                 <div class="bg-white/50 p-6 rounded-2xl border-2 border-yellow-600 mt-6">
@@ -1291,6 +1846,21 @@
             <div class="store-title">💳 SMART PAYMENT HUB</div>
             <div class="store-subtitle">Top Up Cerdas • Memory Nomor • Riwayat Transaksi</div>
 
+            <!-- FLASH SALE TIMER -->
+            <div id="flashSaleBar">
+                <div>
+                    <div class="flash-sale-label">⚡ FLASH SALE SULTAN</div>
+                    <div style="color:rgba(255,215,0,0.5); font-size:11px; letter-spacing:2px; margin-top:3px;">PENAWARAN SPESIAL BERAKHIR DALAM</div>
+                </div>
+                <div class="flash-timer-digits">
+                    <div class="flash-digit" id="flashH">00</div>
+                    <span class="flash-sep">:</span>
+                    <div class="flash-digit" id="flashM">00</div>
+                    <span class="flash-sep">:</span>
+                    <div class="flash-digit" id="flashS">00</div>
+                </div>
+            </div>
+
             <!-- PAYMENT METHOD SHOWCASE (CSS Only - No External Images) -->
             <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,215,0,0.15); border-radius:14px; padding:18px; margin-bottom:24px; text-align:center;">
                 <div style="color:#666; font-size:10px; letter-spacing:3px; text-transform:uppercase; margin-bottom:14px;">✓ METODE PEMBAYARAN TERSEDIA</div>
@@ -1459,6 +2029,35 @@
                     <button class="premium-buy-btn" onclick="buyPremiumWA('Claude Pro','Rp 55.000')">📱 BELI VIA WA SULTAN</button>
                 </div>
             </div>
+
+            <div class="store-divider"></div>
+
+            <!-- CATEGORY C: SULTAN POWER-UPS -->
+            <div class="mb-2"><span class="store-category-label">🧊 C. SULTAN POWER-UPS — BELI DENGAN XP</span></div>
+            <p style="color:#888; font-size:12px; margin-bottom:18px;">Tukar XP jadi keuntungan nyata! XP kamu: <strong id="xpBalanceDisplay" style="color:var(--emperor-gold);">0</strong></p>
+            <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:16px; margin-bottom:20px;">
+                <div class="streak-freeze-card" onclick="buyStreakFreeze()">
+                    <span class="sf-icon">🧊</span>
+                    <div class="sf-name">STREAK FREEZE</div>
+                    <div class="sf-desc">Streak tidak putus walau sehari tidak belajar. Otomatis aktif saat diperlukan!</div>
+                    <div class="sf-price">500 XP</div>
+                    <div class="sf-owned">Dimiliki: <span id="freezeOwnedCount">0</span> buah</div>
+                </div>
+                <div class="streak-freeze-card" onclick="buyXPBooster()" style="border-color:#FFD700;">
+                    <span class="sf-icon">⚡</span>
+                    <div class="sf-name" style="color:var(--emperor-gold);">XP BOOSTER 2x</div>
+                    <div class="sf-desc">Semua XP yang kamu dapatkan berlipat 2x selama 24 jam penuh!</div>
+                    <div class="sf-price">1.000 XP</div>
+                    <div class="sf-owned"><span id="boosterStatus">Tidak aktif</span></div>
+                </div>
+                <div class="streak-freeze-card" onclick="openPuzzle()" style="border-color:#a855f7; cursor:pointer;">
+                    <span class="sf-icon">🧩</span>
+                    <div class="sf-name" style="color:#a855f7;">CHARACTER PUZZLE</div>
+                    <div class="sf-desc">Game susun radikal karakter! Menang dalam 30 detik = klaim 300 XP!</div>
+                    <div class="sf-price" style="color:#a855f7;">GRATIS MAIN</div>
+                    <div class="sf-owned" style="color:#a855f7;">▶ Mainkan Sekarang</div>
+                </div>
+            </div>
         </div>
 
         <!-- ================================================================ -->
@@ -1528,6 +2127,14 @@
                 </div>
                 <div class="magic-result-info" id="magicResultInfo">
                     // Engine: — | Prompt: —
+                </div>
+                <div class="render-stats-box" id="renderStatsBox" style="display:none;">
+                    <div class="rs-item"><span>🧠 Neural Nodes</span><span class="rs-val" id="rsNodes">—</span></div>
+                    <div class="rs-item"><span>🎞️ Frames Rendered</span><span class="rs-val" id="rsFrames">—</span></div>
+                    <div class="rs-item"><span>⚡ GPU Clusters</span><span class="rs-val" id="rsGPU">—</span></div>
+                    <div class="rs-item"><span>📊 Quality Score</span><span class="rs-val" id="rsQuality">—</span></div>
+                    <div class="rs-item"><span>🕐 Render Time</span><span class="rs-val" id="rsTime">—</span></div>
+                    <div class="rs-item"><span>🏆 Sultan Rating</span><span class="rs-val" id="rsRating">—</span></div>
                 </div>
                 <button class="magic-download-btn" id="magicDownloadBtn" onclick="downloadMagicVideo()">
                     ⬇️ DOWNLOAD VIDEO (MP4)
@@ -2739,7 +3346,17 @@
             document.getElementById('magicResultInfo').textContent =
                 `// Engine: ${engineName} | Prompt: "${prompt.substring(0, 80)}${prompt.length > 80 ? '...' : ''}"`;
 
-            document.getElementById('magicVideoResult').style.display = 'block';
+            // Show fake render stats
+            const statsBox = document.getElementById('renderStatsBox');
+            if (statsBox) {
+                statsBox.style.display = 'grid';
+                document.getElementById('rsNodes').textContent = (Math.floor(Math.random() * 4000) + 8000).toLocaleString();
+                document.getElementById('rsFrames').textContent = (Math.floor(Math.random() * 400) + 200).toLocaleString();
+                document.getElementById('rsGPU').textContent = (Math.floor(Math.random() * 50) + 512) + ' clusters';
+                document.getElementById('rsQuality').textContent = (96 + Math.floor(Math.random() * 4)) + '.' + Math.floor(Math.random() * 9) + '%';
+                document.getElementById('rsTime').textContent = (28 + Math.floor(Math.random() * 8)) + ' detik';
+                document.getElementById('rsRating').textContent = '⭐'.repeat(4 + Math.floor(Math.random() * 2));
+            }            document.getElementById('magicVideoResult').style.display = 'block';
             document.getElementById('magicVideoResult').scrollIntoView({ behavior: 'smooth', block: 'start' });
 
             addXP(30);
@@ -3066,6 +3683,965 @@ Kepribadianmu:
             const inp = document.getElementById('aiUserInput');
             if (inp) { inp.value = text; sendSultanAI(); }
         }
+
+        // ================================================================
+        // ======= 🎬 CINEMATIC INTRO =====================================
+        // ================================================================
+        (function() {
+            const intro = document.getElementById('cinematicIntro');
+            if (!intro) return;
+            // Skip if seen in last 10 minutes
+            const lastSeen = parseInt(localStorage.getItem('introLastSeen') || '0');
+            if (Date.now() - lastSeen < 600000) { intro.style.display = 'none'; return; }
+            setTimeout(() => {
+                intro.classList.add('fade-out');
+                setTimeout(() => {
+                    intro.style.display = 'none';
+                    localStorage.setItem('introLastSeen', Date.now());
+                    // Show changelog on first ever visit
+                    if (!localStorage.getItem('changelogSeen_v4')) {
+                        setTimeout(() => openChangelog(), 400);
+                    }
+                }, 900);
+            }, 2800);
+        })();
+
+        // ================================================================
+        // ======= 🐉 DRAGON CURSOR TRAIL =================================
+        // ================================================================
+        (function() {
+            const canvas = document.getElementById('dragonCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            let W = window.innerWidth, H = window.innerHeight;
+            canvas.width = W; canvas.height = H;
+            window.addEventListener('resize', () => { W = window.innerWidth; H = window.innerHeight; canvas.width = W; canvas.height = H; });
+
+            const particles = [];
+            let mouseX = -1000, mouseY = -1000;
+            let touchActive = false;
+
+            const COLORS = ['#FFD700', '#FFA500', '#FF6B00', '#FF4500', '#FFEC8B', '#FFF8DC'];
+            const SHAPES = ['◆', '✦', '★', '•', '◉'];
+
+            function addParticle(x, y) {
+                for (let i = 0; i < 3; i++) {
+                    particles.push({
+                        x, y,
+                        vx: (Math.random() - 0.5) * 3,
+                        vy: (Math.random() - 0.5) * 3 - 1,
+                        size: Math.random() * 14 + 6,
+                        alpha: 1,
+                        color: COLORS[Math.floor(Math.random() * COLORS.length)],
+                        shape: SHAPES[Math.floor(Math.random() * SHAPES.length)],
+                        life: 1,
+                        decay: Math.random() * 0.04 + 0.02,
+                        rotation: Math.random() * Math.PI * 2,
+                        rotSpeed: (Math.random() - 0.5) * 0.2
+                    });
+                }
+            }
+
+            document.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; addParticle(e.clientX, e.clientY); });
+            document.addEventListener('touchmove', e => {
+                if (e.touches[0]) { mouseX = e.touches[0].clientX; mouseY = e.touches[0].clientY; addParticle(mouseX, mouseY); }
+            }, { passive: true });
+
+            function animate() {
+                ctx.clearRect(0, 0, W, H);
+                for (let i = particles.length - 1; i >= 0; i--) {
+                    const p = particles[i];
+                    p.life -= p.decay;
+                    if (p.life <= 0) { particles.splice(i, 1); continue; }
+                    p.x += p.vx; p.y += p.vy;
+                    p.vy += 0.05;
+                    p.rotation += p.rotSpeed;
+                    ctx.save();
+                    ctx.globalAlpha = p.life * 0.85;
+                    ctx.font = `${p.size}px serif`;
+                    ctx.fillStyle = p.color;
+                    ctx.shadowColor = p.color;
+                    ctx.shadowBlur = 10;
+                    ctx.translate(p.x, p.y);
+                    ctx.rotate(p.rotation);
+                    ctx.fillText(p.shape, -p.size / 2, p.size / 2);
+                    ctx.restore();
+                }
+                requestAnimationFrame(animate);
+            }
+            animate();
+        })();
+
+        // ================================================================
+        // ======= 🌊 INK SPLASH TAB TRANSITION ===========================
+        // ================================================================
+        const _origTab = window.tab;
+        function tab(id) {
+            const splash = document.getElementById('inkSplash');
+            if (splash) {
+                splash.style.display = 'block';
+                splash.innerHTML = '';
+                const circle = document.createElement('div');
+                circle.className = 'ink-circle';
+                circle.style.cssText = `width:200px; height:200px; left:50%; top:50%; margin:-100px 0 0 -100px;`;
+                splash.appendChild(circle);
+                setTimeout(() => { splash.style.display = 'none'; }, 600);
+            }
+            playSnd('click');
+            haptic(30);
+            // Call original tab logic
+            _origTabSwitch(id);
+        }
+
+        function _origTabSwitch(id) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden-tab'));
+            const target = document.getElementById(id);
+            if (target) target.classList.remove('hidden-tab');
+            document.querySelectorAll('nav button').forEach(b => b.classList.remove('active-nav', 'nav-active-glow'));
+            const navBtn = document.getElementById('n-' + id);
+            if (navBtn) { navBtn.classList.add('active-nav', 'nav-active-glow'); }
+            if (id === 'flashcard') initFlashcard();
+            if (id === 'progress') initProgress();
+            if (id === 'quiz') startQuiz('mixed');
+            if (id === 'ask-ai') initAskAI();
+            if (id === 'store') { updateXPBalanceDisplay(); updateFreezeDisplay(); updateBoosterStatus(); }
+        }
+
+        // ================================================================
+        // ======= 🔊 WEB AUDIO SOUND SYSTEM ==============================
+        // ================================================================
+        let _audioCtx = null;
+        function _getAudio() {
+            if (!_audioCtx) {
+                try { _audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e) {}
+            }
+            return _audioCtx;
+        }
+
+        function playSnd(type) {
+            try {
+                const ac = _getAudio(); if (!ac) return;
+                if (ac.state === 'suspended') ac.resume();
+                const now = ac.currentTime;
+
+                if (type === 'click') {
+                    // Soft click - brief sine wave
+                    const o = ac.createOscillator();
+                    const g = ac.createGain();
+                    o.connect(g); g.connect(ac.destination);
+                    o.type = 'sine'; o.frequency.value = 800;
+                    g.gain.setValueAtTime(0.08, now);
+                    g.gain.exponentialRampToValueAtTime(0.0001, now + 0.12);
+                    o.start(now); o.stop(now + 0.12);
+
+                } else if (type === 'coin') {
+                    // Coin jingle - ascending tones
+                    [800, 1000, 1200].forEach((freq, i) => {
+                        const o = ac.createOscillator();
+                        const g = ac.createGain();
+                        o.connect(g); g.connect(ac.destination);
+                        o.type = 'sine'; o.frequency.value = freq;
+                        const t = now + i * 0.06;
+                        g.gain.setValueAtTime(0, t);
+                        g.gain.linearRampToValueAtTime(0.12, t + 0.02);
+                        g.gain.exponentialRampToValueAtTime(0.0001, t + 0.18);
+                        o.start(t); o.stop(t + 0.18);
+                    });
+
+                } else if (type === 'gong') {
+                    // Deep gong - low sine with long decay
+                    const o = ac.createOscillator();
+                    const g = ac.createGain();
+                    o.connect(g); g.connect(ac.destination);
+                    o.type = 'sine'; o.frequency.setValueAtTime(180, now);
+                    o.frequency.exponentialRampToValueAtTime(120, now + 1.5);
+                    g.gain.setValueAtTime(0.25, now);
+                    g.gain.exponentialRampToValueAtTime(0.0001, now + 2.0);
+                    o.start(now); o.stop(now + 2.0);
+
+                } else if (type === 'achievement') {
+                    // Fanfare - quick ascending chord
+                    [[523, 0], [659, 0.1], [784, 0.2], [1047, 0.3]].forEach(([freq, delay]) => {
+                        const o = ac.createOscillator();
+                        const g = ac.createGain();
+                        o.connect(g); g.connect(ac.destination);
+                        o.type = 'triangle'; o.frequency.value = freq;
+                        const t = now + delay;
+                        g.gain.setValueAtTime(0.15, t);
+                        g.gain.exponentialRampToValueAtTime(0.0001, t + 0.4);
+                        o.start(t); o.stop(t + 0.4);
+                    });
+
+                } else if (type === 'error') {
+                    // Error buzz
+                    const o = ac.createOscillator();
+                    const g = ac.createGain();
+                    o.connect(g); g.connect(ac.destination);
+                    o.type = 'sawtooth'; o.frequency.value = 200;
+                    g.gain.setValueAtTime(0.15, now);
+                    g.gain.exponentialRampToValueAtTime(0.0001, now + 0.3);
+                    o.start(now); o.stop(now + 0.3);
+
+                } else if (type === 'angpao') {
+                    // Happy jingle
+                    [600, 800, 1000, 1200, 1000].forEach((freq, i) => {
+                        const o = ac.createOscillator();
+                        const g = ac.createGain();
+                        o.connect(g); g.connect(ac.destination);
+                        o.type = 'sine'; o.frequency.value = freq;
+                        const t = now + i * 0.08;
+                        g.gain.setValueAtTime(0.1, t);
+                        g.gain.exponentialRampToValueAtTime(0.0001, t + 0.15);
+                        o.start(t); o.stop(t + 0.15);
+                    });
+                }
+            } catch(e) {}
+        }
+
+        // Patch addXP and showAchievement to play sounds
+        const _origAddXP = window.addXP;
+        function addXP(amount) {
+            if (typeof _origAddXP === 'function') _origAddXP(amount);
+            playSnd('coin');
+        }
+        const _origShowAchievement = window.showAchievement;
+        function showAchievement(msg) {
+            if (typeof _origShowAchievement === 'function') _origShowAchievement(msg);
+            playSnd('achievement');
+            haptic([50, 30, 50]);
+        }
+
+        // ================================================================
+        // ======= 📳 HAPTIC FEEDBACK =====================================
+        // ================================================================
+        function haptic(pattern) {
+            try {
+                if (navigator.vibrate) navigator.vibrate(pattern);
+            } catch(e) {}
+        }
+
+        // ================================================================
+        // ======= 👆 SWIPE GESTURE NAVIGATION ============================
+        // ================================================================
+        (function() {
+            const TAB_ORDER = ['home','silsilah','dasar','kamus','flashcard','quiz','ai-tutor','progress','cinema','karaoke','store','ai-lab','ask-ai'];
+            let touchStartX = 0, touchStartY = 0, touchStartTime = 0;
+
+            document.addEventListener('touchstart', e => {
+                touchStartX = e.touches[0].clientX;
+                touchStartY = e.touches[0].clientY;
+                touchStartTime = Date.now();
+            }, { passive: true });
+
+            document.addEventListener('touchend', e => {
+                const dx = e.changedTouches[0].clientX - touchStartX;
+                const dy = e.changedTouches[0].clientY - touchStartY;
+                const dt = Date.now() - touchStartTime;
+                // Only swipe if fast, horizontal, and significant distance
+                if (dt < 350 && Math.abs(dx) > 70 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+                    const currentTab = document.querySelector('.tab-content:not(.hidden-tab)');
+                    if (!currentTab) return;
+                    const idx = TAB_ORDER.indexOf(currentTab.id);
+                    if (idx === -1) return;
+                    if (dx < 0 && idx < TAB_ORDER.length - 1) {
+                        tab(TAB_ORDER[idx + 1]); // swipe left = next
+                    } else if (dx > 0 && idx > 0) {
+                        tab(TAB_ORDER[idx - 1]); // swipe right = prev
+                    }
+                }
+            }, { passive: true });
+        })();
+
+        // ================================================================
+        // ======= 🌅 DYNAMIC THEME SYSTEM ================================
+        // ================================================================
+        const THEMES = ['theme-morning', 'theme-noon', 'theme-night'];
+        const THEME_ICONS = ['🌄', '☀️', '🌙'];
+        let currentThemeIdx = 0;
+
+        function applyAutoTheme() {
+            const h = new Date().getHours();
+            if (h >= 5 && h < 11)       currentThemeIdx = 0; // morning
+            else if (h >= 11 && h < 18) currentThemeIdx = 1; // noon
+            else                        currentThemeIdx = 2; // night
+            const saved = localStorage.getItem('manualTheme');
+            if (saved !== null) currentThemeIdx = parseInt(saved);
+            applyTheme(currentThemeIdx);
+        }
+
+        function applyTheme(idx) {
+            document.body.classList.remove(...THEMES);
+            document.body.classList.add(THEMES[idx]);
+            const btn = document.getElementById('themeToggleBtn');
+            if (btn) btn.textContent = THEME_ICONS[idx];
+        }
+
+        function cycleTheme() {
+            currentThemeIdx = (currentThemeIdx + 1) % THEMES.length;
+            localStorage.setItem('manualTheme', currentThemeIdx);
+            applyTheme(currentThemeIdx);
+            playSnd('click');
+            haptic(40);
+        }
+
+        applyAutoTheme();
+
+        // ================================================================
+        // ======= 🧧 ANGPAO RAIN EVENT ===================================
+        // ================================================================
+        let angpaoRainActive = false;
+        let angpaoRainTimeout = null;
+
+        function triggerAngpaoRain() {
+            if (angpaoRainActive) return;
+            angpaoRainActive = true;
+            playSnd('angpao');
+            haptic([50, 50, 50]);
+
+            const banner = document.getElementById('angpaoEventBanner');
+            if (banner) banner.classList.add('show');
+
+            // Spawn 15 angpao over 5 seconds
+            let spawned = 0;
+            const spawnInterval = setInterval(() => {
+                if (spawned >= 15) { clearInterval(spawnInterval); return; }
+                spawnAngpao();
+                spawned++;
+            }, 350);
+
+            // End event after 12 seconds
+            angpaoRainTimeout = setTimeout(() => {
+                angpaoRainActive = false;
+                if (banner) banner.classList.remove('show');
+            }, 12000);
+        }
+
+        function spawnAngpao() {
+            const el = document.createElement('div');
+            el.className = 'rain-angpao';
+            el.textContent = '🧧';
+            const xpReward = [10, 20, 30, 50, 100][Math.floor(Math.random() * 5)];
+            el.style.left = Math.random() * 90 + 'vw';
+            el.style.animationDuration = (3 + Math.random() * 3) + 's';
+            el.style.transform = `rotate(${(Math.random() - 0.5) * 30}deg)`;
+            el.title = `Klik! +${xpReward} XP`;
+            el.onclick = (e) => {
+                e.stopPropagation();
+                addXP(xpReward);
+                showAchievement(`🧧 Angpao diklaim! +${xpReward} XP!`);
+                playSnd('angpao');
+                haptic(60);
+                // Burst animation
+                el.style.transform = 'scale(2) rotate(720deg)';
+                el.style.opacity = '0';
+                el.style.transition = 'all 0.3s';
+                setTimeout(() => el.remove(), 300);
+            };
+            document.body.appendChild(el);
+            el.addEventListener('animationend', () => el.remove());
+        }
+
+        // Check for lucky hours (08:08, 18:18, 20:08, 22:22)
+        function checkAngpaoHour() {
+            const now = new Date();
+            const h = now.getHours(), m = now.getMinutes();
+            const lucky = [(8,8), [18,18], [20,8], [22,22]];
+            if (lucky.some(([lh, lm]) => h === lh && m === lm)) {
+                if (!localStorage.getItem(`angpao_${h}_${m}_${now.toDateString()}`)) {
+                    localStorage.setItem(`angpao_${h}_${m}_${now.toDateString()}`, '1');
+                    triggerAngpaoRain();
+                }
+            }
+        }
+        setInterval(checkAngpaoHour, 30000);
+
+        // ================================================================
+        // ======= ⚡ FLASH SALE COUNTDOWN TIMER ==========================
+        // ================================================================
+        function updateFlashTimer() {
+            const now = new Date();
+            // Resets every 6 hours from midnight
+            const secsInDay = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
+            const interval = 6 * 3600;
+            const remaining = interval - (secsInDay % interval);
+            const h = Math.floor(remaining / 3600);
+            const m = Math.floor((remaining % 3600) / 60);
+            const s = remaining % 60;
+            const pad = n => String(n).padStart(2, '0');
+            const fh = document.getElementById('flashH');
+            const fm = document.getElementById('flashM');
+            const fs = document.getElementById('flashS');
+            if (fh) fh.textContent = pad(h);
+            if (fm) fm.textContent = pad(m);
+            if (fs) fs.textContent = pad(s);
+            // Flash red when < 30 min
+            if (fh) fh.style.background = remaining < 1800 ? '#ff4500' : 'var(--imperial-red)';
+        }
+        setInterval(updateFlashTimer, 1000);
+        updateFlashTimer();
+
+        // ================================================================
+        // ======= 🔮 DAILY FORTUNE GENERATOR =============================
+        // ================================================================
+        const FORTUNE_DATA = [
+            { ch: '龙马精神', py: 'lóng mǎ jīng shén', meaning: 'Semangat kuda naga — energi tak terbendung', color: '#8B0000', lucky: '8, 18, 88', luckyColor: 'Merah Kerajaan', hour: '08:08' },
+            { ch: '一帆风顺', py: 'yī fān fēng shùn', meaning: 'Pelayaran satu layar dalam angin baik — segalanya lancar', color: '#004d99', lucky: '1, 11, 111', luckyColor: 'Biru Langit', hour: '11:11' },
+            { ch: '财源滚滚', py: 'cái yuán gǔn gǔn', meaning: 'Sumber kekayaan mengalir deras — rezeki berlimpah', color: '#7a5c00', lucky: '6, 66, 666', luckyColor: 'Emas Murni', hour: '18:18' },
+            { ch: '事事如意', py: 'shì shì rú yì', meaning: 'Segala urusan berjalan sesuai keinginan hati', color: '#004d00', lucky: '9, 19, 99', luckyColor: 'Hijau Giok', hour: '09:09' },
+            { ch: '步步高升', py: 'bù bù gāo shēng', meaning: 'Setiap langkah semakin naik — karir dan posisi terus meningkat', color: '#4a0080', lucky: '3, 33, 333', luckyColor: 'Ungu Imperial', hour: '15:15' },
+            { ch: '心想事成', py: 'xīn xiǎng shì chéng', meaning: 'Apa yang ada di hati, terwujud — mimpi jadi nyata', color: '#800040', lucky: '7, 77, 777', luckyColor: 'Merah Mawar', hour: '07:07' },
+            { ch: '万事胜意', py: 'wàn shì shèng yì', meaning: 'Sepuluh ribu perkara melampaui harapan — lebih dari yang diimpikan', color: '#5a2d00', lucky: '8, 28, 88', luckyColor: 'Coklat Kayu Manis', hour: '20:20' },
+        ];
+
+        const FORTUNE_PREDICTIONS = [
+            '🔮 Energimu meluap hari ini! Ambil keputusan besar — waktunya tepat. Wang Weize merestuimu! 🐉',
+            '💰 Peluang finansial muncul tak terduga. Buka matamu lebar-lebar. Rezeki datang dari arah tak terduga!',
+            '🌟 Hubunganmu dengan orang-orang terpenting akan menguat hari ini. Ucapkan kata yang selama ini tertahan.',
+            '🚀 Proyek yang terbengkalai akan menemukan energi baru. Jangan ragu, mulai sekarang juga bos!',
+            '🧠 Ide-ide brilian datang bertubi-tubi. Catat semuanya — satu di antaranya akan mengubah hidupmu!',
+            '🎯 Fokus dan kegigihan adalah kuncimu hari ini. Yang menyerah kalah, yang bertahan menang!',
+            '🌈 Keberuntungan berpihak padamu. Jangan sia-siakan momentum ini — gas terus bos!',
+        ];
+
+        function getDailyFortune() {
+            const today = new Date().toDateString();
+            const cached = localStorage.getItem('dailyFortune_' + today);
+            if (cached) return JSON.parse(cached);
+            const seed = [...today].reduce((a, c) => a + c.charCodeAt(0), 0);
+            const fortune = FORTUNE_DATA[seed % FORTUNE_DATA.length];
+            const pred = FORTUNE_PREDICTIONS[seed % FORTUNE_PREDICTIONS.length];
+            const result = { ...fortune, prediction: pred };
+            localStorage.setItem('dailyFortune_' + today, JSON.stringify(result));
+            return result;
+        }
+
+        function openFortune() {
+            const f = getDailyFortune();
+            document.getElementById('fortuneChengyu').textContent = f.ch;
+            document.getElementById('fortuneChengyu').style.color = f.color;
+            document.getElementById('fortunePinyin').textContent = f.py;
+            document.getElementById('fortuneMeaning').textContent = f.meaning;
+            document.getElementById('fortunePrediction').textContent = f.prediction;
+            document.getElementById('fortuneLucky').textContent =
+                `🎨 Warna Hoki: ${f.luckyColor}  •  🔢 Angka: ${f.lucky}  •  ⏰ Jam Hoki: ${f.hour}`;
+            document.getElementById('fortuneOverlay').classList.add('show');
+            playSnd('gong');
+            haptic([50, 30, 50, 30, 100]);
+        }
+        function closeFortune() {
+            document.getElementById('fortuneOverlay').classList.remove('show');
+            playSnd('click');
+        }
+
+        // Auto-show fortune once per day
+        (function() {
+            const today = new Date().toDateString();
+            if (!localStorage.getItem('fortuneShown_' + today)) {
+                setTimeout(() => {
+                    // Only show if intro is already gone
+                    const intro = document.getElementById('cinematicIntro');
+                    if (!intro || intro.style.display === 'none') {
+                        openFortune();
+                        localStorage.setItem('fortuneShown_' + today, '1');
+                    }
+                }, 4500);
+            }
+        })();
+
+        // ================================================================
+        // ======= 📸 VIRAL SHARE CARD GENERATOR ==========================
+        // ================================================================
+        function generateShareCard(title, value, subtitle, context) {
+            const canvas = document.getElementById('shareCardCanvas');
+            const ctx = canvas.getContext('2d');
+            const W = 400, H = 560;
+            canvas.width = W; canvas.height = H;
+
+            // Background gradient
+            const bg = ctx.createLinearGradient(0, 0, W, H);
+            bg.addColorStop(0, '#1a0000');
+            bg.addColorStop(0.5, '#2d0a00');
+            bg.addColorStop(1, '#1a0000');
+            ctx.fillStyle = bg;
+            ctx.fillRect(0, 0, W, H);
+
+            // Border
+            ctx.strokeStyle = '#FFD700';
+            ctx.lineWidth = 6;
+            ctx.strokeRect(6, 6, W - 12, H - 12);
+            ctx.strokeStyle = 'rgba(255,215,0,0.3)';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(16, 16, W - 32, H - 32);
+
+            // Top ornament
+            ctx.fillStyle = '#8B0000';
+            ctx.fillRect(0, 50, W, 4);
+            ctx.fillStyle = '#FFD700';
+            ctx.fillRect(0, 54, W, 2);
+
+            // 汪 character
+            ctx.font = '90px Ma Shan Zheng, serif';
+            ctx.textAlign = 'center';
+            ctx.fillStyle = '#FFD700';
+            ctx.shadowColor = 'rgba(255,215,0,0.6)';
+            ctx.shadowBlur = 20;
+            ctx.fillText('汪', W / 2, 130);
+            ctx.shadowBlur = 0;
+
+            // Brand name
+            ctx.font = 'bold 16px Cormorant Garamond, serif';
+            ctx.fillStyle = 'rgba(255,215,0,0.7)';
+            ctx.fillText('WANG WEIZE · SULTAN OMNIVERSE', W / 2, 160);
+
+            // Divider
+            ctx.fillStyle = 'rgba(255,215,0,0.3)';
+            ctx.fillRect(60, 170, W - 120, 1);
+
+            // Title
+            ctx.font = 'bold 20px Playfair Display, serif';
+            ctx.fillStyle = '#fff';
+            ctx.fillText(title || 'QUIZ SULTAN', W / 2, 210);
+
+            // Big value
+            ctx.font = 'bold 80px sans-serif';
+            const grad = ctx.createLinearGradient(0, 240, W, 320);
+            grad.addColorStop(0, '#FFD700');
+            grad.addColorStop(1, '#FF6B00');
+            ctx.fillStyle = grad;
+            ctx.shadowColor = 'rgba(255,215,0,0.4)';
+            ctx.shadowBlur = 15;
+            ctx.fillText(value || '100%', W / 2, 320);
+            ctx.shadowBlur = 0;
+
+            // Subtitle
+            ctx.font = '16px sans-serif';
+            ctx.fillStyle = 'rgba(255,215,0,0.7)';
+            ctx.fillText(subtitle || 'Skor Sempurna!', W / 2, 360);
+
+            // Context text
+            if (context) {
+                ctx.font = '13px sans-serif';
+                ctx.fillStyle = 'rgba(255,255,255,0.5)';
+                ctx.fillText(context, W / 2, 395);
+            }
+
+            // Bottom bar
+            ctx.fillStyle = 'rgba(255,215,0,0.1)';
+            ctx.fillRect(30, 420, W - 60, 80);
+            ctx.strokeStyle = 'rgba(255,215,0,0.2)';
+            ctx.lineWidth = 1;
+            ctx.strokeRect(30, 420, W - 60, 80);
+
+            // Date & signature
+            ctx.font = 'bold 12px monospace';
+            ctx.fillStyle = 'rgba(255,215,0,0.6)';
+            const dateStr = new Date().toLocaleDateString('id-ID', { day:'numeric', month:'long', year:'numeric' });
+            ctx.fillText(`🏮 ${dateStr}`, W / 2, 450);
+            ctx.font = '11px monospace';
+            ctx.fillStyle = 'rgba(255,215,0,0.4)';
+            ctx.fillText('sultanomniverse.id · @wangweize10', W / 2, 475);
+
+            // Bottom dragons
+            ctx.font = '28px serif';
+            ctx.fillText('🐉', 60, 510);
+            ctx.fillText('🐉', W - 60, 510);
+            ctx.font = 'bold 14px serif';
+            ctx.fillStyle = '#FFD700';
+            ctx.fillText('WANG DYNASTY', W / 2, 530);
+
+            document.getElementById('shareCardOverlay').classList.add('show');
+            playSnd('achievement');
+        }
+
+        function shareFortuneCard() {
+            const f = getDailyFortune();
+            generateShareCard('RAMALAN HARI INI', f.ch, f.py, f.meaning.substring(0, 45) + '...');
+        }
+
+        function shareQuizCard(score, total) {
+            const pct = Math.round(score / total * 100);
+            generateShareCard('QUIZ SULTAN RESULT', pct + '%', `${score}/${total} Benar`, 'Wang Dynasty Mandarin Academy');
+        }
+
+        function downloadShareCard() {
+            const canvas = document.getElementById('shareCardCanvas');
+            const link = document.createElement('a');
+            link.download = 'sultan-omniverse-card.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+            playSnd('coin');
+        }
+
+        function closeShareCard() {
+            document.getElementById('shareCardOverlay').classList.remove('show');
+        }
+
+        // Patch quiz results to show share card button
+        const _origNextQuestion = window.nextQuestion;
+
+        // ================================================================
+        // ======= 🧩 CHARACTER PUZZLE MINI GAME ==========================
+        // ================================================================
+        const PUZZLE_DATA = [
+            { char: '汪', pieces: ['氵','王','土','火','金','木'], correct: ['氵','王'], meaning: 'Air + Raja = Marga Wang' },
+            { char: '好', pieces: ['女','子','山','日','月','心'], correct: ['女','子'], meaning: 'Wanita + Anak = Kebaikan' },
+            { char: '明', pieces: ['日','月','水','火','土','木'], correct: ['日','月'], meaning: 'Matahari + Bulan = Terang' },
+            { char: '休', pieces: ['人','木','水','金','土','火'], correct: ['人','木'], meaning: 'Manusia + Pohon = Istirahat' },
+            { char: '森', pieces: ['木','木','木','水','火','土'], correct: ['木','木','木'], meaning: '3 Pohon = Hutan' },
+            { char: '赚', pieces: ['贝','兼','土','水','火','金'], correct: ['贝','兼'], meaning: 'Uang + Ganda = Cuan!' },
+        ];
+
+        let puzzleTimer = null;
+        let puzzleTimeLeft = 30;
+        let puzzleActive = false;
+        let puzzleCurrentData = null;
+        let puzzleAnswerArr = [];
+
+        function openPuzzle() {
+            document.getElementById('puzzleOverlay').classList.add('show');
+            resetPuzzle();
+            playSnd('gong');
+        }
+        function closePuzzle() {
+            document.getElementById('puzzleOverlay').classList.remove('show');
+            if (puzzleTimer) clearInterval(puzzleTimer);
+            puzzleActive = false;
+        }
+        function resetPuzzle() {
+            puzzleActive = false;
+            puzzleAnswerArr = [];
+            if (puzzleTimer) clearInterval(puzzleTimer);
+            document.getElementById('puzzleTimerDisplay').textContent = '30';
+            document.getElementById('puzzleTimerDisplay').classList.remove('danger');
+            document.getElementById('puzzleResult').textContent = '';
+            document.getElementById('puzzleResult').style.color = '';
+            document.getElementById('puzzleStartBtn').textContent = '🎮 MAIN SEKARANG';
+            document.getElementById('puzzleStartBtn').disabled = false;
+            document.getElementById('puzzlePieces').innerHTML = '<div style="color:rgba(255,215,0,0.4); font-size:12px;">Klik tombol main untuk mulai!</div>';
+            document.getElementById('puzzleAnswer').innerHTML = '<div style="color:rgba(255,215,0,0.3); font-size:12px;">Jawaban kamu muncul di sini...</div>';
+        }
+
+        function startPuzzle() {
+            const pd = PUZZLE_DATA[Math.floor(Math.random() * PUZZLE_DATA.length)];
+            puzzleCurrentData = pd;
+            puzzleAnswerArr = [];
+            document.getElementById('puzzleTarget').textContent = pd.char;
+            document.getElementById('puzzleStartBtn').disabled = true;
+            document.getElementById('puzzleResult').textContent = '';
+            document.getElementById('puzzleAnswer').innerHTML = '';
+
+            // Shuffle pieces
+            const shuffled = [...pd.pieces].sort(() => Math.random() - 0.5);
+            document.getElementById('puzzlePieces').innerHTML = shuffled.map(p =>
+                `<div class="puzzle-piece" onclick="puzzlePickPiece(this,'${p}')">${p}</div>`
+            ).join('');
+
+            // Start timer
+            puzzleTimeLeft = 30;
+            puzzleActive = true;
+            const timerEl = document.getElementById('puzzleTimerDisplay');
+            timerEl.textContent = '30';
+            timerEl.classList.remove('danger');
+
+            puzzleTimer = setInterval(() => {
+                puzzleTimeLeft--;
+                timerEl.textContent = puzzleTimeLeft;
+                if (puzzleTimeLeft <= 10) timerEl.classList.add('danger');
+                if (puzzleTimeLeft <= 0) {
+                    clearInterval(puzzleTimer);
+                    puzzleActive = false;
+                    document.getElementById('puzzleResult').textContent = '⏰ WAKTU HABIS! Coba lagi bos!';
+                    document.getElementById('puzzleResult').style.color = '#f87171';
+                    document.getElementById('puzzleStartBtn').disabled = false;
+                    document.getElementById('puzzleStartBtn').textContent = '🔄 Coba Lagi';
+                    playSnd('error');
+                    haptic([100, 50, 100]);
+                }
+            }, 1000);
+        }
+
+        function puzzlePickPiece(el, piece) {
+            if (!puzzleActive) return;
+            puzzleAnswerArr.push(piece);
+            el.classList.add('dropped');
+            el.onclick = null;
+
+            const answerEl = document.getElementById('puzzleAnswer');
+            const pieceEl = document.createElement('div');
+            pieceEl.className = 'puzzle-piece dropped';
+            pieceEl.textContent = piece;
+            pieceEl.onclick = () => {
+                // Remove from answer
+                puzzleAnswerArr = puzzleAnswerArr.filter((_, i) => i !== puzzleAnswerArr.lastIndexOf(piece));
+                pieceEl.remove();
+                // Re-enable in pieces
+                el.classList.remove('dropped');
+                el.onclick = () => puzzlePickPiece(el, piece);
+            };
+            answerEl.appendChild(pieceEl);
+
+            // Check if answer matches correct combination
+            const sorted = [...puzzleAnswerArr].sort().join('');
+            const correct = [...puzzleCurrentData.correct].sort().join('');
+            if (sorted === correct && puzzleAnswerArr.length === puzzleCurrentData.correct.length) {
+                clearInterval(puzzleTimer);
+                puzzleActive = false;
+                const xpReward = Math.max(100, puzzleTimeLeft * 10);
+                document.getElementById('puzzleResult').innerHTML = `✅ BENAR! ${puzzleCurrentData.meaning} <br>+${xpReward} XP! 🏆`;
+                document.getElementById('puzzleResult').style.color = '#4ade80';
+                addXP(xpReward);
+                showAchievement(`🧩 Puzzle selesai! +${xpReward} XP!`);
+                document.getElementById('puzzleStartBtn').disabled = false;
+                document.getElementById('puzzleStartBtn').textContent = '🔄 Karakter Baru';
+                haptic([50, 30, 50, 30, 100]);
+                setTimeout(() => generateShareCard('CHARACTER PUZZLE', '✅', puzzleCurrentData.char + ' = ' + puzzleCurrentData.correct.join('+'), puzzleCurrentData.meaning), 1500);
+            }
+        }
+
+        // ================================================================
+        // ======= 🔒 STREAK FREEZE & BOOSTER STORE ITEMS =================
+        // ================================================================
+        function updateXPBalanceDisplay() {
+            const xp = (typeof userStats !== 'undefined') ? (userStats.xp || 0) : 0;
+            const el = document.getElementById('xpBalanceDisplay');
+            if (el) el.textContent = xp.toLocaleString('id-ID') + ' XP';
+        }
+        function updateFreezeDisplay() {
+            const count = parseInt(localStorage.getItem('streakFreezeCount') || '0');
+            const el = document.getElementById('freezeOwnedCount');
+            if (el) el.textContent = count;
+            const dbEl = document.getElementById('dbFreezeCount');
+            if (dbEl) dbEl.textContent = count;
+        }
+        function updateBoosterStatus() {
+            const expires = parseInt(localStorage.getItem('xpBoosterExpires') || '0');
+            const el = document.getElementById('boosterStatus');
+            if (!el) return;
+            if (Date.now() < expires) {
+                const remaining = Math.ceil((expires - Date.now()) / 3600000);
+                el.textContent = `⚡ AKTIF (${remaining} jam tersisa)`;
+                el.style.color = '#ffd700';
+            } else {
+                el.textContent = 'Tidak aktif';
+                el.style.color = '#888';
+            }
+        }
+        function buyStreakFreeze() {
+            const xp = (typeof userStats !== 'undefined') ? (userStats.xp || 0) : 0;
+            if (xp < 500) { alert(`😅 XP kamu kurang bos! XP sekarang: ${xp}. Butuh 500 XP untuk beli Streak Freeze!`); playSnd('error'); return; }
+            if (!confirm('Beli Streak Freeze 1 buah?\nHarga: 500 XP\nXP kamu: ' + xp)) return;
+            if (typeof userStats !== 'undefined') { userStats.xp = Math.max(0, userStats.xp - 500); if (typeof saveUserData === 'function') saveUserData(); if (typeof updateStatsDisplay === 'function') updateStatsDisplay(); }
+            const count = parseInt(localStorage.getItem('streakFreezeCount') || '0') + 1;
+            localStorage.setItem('streakFreezeCount', count);
+            updateFreezeDisplay();
+            updateXPBalanceDisplay();
+            showAchievement('🧊 Streak Freeze dibeli! Streak aman 1 hari!');
+            playSnd('coin');
+        }
+        function buyXPBooster() {
+            const xp = (typeof userStats !== 'undefined') ? (userStats.xp || 0) : 0;
+            const nowExpires = parseInt(localStorage.getItem('xpBoosterExpires') || '0');
+            if (Date.now() < nowExpires) { alert('⚡ XP Booster sudah aktif bos! Tunggu sampai habis dulu ya!'); return; }
+            if (xp < 1000) { alert(`😅 XP kamu kurang! Butuh 1.000 XP. Sekarang: ${xp}`); playSnd('error'); return; }
+            if (!confirm('Aktifkan XP Booster 2x selama 24 jam?\nHarga: 1.000 XP')) return;
+            if (typeof userStats !== 'undefined') { userStats.xp = Math.max(0, userStats.xp - 1000); if (typeof saveUserData === 'function') saveUserData(); if (typeof updateStatsDisplay === 'function') updateStatsDisplay(); }
+            const expires = Date.now() + 86400000;
+            localStorage.setItem('xpBoosterExpires', expires);
+            updateBoosterStatus();
+            updateXPBalanceDisplay();
+            showAchievement('⚡ XP Booster 2x AKTIF selama 24 jam!');
+            playSnd('achievement');
+        }
+
+        // ================================================================
+        // ======= 📢 PAGE TITLE NOTIFICATION =============================
+        // ================================================================
+        let _origTitle = document.title;
+        let _titleBlinkInterval = null;
+
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                let blink = false;
+                _titleBlinkInterval = setInterval(() => {
+                    document.title = blink ? '🏮 Sultan merindukanmu bos!' : '🐉 Streak mau putus!';
+                    blink = !blink;
+                }, 1500);
+            } else {
+                if (_titleBlinkInterval) clearInterval(_titleBlinkInterval);
+                document.title = _origTitle;
+            }
+        });
+
+        // ================================================================
+        // ======= ⚙️ DEBUG PANEL (Shift+Alt+D) ===========================
+        // ================================================================
+        document.addEventListener('keydown', e => {
+            if (e.shiftKey && e.altKey && e.key === 'D') {
+                const panel = document.getElementById('debugPanel');
+                if (panel) panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+            }
+            // Konami code easter egg
+            _konamiCheck(e.key);
+        });
+        function dbSetXP() {
+            const v = parseInt(document.getElementById('dbXP').value) || 0;
+            if (typeof userStats !== 'undefined') { userStats.xp = v; if (typeof saveUserData === 'function') saveUserData(); if (typeof updateStatsDisplay === 'function') updateStatsDisplay(); }
+            alert('✅ XP set ke ' + v);
+        }
+        function dbSetSaldo() {
+            const v = parseInt(document.getElementById('dbSaldo').value) || 0;
+            localStorage.setItem('saldoAngpao', v);
+            if (typeof updateAngpaoUI === 'function') updateAngpaoUI();
+            alert('✅ Saldo set ke Rp ' + v.toLocaleString('id-ID'));
+        }
+        function dbAddFreeze() {
+            const c = parseInt(localStorage.getItem('streakFreezeCount') || '0') + 1;
+            localStorage.setItem('streakFreezeCount', c);
+            updateFreezeDisplay();
+        }
+
+        // ================================================================
+        // ======= 🥚 KONAMI CODE EASTER EGG ==============================
+        // ================================================================
+        const KONAMI = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+        let konamiIdx = 0;
+        function _konamiCheck(key) {
+            if (key === KONAMI[konamiIdx]) {
+                konamiIdx++;
+                if (konamiIdx === KONAMI.length) {
+                    konamiIdx = 0;
+                    triggerAngpaoRain();
+                    addXP(888);
+                    showAchievement('🥚 KONAMI CODE! +888 XP SULTAN LEGEND!');
+                    playSnd('achievement');
+                }
+            } else { konamiIdx = 0; }
+        }
+
+        // ================================================================
+        // ======= 📋 CHANGELOG POPUP =====================================
+        // ================================================================
+        function openChangelog() {
+            document.getElementById('changelogOverlay').classList.add('show');
+            playSnd('gong');
+        }
+        function closeChangelog() {
+            document.getElementById('changelogOverlay').classList.remove('show');
+            localStorage.setItem('changelogSeen_v4', '1');
+            // Auto-trigger fortune after changelog
+            const today = new Date().toDateString();
+            if (!localStorage.getItem('fortuneShown_' + today)) {
+                setTimeout(() => { openFortune(); localStorage.setItem('fortuneShown_' + today, '1'); }, 500);
+            }
+        }
+
+        // ================================================================
+        // ======= 📱 LANDSCAPE WARNING ===================================
+        // ================================================================
+        function checkOrientation() {
+            const warn = document.getElementById('landscapeWarn');
+            if (!warn) return;
+            const isLandscape = window.innerWidth > window.innerHeight && window.innerWidth < 900;
+            warn.style.display = isLandscape ? 'flex' : 'none';
+        }
+        window.addEventListener('resize', checkOrientation);
+        window.addEventListener('orientationchange', checkOrientation);
+        checkOrientation();
+
+        // ================================================================
+        // ======= 📡 OFFLINE DETECTION ===================================
+        // ================================================================
+        function updateOnlineStatus() {
+            const banner = document.getElementById('offlineBanner');
+            if (!banner) return;
+            if (!navigator.onLine) {
+                banner.classList.add('show');
+                playSnd('error');
+            } else {
+                banner.classList.remove('show');
+            }
+        }
+        window.addEventListener('online', updateOnlineStatus);
+        window.addEventListener('offline', updateOnlineStatus);
+
+        // ================================================================
+        // ======= 🛡️ GLOBAL ERROR BOUNDARY ===============================
+        // ================================================================
+        window.addEventListener('error', e => {
+            console.warn('[Sultan Shield] Error caught:', e.message);
+            // Don't show alert for every error — just log silently
+        });
+        window.addEventListener('unhandledrejection', e => {
+            console.warn('[Sultan Shield] Promise rejected:', e.reason);
+            e.preventDefault(); // Prevent ugly console errors from breaking UX
+        });
+
+        // ================================================================
+        // ======= 🎯 PATCH QUIZ TO SHOW SHARE CARD =======================
+        // ================================================================
+        const _origShowResults = window.showResults;
+        function showResults() {
+            if (typeof _origShowResults === 'function') _origShowResults();
+            // Show share button in quiz results
+            const resultsEl = document.getElementById('quizResults');
+            if (resultsEl && !document.getElementById('quizShareBtn')) {
+                const btn = document.createElement('button');
+                btn.id = 'quizShareBtn';
+                btn.textContent = '📸 Bagikan Hasil';
+                btn.className = 'bg-yellow-600 text-white px-6 py-3 rounded-lg font-black mx-2 mt-2';
+                btn.onclick = () => {
+                    const scoreEl = document.getElementById('finalScore');
+                    const scoreText = scoreEl ? scoreEl.textContent : '?%';
+                    generateShareCard('QUIZ SULTAN', scoreText, 'Wang Dynasty Academy', 'Belajar Mandarin Bersama Sultan!');
+                };
+                resultsEl.appendChild(btn);
+            }
+        }
+
+        // ================================================================
+        // ======= 🔄 INIT ALL NEW FEATURES ON LOAD =======================
+        // ================================================================
+        window.addEventListener('load', function() {
+            updateBoosterStatus();
+            updateFreezeDisplay();
+            setTimeout(checkAngpaoHour, 2000);
+
+            // Show changelog for new visitors (after intro fades)
+            setTimeout(() => {
+                if (!localStorage.getItem('changelogSeen_v4')) {
+                    const intro = document.getElementById('cinematicIntro');
+                    if (!intro || intro.style.display === 'none') openChangelog();
+                }
+            }, 3500);
+        });
+
+        // ================================================================
+        // ======= ⭐ ENHANCED addXP with XP BOOSTER SUPPORT ==============
+        // ================================================================
+        // Override the override to add booster logic
+        const _addXPWithSound = window.addXP;
+        window.addXP = function(amount) {
+            const boosterExpires = parseInt(localStorage.getItem('xpBoosterExpires') || '0');
+            const boosted = Date.now() < boosterExpires;
+            const finalAmount = boosted ? amount * 2 : amount;
+            if (boosted && amount > 0) {
+                // Show boost indicator briefly
+                const el = document.createElement('div');
+                el.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(255,215,0,0.9);color:#000;padding:8px 20px;border-radius:20px;font-weight:900;font-size:14px;z-index:99999;animation:fadeIn 0.3s;pointer-events:none;';
+                el.textContent = `⚡ XP BOOSTER 2x! +${finalAmount} XP!`;
+                document.body.appendChild(el);
+                setTimeout(() => el.remove(), 1500);
+            }
+            if (typeof _addXPWithSound === 'function') _addXPWithSound(finalAmount);
+            else {
+                // Fallback direct XP add
+                if (typeof userStats !== 'undefined') {
+                    userStats.xp = (userStats.xp || 0) + finalAmount;
+                    if (typeof saveUserData === 'function') saveUserData();
+                    if (typeof updateStatsDisplay === 'function') updateStatsDisplay();
+                }
+            }
+        };
 
     </script>
 </body>
